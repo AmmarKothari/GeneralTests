@@ -1,0 +1,4 @@
+
+
+class ParityTest(object):
+	def __init__(self):
