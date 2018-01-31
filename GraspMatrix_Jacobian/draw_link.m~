@@ -1,0 +1,15 @@
+classdef draw_link
+    properties
+        length
+        pose
+    end
+
+    methods
+        function obj = draw_link(link)
+            
+        end
+
+    end
+
+
+end
