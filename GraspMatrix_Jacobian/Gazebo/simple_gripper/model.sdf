@@ -1,0 +1,79 @@
+<?xml version='1.0'?>
+<sdf version='1.4'>
+  <model name="simple_gripper">
+  	<static>false</static>
+  		<link name='base'>
+  			<pose> 0 0 0.05 0 0 0</pose>
+            <visual name="visual">
+            	<geometry>
+	            	<box>
+	            		<size>.4 .2 .1</size>
+	            	</box>
+	            </geometry>
+            </visual>
+            <collision name='collision'>
+            	<geometry>
+	            	<box>
+	            		<size>.4 .2 .1</size>
+	            	</box>
+	            </geometry>
+            </collision>
+            <intertial>
+            	<origin xyz="0 0 0" rpy="0 0 0"/>
+            	<mass value="100"/>
+            	<interia
+			        ixx="1.0" ixy="0.0" ixz="0.0"
+			        iyy="1.0" iyz="0.0"
+			        izz="1.0"/>
+		    </intertial>
+        </link>
+
+        <joint name="fixed to ground" type="fixed">
+  			<parent>world</parent>
+  			<child>base</child>
+  		</joint>
+
+  		 <link name='left_proximal'>
+        	<pose>0 0.35 .05 1.57 0 0</pose>
+        	<visual name="visual">
+        		<geometry>
+        			<cylinder>
+        				<radius>.05</radius>
+        				<length>0.5</length>
+        			</cylinder>
+        		</geometry>
+        	</visual>
+        	<collision name='collision'>
+        		<geometry>
+        			<cylinder>
+        				<radius>.05</radius>
+        				<length>0.5</length>
+        			</cylinder>
+        		</geometry>
+        	</collision>
+            <intertial>
+            	<origin xyz="0 0 0" rpy="0 0 0"/>
+            	<mass value="1"/>
+            	<interia
+			        ixx="1.0" ixy="0.0" ixz="0.0"
+			        iyy="1.0" iyz="0.0"
+			        izz="1.0"/>
+		    </intertial>
+
+        </link>
+
+        <joint type="revolute" name="base_to_left_proximal">
+        	<pose>0 0 0 0 0 0</pose>
+        	<child>left_proximal</child>
+        	<parent>base</parent>
+        	<axis>
+        		<xyz>0 0 1</xyz>
+        	</axis>
+        </joint>
+       
+
+
+
+
+  </model>
+</sdf>
