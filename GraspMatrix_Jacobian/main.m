@@ -18,8 +18,7 @@ right_distal = link_gripper('right_dist', 'right_prox', rev_axis, [2,0,pi/8], 'r
 obj = grasp_object('rectangle');
 obj = obj.setDims([0.5,0.5]);
 obj = obj.setLocation([5,2]);
-
-
+obj = obj.setBoundary();
 
 g = gripper([base, left_proximal, left_distal, right_proximal, right_distal], 1);
 g = g.calc_poses([0, -pi/8, 0, 0, 0]);
@@ -39,12 +38,24 @@ end_pts = g.endPoints();
 alphas = g.invKin(contact_points);
 start_alphas = g.get_alphas();
 P = Planner(g);
+M = Map();
+M = M.addObject(obj);
+M = M.limits();
+% M = M.costMap();
+noise_map = M.noiseCostMap(10, 0.05);
+dist_map  = M.addDistMap(contact_points);
+blur_map  = M.blurCostMap(5, dist_map);
+% P = P.setCostMap(M.cost_map, M.x_range, M.y_range);
+P = P.setCostMap(noise_map + blur_map, M.x_range, M.y_range);
 alpha_path = P.linearAlphaPath(start_alphas, alphas, 100);
+q_cost = P.trajQCost(alpha_path);
+ep_cost = P.endPointCost(alpha_path, contact_points);
+% alpha_path_optimized = P.reduceCost(alpha_path);
 xy_path = P.xy_path(alpha_path);
-P = P.costMap();
 for i = 1:length(alpha_path)
     cla
-    contour(P.x_range, P.y_range, P.cost_map)
+    v = max(q_cost):-1:min(q_cost);
+    contour(P.x_range, P.y_range, P.cost_map', v)
     g = g.calc_poses(alpha_path(i,:));
     g.draw(ax);
     obj.draw(ax);
@@ -52,6 +63,21 @@ for i = 1:length(alpha_path)
     pause(0.01);
 end
 
-
+for i = 1:length(q_cost)
+    if q_cost(i) > 4
+        m = 'bo';
+    else
+        m = 'r*';
+    end
+    hold on; plot(xy_path(2*i-1,1), xy_path(2*i-1,2), m); hold off;
+    hold on; plot(xy_path(2*i,1), xy_path(2*i,2), m); hold off;
+end
+% figure(); hold on;
+% for i = 1:length(alpha_path)
+%     plot(xy_path(i,1), xy_path(i,2), 'bo')
+%     pause(0.1)
+% end
+% hold off;
+    
 
 

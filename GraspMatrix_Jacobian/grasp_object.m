@@ -24,13 +24,16 @@ classdef grasp_object
             obj.center = reshape(center, [1,2]);
         end
         
-        function obj = draw(obj, ax)
-            if strcmp(obj.type, 'rectangle')
+        function obj = setBoundary(obj)
                 obj.boundary = [ obj.center-obj.dims;
                                 obj.center-obj.dims.*[-1,1];
                                 obj.center+obj.dims;
                                 obj.center-obj.dims.*[1,-1];
                                 obj.center-obj.dims;];
+        end 
+        
+        function obj = draw(obj, ax)
+            if strcmp(obj.type, 'rectangle')
                 hold on
                     plot(ax, obj.boundary(:,1), obj.boundary(:,2), 'o-')
                 hold off
@@ -39,10 +42,5 @@ classdef grasp_object
                 obj.r = obj.dims(1);
             end
         end
-        
-%         function inCollision = collision(obj, pt)
-%             [in, on] = 
-%                 
-        
     end
 end
