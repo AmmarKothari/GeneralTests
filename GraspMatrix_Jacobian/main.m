@@ -26,6 +26,14 @@ g.draw(ax);
 obj.draw(ax);
 axis equal
 
+Q_INPUTS = 5;
+TRAJ_NOISE = 1;
+TRAJ_STEPS = 100;
+OBJ_NOISE = 0.05;
+BLUR_FILTER_SIZE = 5;
+NOISEY_TRAJS = 5;
+TRAJ_DT = 0.01;
+
 contact_points = [obj.center(1), obj.center(2)+obj.dims(2);
                 obj.center(1), obj.center(2)-obj.dims(2)];
 hold on
@@ -42,14 +50,16 @@ M = Map();
 M = M.addObject(obj);
 M = M.limits();
 % M = M.costMap();
-noise_map = M.noiseCostMap(10, 0.05);
+noise_map = M.noiseCostMap(10, OBJ_NOISE);
 dist_map  = M.addDistMap(contact_points);
-blur_map  = M.blurCostMap(5, dist_map);
+blur_map  = M.blurCostMap(BLUR_FILTER_SIZE, dist_map);
 % P = P.setCostMap(M.cost_map, M.x_range, M.y_range);
 P = P.setCostMap(noise_map + blur_map, M.x_range, M.y_range);
-alpha_path = P.linearAlphaPath(start_alphas, alphas, 100);
+alpha_path = P.linearAlphaPath(start_alphas, alphas, TRAJ_STEPS);
 q_cost = P.trajQCost(alpha_path);
 ep_cost = P.endPointCost(alpha_path, contact_points);
+S = STOMP(Q_INPUTS, TRAJ_STEPS, TRAJ_NOISE, TRAJ_DT);
+S = S.noiseyTrajs(alpha_path, TRAJ_NOISE, NOISEY_TRAJS);
 % alpha_path_optimized = P.reduceCost(alpha_path);
 xy_path = P.xy_path(alpha_path);
 for i = 1:length(alpha_path)
