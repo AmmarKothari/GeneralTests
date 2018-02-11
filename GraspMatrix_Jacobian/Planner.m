@@ -15,7 +15,7 @@ classdef Planner
         end
         
         function xy_points = xy_path(obj, path)
-%             xy_points = zeros(size(path,1), 2);
+            % calculates end points of fingers
             xy_points = [];
             for p = 1:size(path,1)
                 xy = obj.gripper.calc_poses(path(p,:));
@@ -66,12 +66,6 @@ classdef Planner
             % find cost of a configuration
             xy = obj.gripper.calc_poses(q);
             xy_end_points = xy.endPoints();
-            % find closest point in map for each end point
-%             [valx1,idx1] = min(abs(obj.x_range - xy_end_points(1,1)));
-%             [valx2,idx2] = min(abs(obj.x_range - xy_end_points(2,1)));
-%             [valy1,idy1] = min(abs(obj.y_range - xy_end_points(1,2)));
-%             [valy2,idy2] = min(abs(obj.y_range - xy_end_points(2,2)));
-%             cost = obj.cost_map(idx1,idy1) + obj.cost_map(idx2,idy2);
             cost = obj.xyCost(xy_end_points(1,:)) + obj.xyCost(xy_end_points(2,:));
         end         
         
@@ -97,6 +91,18 @@ classdef Planner
             else
                 ep_cost = 0;
             end
+        end
+        
+        function [] = plotTrajs(obj, trajs)
+            figure()
+            hold on; 
+            for i = 1:size(trajs, 3)
+                xy_path = obj.xy_path(trajs(:,:,i));
+                for i1 = 1:size(trajs, 1)
+                    plot(xy_path(i1,1), xy_path(i1,2), 'ro');
+                end
+            end
+            hold off;
         end
             
     end

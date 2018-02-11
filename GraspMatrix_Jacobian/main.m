@@ -27,7 +27,7 @@ obj.draw(ax);
 axis equal
 
 Q_INPUTS = 5;
-TRAJ_NOISE = 1;
+TRAJ_NOISE = 0.0005; % noise scaled to joint range in trajectory in STOMP
 TRAJ_STEPS = 100;
 OBJ_NOISE = 0.05;
 BLUR_FILTER_SIZE = 5;
@@ -58,9 +58,21 @@ P = P.setCostMap(noise_map + blur_map, M.x_range, M.y_range);
 alpha_path = P.linearAlphaPath(start_alphas, alphas, TRAJ_STEPS);
 q_cost = P.trajQCost(alpha_path);
 ep_cost = P.endPointCost(alpha_path, contact_points);
-S = STOMP(Q_INPUTS, TRAJ_STEPS, TRAJ_NOISE, TRAJ_DT);
-S = S.noiseyTrajs(alpha_path, TRAJ_NOISE, NOISEY_TRAJS);
-% alpha_path_optimized = P.reduceCost(alpha_path);
+eval_q = @(q) P.QCost(q);
+eval_path = @(path)  sum(P.trajQCost(path)) + P.endPointCost(alpha_path, contact_points);
+S = STOMP(Q_INPUTS, TRAJ_STEPS, TRAJ_NOISE, TRAJ_DT, eval_traj, eval_path);
+% move this stuff into STOMP as an optimization function
+% record trajectories over optimization
+% set termination condition based on difference between found trajectories
+% reduce noise over iterations
+[noisey_trajs, noise] = S.noiseyTrajs(alpha_path, TRAJ_NOISE, NOISEY_TRAJS);
+traj_costs = S.evalTrajs(noisey_trajs);
+traj_probs = S.probTrajs(traj_costs);
+delta_q = S.deltaQ(traj_probs, noise, S.M);
+alpha_adj = S.adjustPath(alpha_path, delta_q);
+cost_adj = S.pathCost(alpha_adj);
+sprintf('Previous Cost: %f \n Current Cost: %f', eval_path(alpha_path), cost_adj)
+% P.plotTrajs(S.noisey_trajs);
 xy_path = P.xy_path(alpha_path);
 for i = 1:length(alpha_path)
     cla
