@@ -27,12 +27,14 @@ obj.draw(ax);
 axis equal
 
 Q_INPUTS = 5;
-TRAJ_NOISE = 0.0005; % noise scaled to joint range in trajectory in STOMP
+TRAJ_NOISE = 1e-15; % noise scaled to joint range in trajectory in STOMP
+NOISE_COOLING = 0.99;
 TRAJ_STEPS = 100;
 OBJ_NOISE = 0.05;
 BLUR_FILTER_SIZE = 5;
 NOISEY_TRAJS = 5;
 TRAJ_DT = 0.01;
+STOMP_STOP_COND = 0.01;
 
 contact_points = [obj.center(1), obj.center(2)+obj.dims(2);
                 obj.center(1), obj.center(2)-obj.dims(2)];
@@ -60,25 +62,16 @@ q_cost = P.trajQCost(alpha_path);
 ep_cost = P.endPointCost(alpha_path, contact_points);
 eval_q = @(q) P.QCost(q);
 eval_path = @(path)  sum(P.trajQCost(path)) + P.endPointCost(alpha_path, contact_points);
-S = STOMP(Q_INPUTS, TRAJ_STEPS, TRAJ_NOISE, TRAJ_DT, eval_traj, eval_path);
-% move this stuff into STOMP as an optimization function
-% record trajectories over optimization
-% set termination condition based on difference between found trajectories
-% reduce noise over iterations
-[noisey_trajs, noise] = S.noiseyTrajs(alpha_path, TRAJ_NOISE, NOISEY_TRAJS);
-traj_costs = S.evalTrajs(noisey_trajs);
-traj_probs = S.probTrajs(traj_costs);
-delta_q = S.deltaQ(traj_probs, noise, S.M);
-alpha_adj = S.adjustPath(alpha_path, delta_q);
-cost_adj = S.pathCost(alpha_adj);
-sprintf('Previous Cost: %f \n Current Cost: %f', eval_path(alpha_path), cost_adj)
-% P.plotTrajs(S.noisey_trajs);
-xy_path = P.xy_path(alpha_path);
-for i = 1:length(alpha_path)
+S = STOMP(Q_INPUTS, TRAJ_STEPS, TRAJ_DT, eval_q, eval_path, NOISE_COOLING);
+stomp_path = S.optimizeTraj(STOMP_STOP_COND, alpha_path, TRAJ_NOISE, NOISEY_TRAJS);
+% implement dynamics and torque cost function
+% implement successfu and failed grasps and good cost function space
+xy_path = P.xy_path(stomp_path);
+for i = 1:length(stomp_path)
     cla
     v = max(q_cost):-1:min(q_cost);
     contour(P.x_range, P.y_range, P.cost_map', v)
-    g = g.calc_poses(alpha_path(i,:));
+    g = g.calc_poses(stomp_path(i,:));
     g.draw(ax);
     obj.draw(ax);
     axis equal

@@ -87,7 +87,7 @@ classdef Planner
             xy = obj.gripper.calc_poses(alpha_path(end,:));
             xy_end_points = xy.endPoints();
             if vecnorm(xy_end_points(:,1:2) - goal_xy, 2, 2) > dist_epsilon
-                ep_cost = 1e3; % some large number
+                ep_cost = 1e5; % some large number
             else
                 ep_cost = 0;
             end

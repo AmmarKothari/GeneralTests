@@ -6,19 +6,18 @@ classdef STOMP
        M
        DOF
        steps
-       noise
-       noisey_trajs
        dt
        eval_state
        eval_path
+       best_traj_iter % best trajectory from that iteration
+       noise_cooling % reducing noise in each iteration
        %
        debugSTOMP1
     end
     methods
-        function obj = STOMP(dof, steps, noise, dt, eval_state, eval_path)
+        function obj = STOMP(dof, steps, dt, eval_state, eval_path, noise_cooling)
             obj.DOF = dof;
             obj.steps = steps;
-            obj.noise = noise;
             obj.eval_state = eval_state; % function to evaluate cost of a state
             obj.eval_path = eval_path; % function to evaluate cost of path
             %precompute
@@ -27,19 +26,61 @@ classdef STOMP
             obj.R_inv = inv(obj.R);
             obj.M = obj.computeM(obj.R_inv, steps);
             obj.dt = dt;
+            obj.noise_cooling = noise_cooling;
             
             obj.debugSTOMP1 = false;  %plot noisey trajectories
         end
         
+        function cur_path = optimizeTraj(obj, stop_condition, path, noise_amp, n_trajs)
+            ITER_LIMIT = 100;
+            eval_path = @(p) obj.eval_path(p) + sum(sum(1/2 * p' * obj.R * p));
+            Q_new = eval_path(path);
+            Q_prev = Q_new * 10;
+            cur_path = path;
+            no_improvement_counter = 0;
+            total_iters = 0;
+            while (no_improvement_counter < 5)
+                total_iters = total_iters + 1;
+                if total_iters > ITER_LIMIT
+                    break
+                end
+                [noisey_trajs, noise, range] = obj.noiseyTrajs(cur_path, noise_amp, n_trajs); % create noisey trajectories
+                traj_costs = obj.evalTrajs(noisey_trajs); % evaluate each point in trajectories
+                traj_probs = obj.probTrajs(traj_costs); % calculate probability of each point based on cost
+                delta_q = obj.deltaQ(traj_probs, noise, obj.M); % change in path
+                delta_q = delta_q / 100; % I don't know.  Otherwise it was generating crazy trajectories.
+                new_path = obj.adjustPath(cur_path, delta_q, range); % updated path
+                Q_new = eval_path(new_path);
+                Q_diff = abs(Q_new - Q_prev)/Q_prev;
+                noise_amp = noise_amp * obj.noise_cooling;
+                fprintf('Iter: %d, Previous Cost: %f \t New Cost: %f \n', total_iters, Q_prev, Q_new)
+%                 obj.plotNoiseyTrajs(path, cat(3, cur_path, prev_path));
+%                 waitforbuttonpress
+%                 close all;
+                 if Q_diff < stop_condition
+                     no_improvement_counter = no_improvement_counter + 1;
+                 elseif Q_prev < Q_new
+                     % don't update values
+                 else
+                     no_improvement_counter = 0;
+                     prev_path = cur_path;
+                     cur_path = new_path;
+                     Q_prev = Q_new; % store costs
+                 end
+            end
+            
+            
+        end
         
-        function [noisey_trajs, noises] = noiseyTrajs(obj, alpha_path, noise, n_trajs)
+        
+        function [noisey_trajs, noises, range] = noiseyTrajs(obj, alpha_path, noise, n_trajs)
             noisey_trajs = zeros(size(alpha_path, 1), size(alpha_path, 2), n_trajs);
             noises = zeros(size(alpha_path, 1), n_trajs);
             for i = 1:n_trajs
-                [noisey_trajs(:, :, i), noises(:, i)]  = obj.noisyTraj(alpha_path, obj.R_inv, noise);
+                [noisey_trajs(:, :, i), noises(:, i), range]  = obj.noisyTraj(alpha_path, obj.R_inv, noise);
             end
             if obj.debugSTOMP1
-                obj.plotNoiseyTrajs(alpha_path, obj.noisey_trajs);
+                obj.plotNoiseyTrajs(alpha_path, noisey_trajs);
             end
         end
         
@@ -55,10 +96,10 @@ classdef STOMP
         function traj_prob = probTrajs(obj, costs)
             % reducing cost magnitude and clipping
             % so that it doesn't saturate exp
-            if mean(costs(:)) > 10
-                costs = costs ./ mean(costs(:));
-            end
-            costs(costs > 10) = 10; 
+%             if mean(costs(:)) > 10
+%                 costs = costs ./ mean(costs(:));
+%             end
+%             costs(costs > 10) = 10; 
             lambda = 1/10;
             traj_prob = obj.probTrajs_normsoftmax(costs, lambda);            
         end
@@ -88,7 +129,7 @@ classdef STOMP
             M = R_inv./max(R_inv)/N;
         end
         
-        function [noisy_traj, noise] = noisyTraj(alpha_path, R_inv, noise_amp)
+        function [noisy_traj, noise, range] = noisyTraj(alpha_path, R_inv, noise_amp)
             % generates a single noisy trajectory
             % scale amount of range based on joint movement
             range = abs(max(alpha_path) - min(alpha_path));
@@ -124,7 +165,6 @@ classdef STOMP
             % higher cost should result in lower probability
             for i_timestep = 1:size(costs, 1)
                 for i_trajs = 1:size(costs,2)
-%                 min_timestep_cost = 
                     traj_prob(i_timestep, i_trajs) = exp(-1/lambda * costs(i_timestep, i_trajs));
                 end
                 traj_prob(i_timestep, :) = traj_prob(i_timestep,:) / sum(traj_prob(i_timestep,:));
@@ -156,8 +196,9 @@ classdef STOMP
             delta_q = M * delta_q_noise;
         end
         
-        function path_adj = adjustPath(alpha_path, delta)
-            path_adj = alpha_path + delta;
+        function path_adj = adjustPath(alpha_path, delta, range)
+            joint_delta = delta * range; % adjusting for specific range of each joint
+            path_adj = alpha_path + joint_delta;
         end
         
     end
