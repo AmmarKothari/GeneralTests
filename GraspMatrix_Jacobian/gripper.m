@@ -95,6 +95,12 @@ classdef gripper
             alphas = [obj.links.alpha];
         end
         
+        function alphas = get_alphas_world(obj)
+            % returns the orientation of each link
+            alphas = obj.get_poses;
+            alphas = alphas(:,3);
+        end
+        
         function dist = dist_to_goal(obj, goal, al)
             f_arm = obj.calc_poses(al);
             tips = f_arm.endPoints();
@@ -125,6 +131,25 @@ classdef gripper
                 obj.links(i) = obj.links(i).clearLink();
             end
         end
+        
+        function Js = jacobian_func(obj)
+            % returns functions to get 2 jacobians (one for each side of
+            % gripper)
+            J = @(l0,theta0,l1,theta1,l2,theta2) ...
+                    [-l0*sin(theta0)-l1*sin(theta1+theta0)-l2*sin(theta0+theta1+theta2), -l1*sin(theta1+theta0)-l2*sin(theta0+theta1+theta2), -l2*sin(theta0+theta1+theta2);
+                    l0*cos(theta0)+l1*cos(theta1+theta0)+l2*cos(theta0+theta1+theta2), l1*cos(theta1+theta0)+l2*cos(theta0+theta1+theta2),  l2*cos(theta0+theta1+theta2);
+                    1,1,1];
+            J1 = @(a) J(obj.links(1).h0(1), a(1), obj.links(2).h0(1), a(2), obj.links(3).h0(1), a(3));
+            J2 = @(a) J(obj.links(1).h0(1), a(1), obj.links(4).h0(1), a(2), obj.links(5).h0(1), a(3));
+            Js = {J1; J2};
+        end
+        
+        function J = jacobian(obj)
+           poses = reshape([obj.links.pose],3,[])';
+           a_locals = reshape([obj.links.a],3,[])';
+           J = GeoOps2D.jacobian_spatial(poses, a_locals);
+        end
+        
     end
     
     

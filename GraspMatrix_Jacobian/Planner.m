@@ -8,6 +8,7 @@ classdef Planner
         y_limits
         x_range
         y_range
+        ep_cost = 1e2;
     end
     methods
         function obj = Planner(gripper)
@@ -61,9 +62,16 @@ classdef Planner
             cost = obj.cost_map(idx1,idy1);
         end
             
+        function cost = QCost_ind(obj, q)
+            % find cost of a configuration and return each one in an array
+            xy = obj.gripper.calc_poses(q);
+            xy_end_points = xy.endPoints();
+            cost = [obj.xyCost(xy_end_points(1,:)), obj.xyCost(xy_end_points(2,:))];
+        end
         
-        function cost = QCost(obj, q)
-            % find cost of a configuration
+        function cost = QCost_all(obj, q)
+            % find cost of a configuration and return one number for all
+            % joints
             xy = obj.gripper.calc_poses(q);
             xy_end_points = xy.endPoints();
             cost = obj.xyCost(xy_end_points(1,:)) + obj.xyCost(xy_end_points(2,:));
@@ -74,10 +82,11 @@ classdef Planner
             cost = zeros(size(alpha_path, 1), 1);
             for i = 1:size(alpha_path, 1)
                 % cost for configuration
-                cost(i) = obj.QCost(alpha_path(i,:));
-                % TODO: add high cost for exceeding joint limits
+                cost(i) = obj.QCost_all(alpha_path(i,:));
+                % TODO: add high cost for exceeding joint limits -- do this
+                % in cost function
                 % TODO: add high cost for any part of link inside of an
-                % object
+                % object -- also probably in the state cost function
             end
         end
         
@@ -87,7 +96,7 @@ classdef Planner
             xy = obj.gripper.calc_poses(alpha_path(end,:));
             xy_end_points = xy.endPoints();
             if vecnorm(xy_end_points(:,1:2) - goal_xy, 2, 2) > dist_epsilon
-                ep_cost = 1e5; % some large number
+                ep_cost = obj.ep_cost; % some large number
             else
                 ep_cost = 0;
             end

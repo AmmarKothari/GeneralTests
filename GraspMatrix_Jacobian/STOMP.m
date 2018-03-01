@@ -1,21 +1,22 @@
 classdef STOMP
     properties
-       A
-       R
-       R_inv
-       M
+       A, R, R_inv, M
        DOF
-       steps
-       dt
+       steps, dt
        eval_state
        eval_path
        best_traj_iter % best trajectory from that iteration
        noise_cooling % reducing noise in each iteration
+       noisey_trajs_xy
+       vel_func
+       xy_path_func
+       NO_IMPROVEMENT_STOP = 10
        %
-       debugSTOMP1
+       debugSTOMP1 = false, %plot noisey trajectories
+       debugSTOMP2 = false, % plot noisey trajectories in operational space
     end
     methods
-        function obj = STOMP(dof, steps, dt, eval_state, eval_path, noise_cooling)
+        function obj = STOMP(dof, steps, dt, eval_state, eval_path, noise_cooling, vel_func,xy_path_func)
             obj.DOF = dof;
             obj.steps = steps;
             obj.eval_state = eval_state; % function to evaluate cost of a state
@@ -27,8 +28,8 @@ classdef STOMP
             obj.M = obj.computeM(obj.R_inv, steps);
             obj.dt = dt;
             obj.noise_cooling = noise_cooling;
-            
-            obj.debugSTOMP1 = false;  %plot noisey trajectories
+            obj.vel_func = vel_func;
+            obj.xy_path_func = xy_path_func;
         end
         
         function cur_path = optimizeTraj(obj, stop_condition, path, noise_amp, n_trajs)
@@ -39,7 +40,7 @@ classdef STOMP
             cur_path = path;
             no_improvement_counter = 0;
             total_iters = 0;
-            while (no_improvement_counter < 5)
+            while (no_improvement_counter < obj.NO_IMPROVEMENT_STOP)
                 total_iters = total_iters + 1;
                 if total_iters > ITER_LIMIT
                     break
@@ -57,16 +58,19 @@ classdef STOMP
 %                 obj.plotNoiseyTrajs(path, cat(3, cur_path, prev_path));
 %                 waitforbuttonpress
 %                 close all;
-                 if Q_diff < stop_condition
-                     no_improvement_counter = no_improvement_counter + 1;
-                 elseif Q_prev < Q_new
+                if Q_prev < Q_new
                      % don't update values
-                 else
-                     no_improvement_counter = 0;
+                     no_improvement_counter = no_improvement_counter + 1;
+                else
                      prev_path = cur_path;
                      cur_path = new_path;
                      Q_prev = Q_new; % store costs
-                 end
+                     if Q_diff < stop_condition
+                        no_improvement_counter = no_improvement_counter + 1;
+                     else
+                        no_improvement_counter = 0;
+                     end
+                end
             end
             
             
@@ -79,16 +83,37 @@ classdef STOMP
             for i = 1:n_trajs
                 [noisey_trajs(:, :, i), noises(:, i), range]  = obj.noisyTraj(alpha_path, obj.R_inv, noise);
             end
+            obj.noisey_trajs_xy = cat(3, obj.noisey_trajs_xy, noisey_trajs);
+            
             if obj.debugSTOMP1
                 obj.plotNoiseyTrajs(alpha_path, noisey_trajs);
+            end
+            if obj.debugSTOMP2
+                cla(figure(2));
+                figure(2); hold on;
+                for i = 1:n_trajs
+                    xy_path = obj.xy_path_func(noisey_trajs(:,:,i));
+                    plot(xy_path(:,1), xy_path(:,2), 'rx')
+                end
+                pause(0.1)
             end
         end
         
         function traj_costs = evalTrajs(obj, trajs)
+            vels = cat(1, zeros(1,5,5), diff(trajs))/obj.dt; % finite difference velocity at each point
+            accs = cat(1, diff(vels), zeros(1,5,5))/obj.dt; % finite difference acceleration at each point
             traj_costs = zeros(size(trajs, 1), size(trajs, 3));
             for i_trajs = 1:size(trajs,3)
                 for i_timestep = 1:size(trajs, 1)
-                    traj_costs(i_timestep, i_trajs) = obj.stateCost(trajs(i_timestep, :, i_trajs));
+                    pos_cost = obj.stateCost(trajs(i_timestep, :, i_trajs));
+                    % % this is my version of the obstacle cost
+                    % get endpoint velocity in operational space
+                    v1 = obj.vel_func{1}(trajs(i_timestep, 1:3, i_trajs))*vels(i_timestep, 1:3, i_trajs)';
+                    v2 = obj.vel_func{2}(trajs(i_timestep, [1,4,5], i_trajs))*vels(i_timestep, [1,4,5], i_trajs)';
+                    % multiply by end point velocity
+                    traj_costs(i_timestep, i_trajs) = pos_cost * [norm(v1(1:2)), norm(v2(1:2))]';
+                    
+                    % % implement a torque cost
                 end
             end
         end

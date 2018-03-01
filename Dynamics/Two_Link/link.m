@@ -41,14 +41,17 @@ classdef link
             obj.V_CM = [obj.V_CM; obj.v_cm];
             obj.A_CM = [obj.A_CM; obj.a_cm];
             obj.TORQUE = [obj.TORQUE; obj.torque];
+            obj.W = obj.store(obj.W, obj.w);
+            obj.J = obj.store(obj.J, obj.j);
+            obj.ALPHA = obj.store(obj.ALPHA, obj.alpha);
             
         end
         
         function obj = plot_CM(obj, fig_num)
             cla(figure(fig_num));
             figure(fig_num);
-%             plot(obj.P_CM(:,1), obj.P_CM(:,2), 'ro')  
-            plot(obj.A_CM(:,1), obj.A_CM(:,2), 'ro')         
+            plot(obj.P_CM(:,1), obj.P_CM(:,2), 'ro')  
+%             plot(obj.A_CM(:,1), obj.A_CM(:,2), 'ro')         
         end
         
         function obj = plot_Torque(obj, fig_num)
@@ -74,6 +77,9 @@ classdef link
         end
         function I = I_END(l,m)
             I = 1/3 * m * l^2;
+        end
+        function O = store(O, o)
+            O = [O;o];
         end
         
     end

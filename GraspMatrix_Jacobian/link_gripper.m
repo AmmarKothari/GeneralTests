@@ -1,36 +1,31 @@
 classdef link_gripper
     properties
-        h
-        a
+        h, h_poi, a, h0
         index
-        h_poi
         zero_pose
-        alpha
-        alpha_dot
+        alpha, alpha_dot
         pose
-        proximal
-        distal
-        name
-        parent
-        c
-        plot_handles
+        proximal, distal
+        name, parent
+        c, plot_handles
+        
         % input desired velocity and output acceleration
         alpha_dot_desired
-        kp
-        ki
+        kp, ki
         alpha_dot_dot
-        e_total
+        e, e_prev, e_total
     end
     
     methods
         function obj = link_gripper(name, parent, a, h, c, h_poi)
             obj.name = name; % name of this link
             obj.parent = parent; % name of parent link
-            obj.h = group(h);
-            obj.h_poi = group(h_poi);
+            obj.h0 = h;
+            obj.h = GeoOps2D.group(h);
+            obj.h_poi = GeoOps2D.group(h_poi);
             obj.a = a;
-            obj.pose = group([0,0,0]);
-            obj.zero_pose = group([0,0,0]);
+            obj.pose = GeoOps2D.group([0,0,0]);
+            obj.zero_pose = GeoOps2D.group([0,0,0]);
             obj.alpha = 0;
             obj.c = c;
             obj.alpha_dot_desired = 0;
@@ -77,10 +72,10 @@ classdef link_gripper
             % figure out how the base pose changes
             h_rot = [obj.h(1, 1:2), 0; obj.h(2,1:2), 0; 0 0 1];
             remainder_h = [1 0 obj.h(1,3); 0 1 obj.h(2,3); 0 0 1]; % no additional rotation from base
-            frame_rot = RightAction(h_rot, obj.a * obj.alpha);
-            obj.proximal = poseFromMatrix(RightAction(obj.zero_pose, frame_rot));
-            obj.pose = poseFromMatrix(RightAction(obj.proximal, remainder_h));
-            obj.distal = poseFromMatrix(RightAction(obj.pose, remainder_h));
+            frame_rot = GeoOps2D.RightAction(h_rot, obj.a * obj.alpha);
+            obj.proximal = GeoOps2D.RightAction(obj.zero_pose, frame_rot).p;
+            obj.pose = GeoOps2D.RightAction(obj.proximal, remainder_h).p;
+            obj.distal = GeoOps2D.RightAction(obj.pose, remainder_h).p;
         end
         function obj = linkPosBackward(obj, alpha_)
             obj.alpha = alpha_;

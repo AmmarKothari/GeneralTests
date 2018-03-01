@@ -13,20 +13,20 @@ link2 = link(l2,m2);
 
 
 
-t_end = 40; % time
+t_end = 8; % time
 n_steps = 1000;
 dt = t_end/n_steps; % timestep
 cla(figure(1));
 for t = 0:dt:t_end
-    link1.torque = 1*sin(t);
+    link1.torque = 0.1*sin(t);
     
     %Forward
-    link1.j = link1.j + dt*link1.w + 1/2*dt^2*link1.alpha;
-    link1.w = link1.w + dt*link1.alpha;
     out = inv(link1.group([0,0,link1.j]))*[link1.alpha*link1.r, -link1.w^2*link1.r, 0]';
+    link1.w = link1.w + dt*link1.alpha;
+    link1.j = link1.j + dt*link1.w;
     link1.a_cm = out(1:2)';
-    link1.p_cm = link1.p_cm + dt*link1.v_cm + 1/2*dt^2*link1.a_cm;
     link1.v_cm = link1.v_cm + dt*link1.a_cm;
+    link1.p_cm = link1.p_cm + dt*link1.v_cm;
     
     link1.a_d = link1.alpha*link1.l*[cos(link1.j),sin(link1.j)];
     link1.p_d = link1.p_d + dt*link1.v_d + 1/2*dt^2*link1.a_d;
@@ -36,7 +36,13 @@ for t = 0:dt:t_end
     link2.p_p = link1.p_d;
     link2.v_p = link2.v_d;
     
-    link2.a_cm = link2.a_p + (link2.alpha*link2.r)*[cos(link2.j+link1.j), sin(link2.j+link1.j)];
+%     link2.a_cm = link2.a_p + (link2.alpha*link2.r)*[cos(link2.j+link1.j), sin(link2.j+link1.j)];
+    out = link2.a_p + inv(link2.group([0,0,link2.j+link1.j]))*[link2.alpha*link2.r, -link2.w^2*link2.r, 0]';
+    link2.w = link2.w + dt*link2.alpha;
+    link2.j = link2.j + dt*link2.w;
+    link2.a_cm = out(1:2);
+    link2.v_cm = link2.v_cm + dt*link2.a_cm;
+    link2.p_cm = link2.p_cm + dt*link2.v_cm;
     
        
     
@@ -62,10 +68,11 @@ for t = 0:dt:t_end
     
     % solve for alpha1
     link1.alpha = (link1.torque + link1.O_d_t*link1.r) * inv(link1.I_end);
-    
+%     
     link1 = link1.store_values();
     link2 = link2.store_values();
-    link1.plot_CM(1);
     
     
 end
+
+link2.plot_CM(1);
