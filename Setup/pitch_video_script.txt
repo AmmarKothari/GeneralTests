@@ -1,0 +1,13 @@
+The goal of this work is to create a grasp sampling system based on human intuition.  The two main contributions of this work are (One) Administering questions to quickly define limits on what preshapes humans use for different object sizes and (Two) The ability to querry the system for a preshape based on a an object, approach direction, and confidence.
+
+The first step was to map human grasps to robotic hand preshapes.
+
+The next step was to build out all possible grasp object pairs while taking advantage of heuristics to limit the number of total possibilities.  We enumerated all possibilities into the graph shown here.
+
+For the surveys, we provided detailed training videos.  The video demonstrated what movements were allowed to go from preshape to grasp.  By using both real and synthetic images, the mapping was made clear to the participants.  Additionally, the videos allowed the participants to be normalized to physical attributes like fingertip texture or weight of the objects.
+
+The survey consisted of several questions that found the boundary at which a preshape was no longer preferred for an object.  First, questions about change in 1 shape dimension were asked.  Then, questions about variation in 2 dimensions were asked to uncover any correlated features.  Finally, addtional questions were asked to validate the data.
+
+With the data, we can see how much size variation the same preshape is still preferred.  We can also examine which preshapes overlap in shape space indicating equivalent preference for both preshapes.
+
+Thank you!
