@@ -5,25 +5,41 @@ classdef Map1
     % TODO: more complex maps can load map from an image file
     
     properties
-        n_landmarks = 0;
+        n_landmarks = 0
         landmarks = []
+        world = [100, 100]
     end
     
     methods
         function obj = Map1()
             % all landmarks and names
             %   Detailed explanation goes here
-            obj.landmarks = [0, 10;
-                            0, 50;
-                            50, 50;
-                            50, 10]';
+            obj.landmarks = {
+                            [10, 10], 'pt1';
+                            [10, 50], 'pt2';
+                            [50, 50], 'pt3';
+                            [50, 10], 'pt4'
+                            };
             obj.n_landmarks = size(obj.landmarks,1);
+            obj.world = [100, 100];
         end
         
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
+        function [] = plotMap(obj)
+            %plotMap - plots the map borders and landmarks
             %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
+            borders = [ 0, 0;
+                        obj.world(1), 0;
+                        obj.world;
+                        0, obj.world(2);
+                        0, 0];
+            xy = [];
+            for i = 1:size(obj.landmarks,1)
+                xy = [xy; obj.landmarks{i, 1}];
+            end
+            plot(xy(:,1), xy(:,2), 'rx');
+            hold on;
+            plot(borders(:,1), borders(:,2), 'k-')
+            hold off
         end
     end
 end
