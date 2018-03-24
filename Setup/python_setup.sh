@@ -23,3 +23,8 @@ sudo pip install pdbpp
 sudo pip install --upgrade pip
 sudo apt-get install -y python-pip3
 sudo pip install progressbar
+
+# setting up ipython
+ipython profile create
+sudo cp -f ipython_config.py ~/.ipython/profile_default
+

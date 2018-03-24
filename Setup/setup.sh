@@ -43,30 +43,30 @@ sudo chgrp ammar Projects
 log_all "General Folders Created"
 
 # ---- Install Python Things ---- #
+cd $curdir
 bash python_setup.sh
 
 # ---- Install Chrome ---- #
+cd $curdir
 bash chrome_setup.sh
 
 # ---- Prep Install for OpenCV ---- #
+cd $curdir
 sudo apt-get -y install build-essential
 sudo apt-get -y install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
 sudo apt-get -y install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 
-# ---- Install Keras ---- #
-sudo apt-get -y libblas-dev liblapack-dev gfortran
-pip3 install numpy scipy keras --user
-
 #---- Install OpenAI Gym ---- #
-sudo apt-get -y installgolang python3-dev python-dev libcupti-dev libjpeg-turbo8-dev make tmux htop chromium-browser git cmake zlib1g-dev libjpeg-dev xvfb libav-tools xorg-dev python-opengl libboost-all-dev libsdl2-dev swig
+cd $curdir
+bash openAI_setup.sh
 
 #---- Sublime ----#
-sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
-sudo apt-get -y update
-sudo apt-get install sublime-text-installer
+cd $curdir
+bash sublime_setup.sh
 
 
 #---- Spotify ----#
+cd $curdir
 # 1. Add the Spotify repository signing key to be able to verify downloaded packages
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
 # 2. Add the Spotify repository
@@ -83,21 +83,27 @@ sudo apt-get -y install spotify-client
 #---- Tensor Flow ---- #
 
 #---- Install Mendeley ----- #
+cd $curdir
 bash mendeley_setup.sh
 
 #--- OpenRAVE --- #
+cd $curdir
 bash openrave_new_setup.sh
 
 # --- Docker ---- #
+cd $curdir
 bash docker_setup.sh
 
 # ---- Pycharm ---- #
+cd $curdir
 bash pycharm_setup.sh
 
 # ----- TeamViewer ---- #
+cd $curdir
 bash teamviewer_setup.sh
 
 #---- General ----#
+cd $curdir
 bash general_packages_setup.sh
 
 sudo apt-get autoremove
