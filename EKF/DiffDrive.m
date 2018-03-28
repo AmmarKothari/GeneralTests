@@ -6,7 +6,10 @@ classdef DiffDrive
         % phyiscal
         l=1 % distance between wheels
         dt=1e-3; % how often to update the position.
-        vMax = 1; vMin = 0;
+        vMax = 1; vMin = -1;
+        uMax = 0.1; uMin = -0.1;
+        uNoise = [0.1, 0.1];
+        obsNoise = [0.1, 0.1, 0.1];
         % state
         q = struct('x', 0, 'y', 0, 'theta', 0);
         qd = struct('v', 0, 'w', 0);
@@ -14,25 +17,31 @@ classdef DiffDrive
         qr = struct('x', 0, 'v', 0, 'a', 0);
         ql = struct('x', 0, 'v', 0, 'a', 0);
         
+        %observation
+        odom = struct('x', 0, 'y', 0, 'theta', 0);
+        
         % record values
         state_all = []
+        obs_all = []
         
     end
     
     methods
-        function obj = DiffDrive(l, dt)
+        function obj = DiffDrive(l, dt, uNoise, obsNoise)
             %UNTITLED7 Construct an instance of this class
             %   Detailed explanation goes here
             obj.l = l;
             obj.dt = dt;
+            obj.uNoise = uNoise;
+            obj.obsNoise = obsNoise;
         end
         
         function obj = step_dynamics(obj, u)
             %step_dynamics - Move the simulation forward by dt
             %   Detailed explanation goes here
             dt = obj.dt;
-            obj.ql.a = u(1);
-            obj.qr.a = u(2);
+            obj.ql.a = u(1) + randn(1)*obj.uNoise(1);
+            obj.qr.a = u(2) + randn(1)*obj.uNoise(2);
             xL = obj.ql.x; vL = obj.ql.v; aL = obj.ql.a;
             xR = obj.qr.x; vR = obj.qr.v; aR = obj.qr.a;
             x = obj.q.x; y = obj.q.y; theta = obj.q.theta;
@@ -54,7 +63,7 @@ classdef DiffDrive
             obj.ql.v = vL + aL * dt;
             obj.qr.v = vR + aR * dt;
             v = 1/2 * (obj.ql.v + obj.qr.v);
-            v = obj.clampV(v); % speed limits need to be implemented on the wheels -- take from mobile robotics class
+            v = obj.clampVal(v, obj.vMax, obj.vMin); % speed limits need to be implemented on the wheels -- take from mobile robotics class
             if R ~= inf
                 x_ICC = x - R * sin(theta);
                 y_ICC = y + R * cos(theta);
@@ -68,8 +77,16 @@ classdef DiffDrive
 
         end
         
+        function [obj, odom] = getOdometry(obj)
+            obj.odom = obj.q;
+            obj.odom.x = obj.odom.x + obj.obsNoise(1);
+            obj.odom.y = obj.odom.y + obj.obsNoise(2);
+            obj.odom.theta = obj.odom.theta + obj.obsNoise(3);
+            odom = obj.odom;
+        end
         function obj = recordData(obj)
             obj.state_all = [obj.state_all; obj.q.x, obj.q.y, obj.q.theta, obj.qd.v];
+            obj.obs_all = [obj.obs_all; obj.odom.x, obj.odom.y, obj.odom.theta];
         end
         
         function obj = testDynamics(obj)
@@ -99,10 +116,14 @@ classdef DiffDrive
             hold off
             axis equal
         end
-            
-
-        function v_clamp = clampV(obj, v)
-            v_clamp = sign(v) * min(max(abs(v),obj.vMin), obj.vMax);
+        
+        function obj = plotObservedState(obj)
+            plot(obj.obs_all(:,1), obj.obs_all(:,2), 'y*'); %end
+            hold on
+            plot(obj.obs_all(1,1), obj.obs_all(1,2), 'bo'); % start point
+            plot(obj.obs_all(end,1), obj.obs_all(end,2), 'ko'); % end point
+            hold off
+            axis equal
         end
     
     end
@@ -116,6 +137,10 @@ classdef DiffDrive
             else
                 theta_fix = theta;
             end
+        end
+        
+        function val_clamp = clampVal(val, val_max, val_min)
+            val_clamp = sign(val) * min(max(abs(val),val_min), val_max);
         end
         
     end
