@@ -12,3 +12,4 @@ sudo apt-get install -y exfat-fuse exfat-utils
 sudo apt-get install -y p7zip-full
 
 sudo apt-get install -y trash-cli
+sudo apt-get install -y lm-sensors

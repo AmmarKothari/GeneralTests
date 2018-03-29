@@ -69,3 +69,6 @@ catkin_create_pkg wam_node
 
 cp -rf ~/Documents/Software/catkin-barrett-ros-pkg/wam_common/ .
 cp -rf ~/Documents/Software/catkin-barrett-ros-pkg/wam_node/ .
+
+# fixing which library it links to
+cp -rf ~/Documents/Projects/GeneralTests/Setup/CMakeLists.txt wam_node/
