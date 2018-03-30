@@ -15,7 +15,7 @@ rm -rf libconfig-1.4.5 libconfig-1.4.5-PATCHED.tar.gz
 cd ~/Documents/Software
 git clone https://git.barrett.com/software/libbarrett.git
 cd libbarrett
-cmake . -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so
+cmake . -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DNON_REALTIME=true
 make -j8
 sudo make install
 
@@ -51,12 +51,6 @@ sudo make install
 
 
 cd ~/Documents/Software
-git clone git@github.com:BenBlumer/WAMPy.git
-
-echo "" >> ~/.bashrc
-echo "#adding Barrett WAMPy Path" >> ~/.bashrc
-export Barrett_WAMPy_DIR=$(pwd)
-echo "export ROS_PACKAGE_PATH=$Barrett_WAMPy_DIR:\${ROS_PACKAGE_PATH}" >> ~/.bashrc
 
 git clone git@github.com:BenBlumer/catkin-barrett-ros-pkg.git
 
@@ -66,9 +60,43 @@ cd ~/catkin_ws/src/
 
 catkin_create_pkg wam_common
 catkin_create_pkg wam_node
+catkin_create_pkg wam_msgs
 
 cp -rf ~/Documents/Software/catkin-barrett-ros-pkg/wam_common/ .
 cp -rf ~/Documents/Software/catkin-barrett-ros-pkg/wam_node/ .
 
+cp -rf ~/Documents/Software/wam_common/wam_common .
+cp -rf ~/Documents/Software/wam_common/wam_msgs .
+
 # fixing which library it links to
 cp -rf ~/Documents/Projects/GeneralTests/Setup/CMakeLists.txt wam_node/
+
+cd ~/catkin_ws
+catkin_make
+
+cd ~/Documents/Software
+rm -rf catkin-barrett-ros-pkg
+
+cd ~/Documents/Software
+git clone git@github.com:BenBlumer/WAMPy.git
+#git clone https://git.barrett.com/software/wam_common.git
+
+echo "" >> ~/.bashrc
+echo "#adding Barrett WAMPy Path" >> ~/.bashrc
+export Barrett_WAMPy_DIR=$(pwd)
+echo "export ROS_PACKAGE_PATH=\${ROS_PACKAGE_PATH}:$Barrett_WAMPy_DIR" >> ~/.bashrc
+source ~/.bashrc
+rosdep update
+python ~/Documents/Projects/GeneralTests/Setup/replace_string.py $Barrett_WAMPy_DIR/WAMPy/build/CMakeCache.txt /home/caris/Ben/liclipse_ws /home/ammar/Documents/Software
+ln -s WAMPy /home/ammar/catkin_ws/WAMPy
+
+rosmake WAMPy
+
+
+
+# trying to install code from Sonny
+sudo apt-get install libglfw3-dev libgles2-mesa-dev
+sudo apt-get install libqt5x11extras5
+
+#need to add this line at some point
+#source ~/catkin_ws/devel/setup.bash
