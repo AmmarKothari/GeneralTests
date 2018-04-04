@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!-- saved from url=(0079)https://horses.bovada.lv/static/site10/files/websites_cross_domain/storage.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <script>
+
+        (function() {
+            var self = {
+                initEvents: function() {
+                    var eventMethod = window.addEventListener ? 'addEventListener' : 'attachEvent';
+                    var listener = window[eventMethod];
+                    var messageEvent = eventMethod == 'attachEvent' ? 'onmessage' : 'message';
+
+                    listener(messageEvent, self.receiveMessage, false);
+                },
+
+                receiveMessage: function(event) {
+                    var data;
+                    try {
+                        data = JSON.parse(event.data);
+                    } catch (err) {
+                    }
+                    if (data) {
+                        switch (data.action) {
+                            case 'set': self.setData(data.id, data.key, data.value);
+                                break;
+                            case 'remove': self.removeData(data.id, data.key);
+                                break;
+                        }
+                    }
+                },
+
+                setData: function(id, key, value) {
+                    localStorage.setItem(key, value);
+                },
+
+                removeData: function(id, key) {
+                    localStorage.removeItem(key);
+                }
+            };
+            self.initEvents();
+        }());
+    </script>
+</head>
+<body>
+
+</body></html>

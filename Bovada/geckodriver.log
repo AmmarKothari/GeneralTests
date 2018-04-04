@@ -1,0 +1,80 @@
+1518674819110	geckodriver	INFO	geckodriver 0.19.1
+1518674819118	geckodriver	INFO	Listening on 127.0.0.1:34925
+1518674820196	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.TmkIvMRBZx6L"
+1518674820790	Marionette	INFO	Enabled via --marionette
+1518674822308	Marionette	INFO	Listening on port 35743
+1518674822443	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
+1518674931274	geckodriver	INFO	geckodriver 0.19.1
+1518674931282	geckodriver	INFO	Listening on 127.0.0.1:54675
+1518674932362	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.xDtnZFpJYr9z"
+1518674932969	Marionette	INFO	Enabled via --marionette
+1518674934415	Marionette	INFO	Listening on port 35147
+1518674934476	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
+1518675496914	geckodriver	INFO	geckodriver 0.19.1
+1518675496922	geckodriver	INFO	Listening on 127.0.0.1:60539
+1518675498005	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.tdB6iDDb1G4J"
+1518675498620	Marionette	INFO	Enabled via --marionette
+1518675500105	Marionette	INFO	Listening on port 45755
+1518675500139	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
+*** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: telemetry_modules_ping
+1518675561823	geckodriver	INFO	geckodriver 0.19.1
+1518675561832	geckodriver	INFO	Listening on 127.0.0.1:45845
+1518675562907	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.jBDva3VdP0TC"
+1518675563516	Marionette	INFO	Enabled via --marionette
+1518675565095	Marionette	INFO	Listening on port 33143
+1518675565128	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
+1518675780782	geckodriver	INFO	geckodriver 0.19.1
+1518675780786	geckodriver	INFO	Listening on 127.0.0.1:57227
+1518675781878	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.ISYBdK7JA8Dy"
+1518675782481	Marionette	INFO	Enabled via --marionette
+1518675783962	Marionette	INFO	Listening on port 41601
+1518675783990	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
+1518675883862	geckodriver	INFO	geckodriver 0.19.1
+1518675883866	geckodriver	INFO	Listening on 127.0.0.1:46397
+1518675884951	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.f9HhsMI285WH"
+1518675885556	Marionette	INFO	Enabled via --marionette
+1518675887093	Marionette	INFO	Listening on port 42049
+1518675887149	addons.xpi	WARN	Exception running bootstrap method shutdown on activity-stream@mozilla.org: [Exception... "Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIObserverService.removeObserver]"  nsresult: "0x80004005 (NS_ERROR_FAILURE)"  location: "JS frame :: resource://activity-stream/lib/SnippetsFeed.jsm :: uninit :: line 125"  data: no] Stack trace: uninit()@resource://activity-stream/lib/SnippetsFeed.jsm:125 < onAction()@resource://activity-stream/lib/SnippetsFeed.jsm:141 < _middleware/</<()@resource://activity-stream/lib/Store.jsm:51 < Store/this[method]()@resource://activity-stream/lib/Store.jsm:30 < uninit()@resource://activity-stream/lib/Store.jsm:153 < uninit()@resource://activity-stream/lib/ActivityStream.jsm:278 < uninit()@resource://gre/modules/addons/XPIProvider.jsm -> jar:file:///usr/lib/firefox/browser/features/activity-stream@mozilla.org.xpi!/bootstrap.js:80 < shutdown()@resource://gre/modules/addons/XPIProvider.jsm -> jar:file:///usr/lib/firefox/browser/features/activity-stream@mozilla.org.xpi!/bootstrap.js:196 < callBootstrapMethod()@resource://gre/modules/addons/XPIProvider.jsm:4406 < observe()@resource://gre/modules/addons/XPIProvider.jsm:2270
+JavaScript error: resource://shield-recipe-client/lib/ShieldRecipeClient.jsm, line 70: TypeError: log is undefined
+1518675887168	Marionette	WARN	TLS certificate errors will be ignored for this session
+1518675889661	geckodriver	INFO	geckodriver 0.19.1
+1518675889665	geckodriver	INFO	Listening on 127.0.0.1:35041
+1518675890757	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.yGM6yhXjB07Q"
+1518675891294	Marionette	INFO	Enabled via --marionette
+1518675892718	Marionette	INFO	Listening on port 39581
+1518675892773	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
+1518675946095	geckodriver	INFO	geckodriver 0.19.1
+1518675946099	geckodriver	INFO	Listening on 127.0.0.1:33083
+1518675947185	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.mf7XIhGKHI8h"
+1518675947751	Marionette	INFO	Enabled via --marionette
+1518675949193	Marionette	INFO	Listening on port 41637
+1518675949295	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
+*** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: telemetry_modules_ping
+1518675984712	geckodriver	INFO	geckodriver 0.19.1
+1518675984716	geckodriver	INFO	Listening on 127.0.0.1:40825
+1518675985801	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.iOS7a8e3Lwsp"
+1518675986389	Marionette	INFO	Enabled via --marionette
+1518675987772	Marionette	INFO	Listening on port 33467
+1518675987819	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
+1518676107734	geckodriver	INFO	geckodriver 0.19.1
+1518676107738	geckodriver	INFO	Listening on 127.0.0.1:57005
+1518676108821	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.h15loIc0JDEb"
+1518676109395	Marionette	INFO	Enabled via --marionette
+1518676110801	Marionette	INFO	Listening on port 46643
+1518676110831	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
+1518676151409	geckodriver	INFO	geckodriver 0.19.1
+1518676151413	geckodriver	INFO	Listening on 127.0.0.1:47459
+1518676152501	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.jrPylQsA2Qqc"
+1518676153050	Marionette	INFO	Enabled via --marionette
+1518676154355	Marionette	INFO	Listening on port 35759
+1518676154419	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pchat.bovada.lv/netagent/proactive/proactive.aspx, line 2: unreachable code after return statement
