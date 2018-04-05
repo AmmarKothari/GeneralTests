@@ -15,7 +15,8 @@ hold on
 h2_global.plotPose(ax1, h2_global.p, 'k*');
 
 for i = 0:0.1:.5
-    qi = quatinterp(quatnormalize(h1_global.q), quatnormalize(h2_global.q), i, 'slerp');
+    disp(h1_global.q * h2_global.q')
+    qi = quatinterp(quatnormalize(h1_global.q), quatnormalize(h2_global.q), i, 'slerp');      
     pt_mvd = quat2tform(qi) * [h1_global.p(1:3),1]';
     T_mvd = [quat2rotm(qi), pt_mvd(1:3); 0,0,0,1];
     hi_pose = pose_class(T_mvd);
@@ -32,10 +33,15 @@ h1_local.plotPose(ax2, h1_local.p, 'g*');
 hold on
 h2_local.plotPose(ax2, h2_local.p, 'k*');
 
-for i = 0:0.1:1
-    qi = quatinterp(quatnormalize(h1_local.q), quatnormalize(h2_local.q), i, 'slerp');
-    pt_mvd = quat2tform(quatconj(qi)) * [-h1_local.p(1:3),1]';
-    T_mvd = [quat2rotm(qi), pt_mvd(1:3); 0,0,0,1];
+for i = 0:0.1:0.5
+    disp(h1_local.q * h2_local.q')
+    if h1_local.q * h2_local.q' < 0
+        qi = quatinterp(quatnormalize(h1_local.q), quatnormalize(h2_local.q), i, 'slerp');
+    else
+        qi = quatinterp(quatnormalize(h1_local.q), quatnormalize(h2_local.q), i, 'slerp');
+    end
+    T_mvd = quat2tform(qi) * trvec2tform(-h1_local.p(1:3));
+%     T_mvd = [quat2rotm(qi), pt_mvd(1:3,4); 0,0,0,1];
     hi_pose = pose_class(T_mvd);
     hi_pose.plotPose(ax2);
 end
