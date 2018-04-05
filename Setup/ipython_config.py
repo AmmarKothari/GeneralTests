@@ -29,7 +29,11 @@ c = get_config()
 
 # lines of code to run at IPython startup.
 c.InteractiveShellApp.exec_lines = ['%autoreload 2',
-		'print("\\nWarning: disable autoreload in ipython_config.py to improve performance.")']
+		'print("\\nWarning: disable autoreload in ipython_config.py to improve performance.")',
+		'import numpy as np',
+		'print("np imported")',
+		'import matplotlib.pyplot as plt',
+		'print("plt imported")', ]
 
 # Enable GUI event loop integration with any of ('glut', 'gtk', 'gtk3', 'none',
 # 'osx', 'pyglet', 'qt', 'qt4', 'tk', 'wx').
