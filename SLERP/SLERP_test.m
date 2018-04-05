@@ -32,9 +32,9 @@ h1_local.plotPose(ax2, h1_local.p, 'g*');
 hold on
 h2_local.plotPose(ax2, h2_local.p, 'k*');
 
-for i = 0:0.1:.5
+for i = 0:0.1:1
     qi = quatinterp(quatnormalize(h1_local.q), quatnormalize(h2_local.q), i, 'slerp');
-    pt_mvd = quat2tform(qi) * [-h1_local.p(1:3),1]';
+    pt_mvd = quat2tform(quatconj(qi)) * [-h1_local.p(1:3),1]';
     T_mvd = [quat2rotm(qi), pt_mvd(1:3); 0,0,0,1];
     hi_pose = pose_class(T_mvd);
     hi_pose.plotPose(ax2);
