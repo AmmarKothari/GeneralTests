@@ -2,11 +2,28 @@ clear all
 addpath('../GeoMechanics_6D')
 figure(1)
 ax1 = gca();
-global_pose = pose_class([0,0,0,0,0,0]);
-object_pose = pose_class([1,1,1, 0,0,pi]);
-h1_global = pose_class([1,0,1, 0, pi/4, 0]);
-h2_global = pose_class([0,1,0, -pi/4, 0, 0]);
+% test case
+% global_pose = pose_class([0,0,0,0,0,0]);
+% object_pose = pose_class([1,1,1, 0,0,pi]);
+% h1_global = pose_class([1,0,1, 0, pi/4, 0]);
+% h2_global = pose_class([0,1,0, -pi/4, 0, 0]);
 
+% from data
+global_pose = pose_class([0,0,0,0,0,0]);
+object_pose = pose_class([1.      ,  0.      ,  0.      , -0.051881;
+                        0.      ,  1.      ,  0.      ,  0.938581;
+                        0.      ,  0.      ,  1.      ,  0.276977;
+                        0.      ,  0.      ,  0.      ,  1.      ]);
+h1_global = pose_class([ 0.70229904,  0.46869516, -0.53581797,  0.04200627;
+                        0.7096696 , -0.52024395,  0.47509504,  0.84713754;
+                       -0.05608131, -0.71391252, -0.69798553,  0.35852395;
+                        0.        ,  0.        ,  0.        ,  1.        ]);
+                    
+h2_global = pose_class([ 0.99612638, -0.08650489,  0.0157839 , -0.06288321;
+                       -0.07841983, -0.79272321,  0.60451654,  0.83231115;
+                       -0.03978137, -0.60341265, -0.7964362 ,  0.36219946;
+                        0.        ,  0.        ,  0.        ,  1.        ]);
+                    
 global_pose.plotPose(ax1, global_pose.p, 'rx');
 object_pose.plotPose(ax1, object_pose.p, 'bo');
 
@@ -59,25 +76,30 @@ c = object_local.p(1:3); % need to find a center - not guaranteed to be equal di
 % r = distance from center to ponit
 v_c_1 = h1_local.p(1:3) - object_local.p(1:3);
 v_c_2 = h2_local.p(1:3) - object_local.p(1:3); % vector from center to h2
+% v_c_1 = object_local.p(1:3) - h1_local.p(1:3);
+% v_c_2 = object_local.p(1:3) - h2_local.p(1:3); % vector from center to h2
 u_v_c_1 = v_c_1/norm(v_c_1);
 u_v_c_2 = v_c_2/norm(v_c_2);
 r1 = sqrt(sum(v_c_1.^2));
 r2 = sqrt(sum(v_c_2.^2));
 h2_on_circle = u_v_c_2 * r1;
+theta = acos(dot(u_v_c_1, u_v_c_2)/(norm(u_v_c_1)* norm(u_v_c_2)));
 % find axis through the line to the plane between the points and
 % perpinduclar to those points  -- implement current version in openrave
 % see what central axis finder outputs
 
 
 % build the plane
-plane_normal = cross(v_c_1, v_c_2);
+plane_normal = cross(u_v_c_1, u_v_c_2);
 % equation of circle
+% circ = @(t,r) c + r*cos(t)*u_v_c_1 + r*sin(t)*cross(plane_normal, u_v_c_1);
 circ = @(t,r) c + r*cos(t)*u_v_c_1 + r*sin(t)*u_v_c_2;
 
 for i = 0:0.1:0.9
     qi = quatinterp(h1_local.q, h2_local.q, i, 'slerp');
-    T_mvd = trvec2tform(h1_local.p(1:3)*(1-i) + i*h2_local.p(1:3)) * quat2tform(qi);  % for position orientation
+%     T_mvd = trvec2tform(h1_local.p(1:3)*(1-i) + i*h2_local.p(1:3)) * quat2tform(qi);  % for position orientation
     % spherical
+%     T_mvd = trvec2tform(circ(i*theta, (1-i)*r1+i*r2)) * quat2tform(qi); % spherical
     T_mvd = trvec2tform(circ(i*pi/2, (1-i)*r1+i*r2)) * quat2tform(qi); % spherical
     hi_pose = pose_class(T_mvd);
     hi_pose.plotPose(ax2);

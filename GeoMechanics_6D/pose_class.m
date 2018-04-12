@@ -58,7 +58,7 @@ classdef pose_class
                 m = 'ro';
             end
             if nargin < 5
-                scale = 0.1;
+                scale = 0.01;
             end
             if nargin < 3
                 p = obj.p;
