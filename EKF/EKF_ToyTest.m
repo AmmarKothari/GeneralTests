@@ -81,20 +81,21 @@ end
 % plot(1:N, L*cos(theta_noise), 'gx', 1:N, L*cos(z_all), 'rx', 1:N, L*cos(state_all(:,3)), 'bo')
 
 % plot x: actual vs. measured vs. estimated
-% plot(1:N, L*sin(theta_noise), 'gx', 1:N, L*sin(z_all), 'rx', 1:N, L*sin(state_all(:,3)), 'bo')
+plot(1:N, L*sin(theta_noise), 'gx', 1:N, L*sin(z_all), 'rx', 1:N, state_all(:,2), 'bo')
+legend('XY Actual', 'XY from measured Theta', 'XY Estimate')
 
 % plot the x,y position: actual vs. measured vs. estimated
 x = L*cos(theta); y = L*sin(theta);
 x_noise = L*cos(theta_noise); y_noise = L*sin(theta_noise);
-% plot(L*cos(theta_noise), L*sin(theta_noise), 'gx', L*cos(z_all), L*sin(z_all), 'rx', L*cos(state_all(:,3)),L*sin(state_all(:,3)), 'bo')
+% plot(L*cos(theta_noise), L*sin(theta_noise), 'gx', L*cos(z_all), L*sin(z_all), 'rx', state_all(:,1),state_all(:,2), 'bo')
 % axis equal
 
 % plot error in x position
-figure(1)
-subplot(2,1,1)
-plot(t_range, L*cos(state_all(:,3)) - L*cos(theta_noise)', 'bx-')
-subplot(2,1,2)
-plot(t_range, theta_noise, 'ro-')
+% figure(1)
+% subplot(2,1,1)
+% plot(t_range, L*cos(state_all(:,3)) - L*cos(theta_noise)', 'bx-')
+% subplot(2,1,2)
+% plot(t_range, theta_noise, 'ro-')
 
 figure(2)
 miny = min(L*sin(z_all)); maxy = max(L*sin(z_all));
@@ -102,7 +103,7 @@ minx = min(L*cos(z_all)); maxx = max(L*cos(z_all));
 for i=1:N
     plot(L*cos(theta_noise(1:i)), L*sin(theta_noise(1:i)), 'gx',...
         L*cos(z_all(1:i)), L*sin(z_all(1:i)), 'rx', ...
-        L*cos(state_all((1:i),3)),L*sin(state_all((1:i),3)), 'bo')
+        state_all(1:i,1),state_all(1:i,3), 'bo')
     xlim([minx, maxx]); ylim([miny, maxy]);
     pause(0.01)
 end
