@@ -24,7 +24,7 @@ sudo pip install --upgrade pip
 sudo apt-get install -y python-pip3
 sudo pip install progressbar
 sudo pip install scikit-learn
-
+sudo pip install Cython
 
 
 # setting up ipython
