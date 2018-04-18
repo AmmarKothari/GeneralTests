@@ -2,17 +2,23 @@
 % nonlinear
 
 dt = 0.1;
-t_total = 5;
+t_total = 10;
 N = t_total/dt;
 L = 1;
 
 m = 1; % number of measurements
 n = 4; % number of states
-uNoise = 0.01;
-obsNoise = 0.01;
+uNoise = 1e-2;
+obsNoise = 1e-2;
 % theta_dd = 2/10*ones(N,1);
 theta_dd = 1/10 * sin(0:dt:(t_total-dt)) + 0.2;
 theta_dd_noise = theta_dd + randn(size(theta_dd))*uNoise;
+
+% actual values
+theta_d = cumsum(theta_dd * dt);
+theta = cumsum(theta_d * dt);
+theta_d_noise = cumsum(theta_dd_noise * dt);
+theta_noise = cumsum(theta_d_noise * dt);
 
 % state = x,y,theta, thetad
 s0 = [1, 0, 0, 0];
@@ -34,15 +40,18 @@ Jf = @(s) [0, 0, -sin(s(3)),     0;
            0, 0,        0,     1];
    
 Jh = zeros(m,n);
+Jh(3) = 1;
 
-Q = diag(0.0001*ones(4,1));
-R = 0.0001;
+Q = diag(1e-1*ones(4,1));
+R = 1e1;
 
 % run loop
 i = 1;
-for t = 0:dt:(t_total-dt)
+t_range = 0:dt:(t_total-dt);
+for t = t_range
     u = theta_dd_noise(i);
-    z = post.s(3) + dt*post.s(4) + dt^2/2*u + randn(1)*obsNoise;
+%     z = post.s(3) + dt*post.s(4) + dt^2/2*u + randn(1)*obsNoise;
+    z = theta_noise(i) + dt*theta_d_noise(i) + dt^2/2*u + randn(1)*obsNoise;
     % predict
     prior.s = f(post.s, u);
     prior.P = Jf(prior.s) * prior.P * Jf(prior.s)' + Q;
@@ -59,14 +68,8 @@ for t = 0:dt:(t_total-dt)
     prior = post;
 end
 
-% actual values
-theta_d = cumsum(theta_dd * dt);
-theta = cumsum(theta_d *dt);
-theta_d_noise = cumsum(theta_dd_noise * dt);
-theta_noise = cumsum(theta_d_noise *dt);
-
 % plot acceleration: ideal vs. noise
-plot(1:N, theta_dd, 1:N, theta_dd_noise)
+% plot(1:N, theta_dd, 1:N, theta_dd_noise)
 
 % plot velocity: ideal vs. noise vs. estimate
 % plot(1:N, theta_d, 'rx', 1:N, theta_d_noise, 1:N, state_all(:,4), 'gx')
@@ -78,23 +81,29 @@ plot(1:N, theta_dd, 1:N, theta_dd_noise)
 % plot(1:N, L*cos(theta_noise), 'gx', 1:N, L*cos(z_all), 'rx', 1:N, L*cos(state_all(:,3)), 'bo')
 
 % plot x: actual vs. measured vs. estimated
-% plot(1:N, L*sin(theta_noise), 'gx', 1:N, L*sin(z_all), 'rx', 1:N, L*sin(state_all(:,3)), 'bo')
+plot(1:N, L*sin(theta_noise), 'gx', 1:N, L*sin(z_all), 'rx', 1:N, state_all(:,2), 'bo')
+legend('XY Actual', 'XY from measured Theta', 'XY Estimate')
 
 % plot the x,y position: actual vs. measured vs. estimated
 x = L*cos(theta); y = L*sin(theta);
 x_noise = L*cos(theta_noise); y_noise = L*sin(theta_noise);
-% plot(L*cos(theta_noise), L*sin(theta_noise), 'gx', L*cos(z_all), L*sin(z_all), 'rx', L*cos(state_all(:,3)),L*sin(state_all(:,3)), 'bo')
+% plot(L*cos(theta_noise), L*sin(theta_noise), 'gx', L*cos(z_all), L*sin(z_all), 'rx', state_all(:,1),state_all(:,2), 'bo')
 % axis equal
 
 % plot error in x position
-plot(1:N, L*cos(state_all(:,3)) - L*cos(theta_noise)')
+% figure(1)
+% subplot(2,1,1)
+% plot(t_range, L*cos(state_all(:,3)) - L*cos(theta_noise)', 'bx-')
+% subplot(2,1,2)
+% plot(t_range, theta_noise, 'ro-')
 
+figure(2)
 miny = min(L*sin(z_all)); maxy = max(L*sin(z_all));
 minx = min(L*cos(z_all)); maxx = max(L*cos(z_all));
 for i=1:N
     plot(L*cos(theta_noise(1:i)), L*sin(theta_noise(1:i)), 'gx',...
         L*cos(z_all(1:i)), L*sin(z_all(1:i)), 'rx', ...
-        L*cos(state_all((1:i),3)),L*sin(state_all((1:i),3)), 'bo')
+        state_all(1:i,1),state_all(1:i,3), 'bo')
     xlim([minx, maxx]); ylim([miny, maxy]);
     pause(0.01)
 end
