@@ -1,48 +1,40 @@
-function SDFTruncated2D(fn)
+function SDFTruncated2D(fn, truncation_length)
 % Same as SDFTruncated but with notion of inside defined
     img = imread(fn);
     gray = rgb2gray(img);
     gray_lim = size(gray);
-    % inside is closer to middle of image
-    inside = ceil(size(gray)/2);
-    SDF_ratio = 1;
-    truncation_length = 10;
+    inside = ceil(gray_lim/2);
+    DF_ratio = 1;
     new_meas_weight = 1;
-    SDF = zeros(ceil(size(gray)/SDF_ratio));
-    SDF_lim = size(SDF);
-    [SDF_posx,SDF_posy] = meshgrid(1:SDF_ratio:size(gray,1), 1:SDF_ratio:size(gray,2));
-    SDF_weights = zeros(SDF_lim);
-    weight_limit = 75;
+    DF = 10*ones(ceil(size(gray)/DF_ratio));
+    DF_lim = size(DF);
+    [DF_posx,DF_posy] = meshgrid(1:DF_ratio:size(gray,1), 1:DF_ratio:size(gray,2));
+    DF_weights = zeros(DF_lim);
 
     % iterating over all possible values in the scene
     for i1 = 1:gray_lim(1)
        for i2 = 1:gray_lim(2)
-           % measurement
-           val = gray(i1,i2);
-           if val > 200
-               xpos = ceil(i1/SDF_ratio);
-               ypos = ceil(i2/SDF_ratio);
-               % update in that area
-               for j1 = max(xpos-truncation_length, 1):min(xpos+truncation_length, SDF_lim(1))
-                   for j2 = max(ypos-truncation_length, 1):min(ypos+truncation_length, SDF_lim(2))
-                       d = sqrt((j1-xpos)^2 + (j2-ypos)^2); % distance from surface
-                       if norm([xpos,ypos]-inside) > norm([j1,j2]-inside)
-                          d = -d;                            
+           % for each point find the closest surface point
+           xpos = ceil(i1/DF_ratio);
+           ypos = ceil(i2/DF_ratio);
+           d = DF(xpos,ypos);
+           for j1 = max(i1-truncation_length, 1):min(i1+truncation_length, gray_lim(1))
+               for j2 = max(i2-truncation_length, 1):min(i2+truncation_length, gray_lim(2))
+                   val = gray(j1,j2);
+                   if val < 200
+                       d = min(abs(d),sqrt( (j1-i1)^2 + (j2-i2)^2));
+                       if norm([i1,i2]-inside) < norm([j1,j2]-inside)
+                           d = -d;
                        end
-                       SDF(j1,j2) = (SDF(j1,j2)*SDF_weights(j1,j2) + new_meas_weight*d)/(SDF_weights(j1,j2)+new_meas_weight);
-                       SDF_weights(j1,j2) = SDF_weights(j1,j2) + new_meas_weight;
-                       SDF_weights(j1,j2) = min(weight_limit, SDF_weights(j1,j2));
                    end
                end
-               SDF(xpos, ypos) = 0;
            end
-
+           DF(xpos,ypos) = d;
        end
+        imagesc(DF)
+        pause(0.1)
     end
-
     colormap('hot');
-    imagesc(SDF)
+    imagesc(DF)
     colorbar;
-
-
 end
