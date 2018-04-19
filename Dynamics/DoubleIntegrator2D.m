@@ -25,6 +25,12 @@ classdef DoubleIntegrator2D
             obj.qd = dt*acc;
         end
         
+        function obj = saveAll(obj)
+            obj.q_all = [obj.q_all; obj.q'];
+            obj.qd_all = [obj.qd_all; obj.qd'];
+            obj.qdd_all = [obj.qdd_all; obj.qdd'];
+        end
+        
     end
     
     methods (Static)
