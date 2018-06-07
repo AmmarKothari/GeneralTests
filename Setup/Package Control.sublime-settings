@@ -1,0 +1,9 @@
+{
+    "installed_packages":
+    [
+        "LatexTools",
+        "Python Flake8 Lint",
+        "Python Improved",
+	"CUDA C++",
+    ]
+}

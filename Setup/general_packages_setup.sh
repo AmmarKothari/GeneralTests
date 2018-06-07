@@ -11,7 +11,7 @@ sudo apt-get install -y p7zip-full
 sudo apt-get install -y filezilla
 sudo apt-get install -y trash-cli
 sudo apt-get install -y lm-sensors
-
+sudo apt-get install -y meld
 
 # ----- Exfat Mounting (for externals that can go between computers more easily) ---- #
 sudo apt-get install -y exfat-fuse exfat-utils
