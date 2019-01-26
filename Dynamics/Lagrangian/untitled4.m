@@ -1,0 +1,1 @@
+addpath(fullfile('../../', 'ROB541_GeometricMecahnics','Random', 'GeoOps2D'));
