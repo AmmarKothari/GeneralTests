@@ -1,10 +1,13 @@
 
 from ammar_super import AmmarSuper
-from constants import PAD_DEPTH, VPAT_CAPACITY, VPAT_WIDTH, PUSH_SPEED, REVERSE_SPEED
+from constants import PAD_DEPTH, VPAT_CAPACITY, VPAT_WIDTH, PUSH_SPEED, REVERSE_SPEED, IDEAL_PUSH_DIST
+from tmap import tmap
+
 import shapely.geometry as sg
 import copy
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 import pdb
 
@@ -14,9 +17,10 @@ GUESSES_TO_KEEP = 5
 NOISE = 0.99
 ITERATION_LIMIT = 1000
 
+HEIGHT_MAP_RESOLUTION = 0.1 # 10 cm
+
 
 class lane(AmmarSuper):
-	MAX_LENGTH_PUSH = VPAT_CAPACITY / VPAT_WIDTH * PAD_DEPTH
 	def __init__(self):
 		pass
 
@@ -31,10 +35,14 @@ class lane(AmmarSuper):
 		FL = [0, length]
 		self.pad = sg.Polygon([BL, BR, FR, FL])
 		self.length = length
-		self.witdh = VPAT_WIDTH
+		self.width = VPAT_WIDTH
 
 		self.FC = self.front_center(self.pad)
 		self.BC = self.back_center(self.pad)
+		self.tmap = tmap(0,0,length, VPAT_WIDTH, depth, HEIGHT_MAP_RESOLUTION)
+
+		# self.cost_fuction = self.evaluate_guess
+		self.cost_function = self.evaluate_guess_tmap
 
 	def plot_pad(self):
 		x,y = self.pad.exterior.xy
@@ -48,7 +56,7 @@ class lane(AmmarSuper):
 		return np.mean(np.array(rectangle.exterior.xy).T[2:4], axis=0) - self.front_center(rectangle)
 
 	def generate_random_start_points(self):
-		max_start_points = np.ceil(2 * self.length / self.ideal_push_dist()).astype('int')
+		max_start_points = np.ceil(2 * self.length / self.ideal_push_count()).astype('int')
 		return self.length * np.sort(np.random.rand(max_start_points))
 
 	def add_noise_to_guess(self, guess, noise):
@@ -56,22 +64,31 @@ class lane(AmmarSuper):
 		return np.sort(guess)
 
 	def evaluate_guess(self, start_points):
-		# dist_between_points = np.insert(np.diff(start_points), 0, start_points[0]-0)
+		"""Get a lower score for evenly spacing pushes and minimizing the total number of unique points.  Penalty for not ending and starting on the pad"""
 		dist_between_points = np.diff(start_points)
 		dist_between_points = dist_between_points[dist_between_points>0.1] # extra points for minimizing start points
 		start_and_end_correct = np.linalg.norm([start_points[0] - 0, start_points[-1] - self.length])
-		difference_from_ideal = self.ideal_push_dist() - dist_between_points
-		# pdb.set_trace()
+		difference_from_ideal = self.ideal_push_count() - dist_between_points
 		return np.dot(difference_from_ideal, difference_from_ideal.T) + 10*start_and_end_correct
 
-	def evaluate_guesses(self, guesses):
-		return [self.evaluate_guess(guess) for guess in guesses]
+	def evaluate_guess_tmap(self, start_points):
+		cost = 0
+		pdb.set_trace()
+		for i in range(0,len(start_points)-1):
+			# assuming all in a vertical line for now
+			cost += self.tmap.update_tmap_with_push([self.width/2, start_points[i]], [self.width/2, start_points[i+1]])
+		pdb.set_trace()
+		return cost
 
-	def ideal_push_dist(self):
+	def evaluate_guesses(self, guesses):
+		print('Evaluating Guesses')
+		return [self.cost_function(guess) for guess in guesses]
+
+	def ideal_push_count(self):
 		return self.length * PAD_DEPTH * VPAT_WIDTH / VPAT_CAPACITY
 
 	def ideal_solution(self):
-		return np.arange(0, self.length, self.ideal_push_dist())
+		return np.arange(0, self.length, self.ideal_push_count())
 
 	def plot_guesses(self, guesses):
 		plot_array = []
@@ -85,7 +102,7 @@ class lane(AmmarSuper):
 		plt.pause(0.000001)
 
 
-	def hill_climb(self, draw=True):
+	def hill_climb(self, draw=False):
 
 		guesses = [self.generate_random_start_points() for _ in range(NUM_OF_GUESSES)]
 		if draw:
@@ -129,7 +146,7 @@ class lane(AmmarSuper):
 if __name__ == '__main__':
 	l = lane()
 	l.create_pad(10, PAD_DEPTH)
-	l.hill_climb()
+	l.hill_climb(draw=False)
 
 
 

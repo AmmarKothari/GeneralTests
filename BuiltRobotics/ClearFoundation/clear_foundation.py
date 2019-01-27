@@ -20,7 +20,7 @@ plt.xlim(-FOUNDATION_DIAMETER/2, FOUNDATION_DIAMETER/2)
 morty.draw(ax1)
 f1.draw(ax1)
 # f1.circle_grid(100, np.pi/4, ax1)
-f1.hex_grid(1,10,ax1)
+f1.hex_grid_one_side(1,10,ax1)
 path = [ (0,0,0), (100, 0,0), (200, 0,0)]
 for p in path:
 	morty.update_location(p)
