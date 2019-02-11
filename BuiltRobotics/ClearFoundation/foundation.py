@@ -9,7 +9,7 @@ from bcolors import bcolors
 import shapely.geometry as sg
 import shapely.ops as so
 import copy
-# from pad import Pad
+from pad import Pad
 from ammar_super import AmmarSuper
 from constants import PAD_DEPTH, VPAT_CAPACITY, VPAT_WIDTH, PUSH_SPEED, REVERSE_SPEED
 
@@ -25,6 +25,7 @@ class foundation(AmmarSuper):
 		self.color_cycle = cycle('rgby')
 
 	def debug_print(self, arg):
+		return
 		super().debug_print(DEBUG, arg)
 
 	def draw(self, ax):
@@ -37,81 +38,101 @@ class foundation(AmmarSuper):
 			return False
 		return True
 
-	def hex_grid_one_side(self, polygon_sides, ax, draw=False): # this and the above function are the same except for how the indexes are calculated
-		# slot doze so that all the spoil piles end up on one side
-		if self.check_polygon(polygon_sides):
-			return
-		self.draw_polygon(self.circumscribed_polygon_points(polygon_sides), ax)
-		
-		pads = []
-		end_lines = []
-		first_pt_idx = np.argmin(np.array(xy)[:,1]) # bl of first rectangle
-		last_pt_idx = first_pt_idx + abs(first_pt_idx - np.argmax(np.array(xy)[:,1])) # br of last rectangle
-		self.debug_print('{}, {}'.format(first_pt_idx, last_pt_idx))
+	def get_polygon_props(self, polygon_sides):
 		width = 2*self.radius * np.tan(0.5*2*np.pi/polygon_sides)
 		length = 2*self.polygon_radius(polygon_sides)
+		polygon_props = {'sides': polygon_sides, 'width': width, 'length': length}
+		return polygon_props
 
+	def gen_simple_foundation_pads(self, polygon_props):
+		xy_vertices = self.circumscribed_polygon_points(polygon_props['sides'])
+		total_points = len(xy_vertices)
+		first_pt_idx = np.argmin(np.array(xy_vertices)[:,1]) # bl of first rectangle
+		last_pt_idx = first_pt_idx + abs(first_pt_idx - np.argmax(np.array(xy_vertices)[:,1])) # br of last rectangle
+		self.debug_print('{}, {}'.format(first_pt_idx, last_pt_idx))
+		pads = []
 		for i in range(first_pt_idx, last_pt_idx):
-			i_cur = i % len(xy)
-			i_next = (i+1) % len(xy)
+			i_cur = i % total_points
+			i_next = (i+1) % total_points
+			sub_pad = Pad(back_left = xy_vertices[i_cur], back_right = xy_vertices[i_next], length = polygon_props['length'])
+			pads.append(sub_pad)
 
-			BL = xy[i_cur]
-			BR = xy[i_next]
-			theta = np.arctan2(BR[1] - BL[1], BR[0] - BL[0]) - np.pi/2
-			FL = [xy[i_cur][0] + np.cos(theta)*length, xy[i_cur][1] + np.sin(theta)*length]
-			FR = [xy[i_next][0] + np.cos(theta)*length, xy[i_next][1] + np.sin(theta)*length]
-			
-			pads.append(sg.Polygon([BL, BR, FR, FL]))
-			# pads.append(Pad(BL, BR, length))
-			self.debug_print('BL: {}, FR: {}, theta: {}, length: {}, width: {}'.format(BL, FR, theta, length, width))
-			if draw:
-				self.draw_pad(pads[-1], ax)
+		return pads
 
-		num_pads = last_pt_idx - first_pt_idx
-		pad_length = 2*self.polygon_radius(polygon_sides)
-
+	def evaluate_pads(self, pads, polygon_props):
+		num_pads = len(pads)
 		process_dict = dict()
 		unprocessed_pad = copy.deepcopy(self.circle)
 		for i_pad, pad in enumerate(pads):
 			operation_dict = dict()
-			operation_dict['rectangle'] = pad
-			operation_dict['num_lanes'] = np.ceil(width/VPAT_WIDTH)
-			operation_dict['pushes_per_lane'] = np.ceil(length*PAD_DEPTH*VPAT_WIDTH/VPAT_CAPACITY)
-			operation_dict['push_start_locs'] = np.linspace(self.front_center(pad), self.back_center(pad), operation_dict['pushes_per_lane'])
-			operation_dict['dirt_length_per_push'] = length/operation_dict['pushes_per_lane']
+			operation_dict['pad'] = pad
+			operation_dict['length'] = pad.l
+			operation_dict['width'] = pad.w
+			operation_dict['material_moved'] = pad.l * pad.w * PAD_DEPTH
+			operation_dict['num_lanes'] = np.ceil(pad.w/VPAT_WIDTH)
+			operation_dict['pushes_per_lane'] = np.ceil(pad.l*PAD_DEPTH*VPAT_WIDTH/VPAT_CAPACITY)
+			operation_dict['push_start_locs'] = self.linear_interp_between_pts(pad.front_center, pad.back_center, operation_dict['pushes_per_lane'])
+			operation_dict['dirt_length_per_push'] = pad.l/operation_dict['pushes_per_lane'] * operation_dict['num_lanes']
 			total_push_dist = 0
 			for i_push, push in enumerate(np.arange(operation_dict['pushes_per_lane'])):
 				total_push_dist += i_push*operation_dict['dirt_length_per_push']
 			operation_dict['total_push_dist'] = total_push_dist
 			operation_dict['lane_time'] = operation_dict['total_push_dist'] / PUSH_SPEED + operation_dict['total_push_dist'] / REVERSE_SPEED
-			on_foundation_lane = pad.intersection(unprocessed_pad)
+			on_foundation_lane = pad.poly.intersection(self.circle)
 			operation_dict['area_foundation_cleared'] = on_foundation_lane.area
-			operation_dict['area_outside_foundation'] = pad.difference(self.circle).area
-			operation_dict['area_regraded'] = on_foundation_lane.area - unprocessed_pad.difference(on_foundation_lane).area
-			unprocessed_pad = unprocessed_pad.difference(pad)
+			operation_dict['area_outside_foundation'] = pad.poly.difference(self.circle).area
+			newly_graded_area = unprocessed_pad.area - unprocessed_pad.difference(on_foundation_lane).area
+			operation_dict['area_regraded'] = on_foundation_lane.area - newly_graded_area
+			unprocessed_pad = unprocessed_pad.difference(pad.poly)
 			process_dict[i_pad] = copy.deepcopy(operation_dict)
 
-		total_time = sum([process[1]['lane_time'] for process in process_dict.items()])
-		total_regrade = sum([process[1]['area_regraded'] for process in process_dict.items()])
-		pad_transition_dist = 0
-		for i_process in range(1, len(process_dict.items())-1):
-			pad_transition_dist += np.linalg.norm(
-				np.vstack(
-					(process_dict[i_process]['push_start_locs'][-1],process_dict[i_process+1]['push_start_locs'][0])
-					))
-		total_dist = sum([process[1]['total_push_dist'] for process in process_dict.items()])
-		total_area = self.circle.area
-		total_material = width*length*PAD_DEPTH
+		return process_dict, unprocessed_pad
 
-		print('Pad Width: {:.2f} m, Pad Length: {:.2f} m, Pad Depth: {:.2f} m, Total Material: {:.2f} m^3, Total Dist: {:.2f} (Pad Transition Dist: {:.2f}%), Total Regrade: {:.2f} ({:.2f}%), Estimated Time: {:.0f} sec ({:.2f} min)'.format(
-			width, length, PAD_DEPTH, total_material, total_dist, pad_transition_dist/total_dist*100, total_regrade, total_regrade/total_area*100, total_time, total_time/60))
+	def grading_process_stats(self, process_dict, unprocessed_pad):
+		average_length = np.mean([process['length'] for process in process_dict.values()])
+		average_width = np.mean([process['width'] for process in process_dict.values()])
+		total_material = np.sum([process['material_moved'] for process in process_dict.values()])
+		total_time = sum([process['lane_time'] for process in process_dict.values()])
+		total_regrade = sum([process['area_regraded'] for process in process_dict.values()])
+		pad_transition_dist = 0
+		for i_process in range(1, len(process_dict.values())-1):
+			pad_transition_dist += np.linalg.norm(process_dict[i_process]['push_start_locs'][-1] - process_dict[i_process+1]['push_start_locs'][0])
+		total_dist = sum([process['total_push_dist'] for process in process_dict.values()]) + pad_transition_dist
+		total_area = self.circle.area
+
+		print('Pad Width: {:.2f} m, Pad Length: {:.2f} m, Pad Depth: {:.2f} m, Total Material: {:.2f} Ungraded Area: {:.2f}, m^3, Total Dist: {:.2f} (Pad Transition Dist: {:.2f}%), Total Regrade: {:.2f} ({:.2f}%), Estimated Time: {:.0f} sec ({:.2f} min)'.format(
+			average_width, average_length, PAD_DEPTH, total_material, unprocessed_pad.area, total_dist, pad_transition_dist/total_dist*100, total_regrade, total_regrade/total_area*100, total_time, total_time/60))
+		grading_stats_dict = {'average_length': average_length, 'average_width': average_width, 'total_material':total_material, 'total_time':total_time, 'total_regrade':total_regrade,
+		'pad_transition_dist': pad_transition_dist, 'total_dist': total_dist, 'total_area':total_area}
+		return grading_stats_dict
+
+	def grading_score(self, process_dict, grading_stats_dict):
+		total_graded_poly = so.cascaded_union([p['pad'].poly for p in process_dict.values()])
+		total_useful_graded = self.circle.area - self.circle.difference(total_graded_poly).area
+		grade_score = - grading_stats_dict['total_regrade'] - grading_stats_dict['total_dist']  + total_useful_graded
+		return grade_score
+
+
+
+	def hex_grid_one_side(self, polygon_sides, ax, draw=False): # this and the above function are the same except for how the indexes are calculated
+		# slot doze so that all the spoil piles end up on one side
+		if not self.check_polygon(polygon_sides):
+			raise ValueError
+		self.draw_polygon(self.circumscribed_polygon_points(polygon_sides), ax)
 		
-		total_graded = self.circle.area - self.circle.difference(so.cascaded_union([p[1]['rectangle'] for p in process_dict.items()])).area
-		grade_score = - total_regrade - total_dist - pad_transition_dist + total_graded
-		pdb.set_trace()
+		end_lines = []
+		polygon_props = self.get_polygon_props(polygon_sides)
+		pads = self.gen_simple_foundation_pads(polygon_props)
+		process_dict, unprocessed_pad = self.evaluate_pads(pads, polygon_props)
+		grading_stats_dict = self.grading_process_stats(process_dict, unprocessed_pad)
+		grade_score = self.grading_score(process_dict, grading_stats_dict)
+
 		print('Grade Score: {:.2f}'.format(grade_score))
 
 		return end_lines
+
+	def optimize_hex_grid_one_side(self, polygon_sides, ax, draw=False):
+		# generate a set of pads (probably through picking a center back point, a center front point, and a width)
 
 
 	##################
@@ -200,4 +221,32 @@ class foundation(AmmarSuper):
 
 	def back_center(self, rectangle):
 		return np.mean(np.array(rectangle.exterior.xy).T[2:4], axis=0) - self.front_center(rectangle)
+
+	def linear_interp_between_pts(self, start_pt , end_pt, num_points):
+		interp_points = [np.linspace(start_pt[i], end_pt[i], int(num_points)) for i in range(len(start_pt))]
+		return np.array(interp_points).T
+
+	def plot_multipoly(self, multi_poly):
+		xs = []
+		ys = []
+		colors = cycle('rgb')
+		for poly in multi_poly:
+			x = np.array(poly.exterior.xy[0])
+			y = np.array(poly.exterior.xy[1])
+			# xs.append(x)
+			# ys.append(y)
+			plt.plot(x, y, '{}x-'.format(colors.next()))
+		# xs = np.hstack(xs)
+		# ys = np.hstack(ys)
+		
+		plt.show()
+
+
+
+
+if __name__ == '__main__':
+	FOUNDATION_DIAMETER = 64*12*2.54/100 # foundation diameter at bottom in m
+	fig1, ax1 = plt.subplots()
+	f1 = foundation(FOUNDATION_DIAMETER/2)
+	f1.hex_grid_one_side(11,ax1)
 
