@@ -1,0 +1,9 @@
+when out of range -- the link light turns red
+
+watchdog that will go into disable or pause when it expires
+-- unclear how to reset watchdog --> do it over serial
+-- 
+
+
+
+

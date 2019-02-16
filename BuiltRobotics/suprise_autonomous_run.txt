@@ -1,0 +1,720 @@
+####
+#### Running command: "cmake /home/built/built_ws/src -DCATKIN_DEVEL_PREFIX=/home/built/built_ws/devel -DCMAKE_INSTALL_PREFIX=/home/built/built_ws/install -G Unix Makefiles" in "/home/built/built_ws/build"
+####
+####
+#### Running command: "make -j8 -l8" in "/home/built/built_ws/build"
+####
+ROS_MASTER_URI=http://192.168.0.177:11311
+... logging to /home/ammar/.ros/log/e7040ff6-19f0-11e9-9a0c-34e12dd93960/roslaunch-Ammar-Built-25762.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+WARNING: disk usage in log directory [/home/ammar/.ros/log] is over 1GB.
+It's recommended that you use the 'rosclean' command.
+
+started roslaunch server http://192.168.0.177:33231/
+ros_comm version 1.12.14
+SUMMARY
+========
+PARAMETERS
+ * /rosdistro: kinetic
+ * /rosversion: 1.12.14
+NODES
+auto-starting new master
+process[master]: started with pid [25773]
+ROS_MASTER_URI=http://192.168.0.177:11311/
+
+setting /run_id to e7040ff6-19f0-11e9-9a0c-34e12dd93960
+process[rosout-1]: started with pid [25866]
+started core service [/rosout]
+Starting nodes...
+/home/ammar/.ros/log/e7040ff6-19f0-11e9-9a0c-34e12dd93960
+On machine 'ali', starting following processes first: ['system.py', 'cat_ex_hw.py']
+On ali, rosrun built cat_ex_hw.py  __name:=machine_hw __master:=http://192.168.0.177:11311
+On ali, rosrun built system.py  __master:=http://192.168.0.177:11311
+On machine 'ali', delay to let higher priority processes to start up
+On local, rosrun joy joy_node  __name:=gamepad_receiver __master:=http://192.168.0.177:11311
+On local, rosrun rqt_gui rqt_gui --perspective-file ~/built_ws/src/built/asset/ex/excavator.perspective __master:=http://192.168.0.177:11311
+On local, rosrun built terrain_mod.py  __master:=http://192.168.0.177:11311
+On local, rosrun built create_line.py  __master:=http://192.168.0.177:11311
+On local, rosrun built mesh_visualizer.py  __master:=http://192.168.0.177:11311
+On local, rosrun built arm_tester.py  __master:=http://192.168.0.177:11311
+On local, rosrun built obstacle_visualizer.py  __master:=http://192.168.0.177:11311
+On local, rosrun built exvisualizer -w __master:=http://192.168.0.177:11311
+On local, rosrun built kinematic_validation.py  __master:=http://192.168.0.177:11311
+On local, rosrun built terrain_map_visualizer.py  __master:=http://192.168.0.177:11311
+On local, rosrun built create_polygon.py  __master:=http://192.168.0.177:11311
+On local, rosrun built polygon_manager.py  __master:=http://192.168.0.177:11311
+On local, rosrun built param_loader.py  __master:=http://192.168.0.177:11311
+On local, rosrun built create_tri_poly.py  __master:=http://192.168.0.177:11311
+On local, rosrun rviz rviz -d ~/built_ws/src/built/asset/ex/ex.rviz __master:=http://192.168.0.177:11311
+On ali, rosrun built ex_dump.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built excavate.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built collision_detector.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built navigate.py  __master:=http://192.168.0.177:11311
+[ERROR] [1547685810.401408107]: Couldn't open joystick /dev/input/gamepad. Will retry every second.
+On ali, rosrun built terrain_map_publisher.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built ex_imu_calibration.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built localizer.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built ex_imu_reader.py  __name:=imu_reader __master:=http://192.168.0.177:11311
+On ali, rosrun built action_manager.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built move_straight.py  __master:=http://192.168.0.177:11311
+[ INFO] [1547685810.767427607]: rviz version 1.12.16
+[ INFO] [1547685810.767481821]: compiled against Qt version 5.5.1
+[ INFO] [1547685810.767494239]: compiled against OGRE version 1.9.0 (Ghadamon)
+On ali, rosrun built performance_monitor.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built cab_joint_server.py  __name:=cab_joint_server __master:=http://192.168.0.177:11311
+On ali, rosrun built excavate_foundation.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built test_excavate.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built arm_swing_server.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built excavate_volume.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built ifm_receiver.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built action_file_logger.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built ex_effector.py  __master:=http://192.168.0.177:11311
+On ali, rosrun built trench.py  __master:=http://192.168.0.177:11311
+[ INFO] [1547685811.963975085]: Stereo is NOT SUPPORTED
+[ INFO] [1547685811.964484676]: OpenGl version: 4.6 (GLSL 4.6).
+ INFO|19-01-16 16:43:32.729|t:0056|BParam: Refreshing params. (/machine_hw)
+ INFO|19-01-16 16:43:33.119|t:0208|BParam: Refreshing params. (/system)
+[ INFO] [1547685812.612690182]: Opened joystick: /dev/input/gamepad. deadzone_: 0.000000.
+ INFO|19-01-16 16:43:32.824|t:0696|BParam: Refreshing params. (/kinematic_validation)
+ INFO|19-01-16 16:43:34.673|t:0296|BParam: Refreshing params. (/performance_monitor)
+ INFO|19-01-16 16:43:34.433|t:0640|BParam: Refreshing params. (/create_line)
+WARNING|19-01-16 16:43:35.026|t:0296|PerformanceMonitor: Total cpu usage is 100.0% (/performance_monitor)
+ INFO|19-01-16 16:43:35.170|t:0056|CatExControls: Starting labjacks (/machine_hw)
+ INFO|19-01-16 16:43:34.713|t:0784|BParam: Refreshing params. (/create_polygon)
+ INFO|19-01-16 16:43:35.297|t:0592|BParam: Refreshing params. (/imu_reader)
+ INFO|19-01-16 16:43:34.750|t:0944|BParam: Refreshing params. (/create_tri_poly)
+ INFO|19-01-16 16:43:34.786|t:0696|BParam: Refreshing params. (/obstacle_visualizer)
+ INFO|19-01-16 16:43:34.969|t:0880|BParam: Refreshing params. (/terrain_mod)
+ INFO|19-01-16 16:43:35.049|t:0520|BParam: Refreshing params. (/terrain_map_visualizer)
+ INFO|19-01-16 16:43:35.148|t:0680|BParam: Refreshing params. (/mesh_visualizer)
+ INFO|19-01-16 16:43:35.179|t:0680|MeshUtils: No mesh file specified (/mesh_visualizer)
+ INFO|19-01-16 16:43:35.225|t:0112|BParam: Refreshing params. (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:43:35.807|t:0592|blog: Missing IMU data for boom (/imu_reader)
+WARNING|19-01-16 16:43:35.807|t:0592|Rate:  overshoot=((loop_count: 0) (0.0081s) (202.40%)) (/imu_reader)
+WARNING|19-01-16 16:43:35.821|t:0592|Rate:  overslept=((loop_count: 3) (0.0004s) (125.88%)) (/imu_reader)
+Listening for MoveArmGoals and watching the excavator. Press Ctrl-C to return.
+ INFO|19-01-16 16:43:35.859|t:0112|ExVisualizer: CONFIG IS INVALID. [102.6085, 12.7971, 60.9665]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+Retry failed, sleeping to give time for paramiko
+[ INFO] [1547685817.015885298]: Creating 1 swatches
+[ INFO] [1547685817.016329995]: Creating 1 swatches
+[ INFO] [1547685817.016587583]: Creating 1 swatches
+ INFO|19-01-16 16:43:37.670|t:0112|BParam: Refreshing params. (/collision_detector)
+Retry failed, sleeping to give time for paramiko
+ INFO|19-01-16 16:43:38.767|t:0720|BParam: Refreshing params. (/action_manager)
+Retry failed, sleeping to give time for paramiko
+ INFO|19-01-16 16:43:38.861|t:0112|ExVisualizer: CONFIG IS INVALID. [102.6085, 12.7971, 60.9665]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+ INFO|19-01-16 16:43:39.644|t:0056|CatExControls: Enabling autonomous mode (/machine_hw)
+Retry failed, sleeping to give time for paramiko
+WARNING|19-01-16 16:43:39.960|t:0592|Rate:  overshoot=((loop_count: 791) (0.0016s) (39.90%)) (/imu_reader)
+Retry failed, sleeping to give time for paramiko
+WARNING|19-01-16 16:43:40.322|t:0592|Rate:  overslept=((loop_count: 882) (0.0001s) (54.34%)) (/imu_reader)
+ INFO|19-01-16 16:43:40.386|t:0184|BParam: Refreshing params. (/terrain_map_publisher)
+ INFO|19-01-16 16:43:40.456|t:0256|BParam: Refreshing params. (/navigate)
+Exception in thread Thread-9:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 801, in __bootstrap_inner
+    self.run()
+  File "/usr/lib/python2.7/threading.py", line 1073, in run
+    self.function(*self.args, **self.kwargs)
+  File "/home/ammar/built_ws/src/built/pybuilt/script/commands.py", line 163, in load_and_execute_scheduling_params
+    with BashIfc(machine, root=True) as bifc:
+  File "/home/ammar/built_ws/src/built/pybuilt/util/bash_ifc.py", line 54, in __enter__
+    raise BuiltBashException('BashIfc Exception: SSH resources constrained')
+BuiltBashException: BashIfc Exception: SSH resources constrained
+
+ INFO|19-01-16 16:43:40.762|t:0632|BParam: Refreshing params. (/ifm_receiver)
+WARNING|19-01-16 16:43:40.219|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:40.890|t:0560|BParam: Refreshing params. (/ex_dump)
+WARNING|19-01-16 16:43:40.446|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:40.684|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:40.921|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:41.526|t:0528|BParam: Refreshing params. (/localizer)
+ INFO|19-01-16 16:43:41.596|t:0992|BParam: Refreshing params. (/cab_joint_server)
+WARNING|19-01-16 16:43:41.160|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:41.397|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:41.636|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:42.340|t:0944|BParam: Refreshing params. (/trench)
+WARNING|19-01-16 16:43:41.873|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:41.899|t:0112|ExVisualizer: CONFIG IS INVALID. [102.6076, 12.7981, 60.9665]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+ INFO|19-01-16 16:43:42.532|t:0064|BParam: Refreshing params. (/effector)
+ INFO|19-01-16 16:43:42.655|t:0056|CatExHw: Cat Excavator Started (/machine_hw)
+ INFO|19-01-16 16:43:42.663|t:0056|CatExHw: unable to get fuel level reading at this time. (/machine_hw)
+ INFO|19-01-16 16:43:42.663|t:0056|CatExHw: Can't auto-move. Entering idle mode. (/machine_hw)
+WARNING|19-01-16 16:43:42.113|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:42.738|t:0584|BParam: Refreshing params. (/imu_calibration)
+WARNING|19-01-16 16:43:42.765|t:0496|rosout: Inbound TCP/IP connection failed: connection from sender terminated before handshake header received. 0 bytes were received. Please check sender for additional details. (/ifm_receiver)
+ INFO|19-01-16 16:43:42.610|t:0936|BParam: Refreshing params. (/excavate)
+WARNING|19-01-16 16:43:42.362|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:42.613|t:0072|tf: TF Exception: "base_link" passed to lookupTransform argument source_frame does not exist.  (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:43.344|t:0552|BParam: Refreshing params. (/move_straight)
+WARNING|19-01-16 16:43:42.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:43.508|t:0528|Localizer: Set starting z grade (offset=0.0) (/localizer)
+ERROR|19-01-16 16:43:43.673|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:43:43.673|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.353m std dev (/localizer)
+WARNING|19-01-16 16:43:43.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:43.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:43.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:43.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:44.607|t:0592|Rate:  overslept=((loop_count: 1951) (0.0001s) (52.63%)) (/imu_reader)
+WARNING|19-01-16 16:43:44.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:44.712|t:0592|Rate:  overshoot=((loop_count: 1977) (0.0001s) (2.25%)) (/imu_reader)
+WARNING|19-01-16 16:43:44.712|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:44.362|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:44.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:44.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:44.900|t:0112|ExVisualizer: CONFIG IS INVALID. [103.4048, 12.8991, 60.3663]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:43:45.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:45.770|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:45.362|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:46.148|t:0304|TerrainMap_RW: Loading terrain map from previous measurements (/terrain_map_publisher)
+ INFO|19-01-16 16:43:46.151|t:0304|TerrainMap_RW: Finished loading terrain map from previous measurements (/terrain_map_publisher)
+WARNING|19-01-16 16:43:45.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:46.158|t:0496|BParam: Refreshing params. (/arm_swing_server)
+WARNING|19-01-16 16:43:45.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:46.462|t:0184|Rate:  overshoot=((loop_count: 0) (0.2195s) (219.50%)) (/terrain_map_publisher)
+WARNING|19-01-16 16:43:46.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:46.812|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:46.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:46.614|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:46.862|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:47.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:47.860|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:47.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:47.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:47.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:47.900|t:0112|ExVisualizer: CONFIG IS INVALID. [103.9037, 13.0001, 59.7660]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:43:48.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:43:48.711|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:43:48.909|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:48.362|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:48.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:48.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:49.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:49.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:49.968|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+ INFO|19-01-16 16:43:50.734|t:0936|BParam: Refreshing params. (/test_excavate)
+WARNING|19-01-16 16:43:50.281|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:50.288|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:50.551|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:50.813|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:50.902|t:0112|ExVisualizer: CONFIG IS INVALID. [104.1008, 13.3025, 59.5661]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:43:51.075|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:51.007|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:51.337|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:52.057|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:51.599|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:51.861|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:52.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:52.364|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:53.063|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:52.612|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:52.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:53.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:43:53.759|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:43:53.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:54.112|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:53.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:54.407|t:0112|BParam: Refreshing params. (/excavate_volume)
+WARNING|19-01-16 16:43:53.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:53.917|t:0112|ExVisualizer: CONFIG IS INVALID. [103.9000, 13.5025, 59.6666]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:43:54.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:54.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:54.614|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:55.162|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:55.236|t:0592|Rate:  overshoot=((loop_count: 4608) (0.0002s) (4.58%)) (/imu_reader)
+WARNING|19-01-16 16:43:54.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:55.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:55.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:56.169|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:55.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+Traceback (most recent call last):
+  File "/home/built/built_ws/src/built/pybuilt/controls/vehicles/ex/node/ex_effector.py", line 66, in <module>
+    node.update_angles()
+  File "/home/built/built_ws/src/built/pybuilt/controls/vehicles/ex/node/ex_effector.py", line 51, in update_angles
+    self.arm_path_server.update_joint_data(self.arm_pos, self.arm_traj)
+  File "/home/built/built_ws/src/built/pybuilt/controls/vehicles/ex/servers/arm_path_server.py", line 105, in update_joint_data
+    'arm_controller/boom/joint_constants/velocity_bias')
+  File "/home/built/built_ws/src/built/pybuilt/util/built_super.py", line 13, in gparam
+    return BParam.instance().get(ns + param, default)
+  File "/home/built/built_ws/src/built/pybuilt/util/bparam.py", line 121, in get
+    cur_param = cur_param[namespace]
+TypeError: 'NoneType' object has no attribute '__getitem__'
+WARNING|19-01-16 16:43:55.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:56.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:56.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:56.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:57.209|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:56.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:56.917|t:0112|ExVisualizer: CONFIG IS INVALID. [104.1005, 13.5990, 59.2680]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:43:57.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:57.362|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:58.007|t:0592|Rate:  overslept=((loop_count: 5301) (0.0001s) (72.37%)) (/imu_reader)
+WARNING|19-01-16 16:43:57.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:58.260|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.352m std dev (/localizer)
+WARNING|19-01-16 16:43:57.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:58.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:43:58.760|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:43:58.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:58.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:59.312|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.351m std dev (/localizer)
+WARNING|19-01-16 16:43:58.862|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:59.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:59.914|t:0712|rosout: Inbound TCP/IP connection failed: connection from sender terminated before handshake header received. 0 bytes were received. Please check sender for additional details. (/ex_dump)
+WARNING|19-01-16 16:43:59.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:43:59.684|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:00.362|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.351m std dev (/localizer)
+WARNING|19-01-16 16:43:59.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:43:59.925|t:0112|ExVisualizer: CONFIG IS INVALID. [104.1031, 13.5980, 59.0698]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:00.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:00.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:00.709|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:01.414|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.351m std dev (/localizer)
+WARNING|19-01-16 16:44:00.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:01.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:01.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:02.058|t:0328|BParam: Refreshing params. (/excavate_foundation)
+WARNING|19-01-16 16:44:01.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:02.387|t:0592|Rate:  overslept=((loop_count: 6396) (0.0001s) (77.66%)) (/imu_reader)
+WARNING|19-01-16 16:44:01.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:02.463|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.351m std dev (/localizer)
+WARNING|19-01-16 16:44:02.114|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:02.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:02.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:02.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:02.933|t:0112|ExVisualizer: CONFIG IS INVALID. [103.9031, 13.4962, 59.2702]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:03.512|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.351m std dev (/localizer)
+WARNING|19-01-16 16:44:03.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:03.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:03.762|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:03.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:03.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:04.563|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.351m std dev (/localizer)
+WARNING|19-01-16 16:44:04.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:04.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:04.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:04.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:05.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:05.604|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.351m std dev (/localizer)
+WARNING|19-01-16 16:44:05.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:05.614|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:05.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:05.952|t:0112|ExVisualizer: CONFIG IS INVALID. [103.5048, 13.2962, 59.6712]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:06.611|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.351m std dev (/localizer)
+WARNING|19-01-16 16:44:06.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:06.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:06.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:06.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:07.660|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.189m std dev (/localizer)
+WARNING|19-01-16 16:44:07.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:07.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:07.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:07.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:08.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:08.708|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+ERROR|19-01-16 16:44:08.770|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:08.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:08.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:08.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:08.987|t:0112|ExVisualizer: CONFIG IS INVALID. [102.9061, 12.9962, 60.3718]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:09.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:09.707|t:0592|Rate:  overslept=((loop_count: 8226) (0.0001s) (77.08%)) (/imu_reader)
+WARNING|19-01-16 16:44:09.768|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:09.362|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:09.650|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:09.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:10.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:10.808|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:10.887|t:0592|Rate:  overshoot=((loop_count: 8521) (0.0001s) (1.27%)) (/imu_reader)
+WARNING|19-01-16 16:44:10.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:10.686|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:10.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:11.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:11.859|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:11.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:11.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:11.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:11.990|t:0112|ExVisualizer: CONFIG IS INVALID. [102.5060, 12.8971, 60.7716]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:12.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:12.907|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:12.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:12.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:12.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:13.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:13.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:13.811|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:13.968|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:13.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:13.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:14.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:14.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:15.008|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:14.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:14.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:14.995|t:0112|ExVisualizer: CONFIG IS INVALID. [102.0060, 12.6981, 61.3713]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:15.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:15.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:15.967|t:0592|Rate:  overslept=((loop_count: 9791) (0.0001s) (60.69%)) (/imu_reader)
+WARNING|19-01-16 16:44:16.059|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:16.104|t:0592|Rate:  overshoot=((loop_count: 9825) (0.0002s) (5.08%)) (/imu_reader)
+WARNING|19-01-16 16:44:15.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:15.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:16.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:16.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:17.060|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:16.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:16.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:17.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:17.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:18.111|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:17.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:17.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:18.004|t:0112|ExVisualizer: CONFIG IS INVALID. [102.2054, 12.5991, 61.3715]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:18.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:18.859|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:18.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:18.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:19.170|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:18.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:19.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:19.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:20.087|t:0592|Rate:  overslept=((loop_count: 10821) (0.0001s) (53.08%)) (/imu_reader)
+WARNING|19-01-16 16:44:19.652|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:20.209|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:19.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:20.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:20.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:21.258|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:20.986|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:20.988|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:21.044|t:0112|ExVisualizer: CONFIG IS INVALID. [101.9030, 12.6002, 61.4705]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:21.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:21.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:21.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:22.307|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:21.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:22.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:22.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:22.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:23.367|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:22.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:23.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:23.909|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:23.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:23.614|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:24.408|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:23.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:24.084|t:0112|ExVisualizer: CONFIG IS INVALID. [101.6017, 12.6026, 61.8694]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:24.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:24.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:24.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:24.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:25.458|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:25.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:25.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:25.614|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:25.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:26.507|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:26.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:26.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:26.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:26.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:27.515|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:27.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:27.116|t:0112|ExVisualizer: CONFIG IS INVALID. [101.7011, 12.6053, 61.9690]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:27.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:27.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:27.862|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:28.563|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:28.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:28.364|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:28.969|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:28.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:28.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:29.614|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:29.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:29.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:29.636|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:29.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:30.666|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:30.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:30.170|t:0112|ExVisualizer: CONFIG IS INVALID. [101.8004, 12.9053, 61.6686]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:30.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:30.670|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:30.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:31.667|t:0592|Rate:  overslept=((loop_count: 13716) (0.0001s) (235.40%)) (/imu_reader)
+WARNING|19-01-16 16:44:31.671|t:0592|Rate:  overshoot=((loop_count: 13717) (0.0000s) (0.32%)) (/imu_reader)
+WARNING|19-01-16 16:44:31.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:31.715|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:31.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:31.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:31.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:32.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:32.767|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:32.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:32.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:32.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:33.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:33.208|t:0112|ExVisualizer: CONFIG IS INVALID. [101.8004, 13.0052, 61.6684]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:33.806|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:33.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:33.972|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:33.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:33.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:34.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:34.814|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:34.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:34.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:34.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:35.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:35.863|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:35.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:35.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:35.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:36.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:36.691|t:0592|Rate:  overslept=((loop_count: 14972) (0.0001s) (50.48%)) (/imu_reader)
+ INFO|19-01-16 16:44:36.249|t:0112|ExVisualizer: CONFIG IS INVALID. [102.1001, 13.2038, 61.4679]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:36.912|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:36.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:36.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:36.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:37.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:37.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:37.972|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:37.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:37.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:38.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:38.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:39.011|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:39.011|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:38.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:38.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:39.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:39.289|t:0112|ExVisualizer: CONFIG IS INVALID. [101.8007, 13.3038, 61.7676]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:39.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:40.062|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:39.637|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:39.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:40.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:40.362|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:41.111|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.19m std dev (/localizer)
+WARNING|19-01-16 16:44:40.963|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:40.967|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:41.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:41.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:42.160|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:42.167|t:0592|Rate:  overslept=((loop_count: 16341) (0.0001s) (50.40%)) (/imu_reader)
+WARNING|19-01-16 16:44:41.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:42.187|t:0592|Rate:  overshoot=((loop_count: 16346) (0.0000s) (0.55%)) (/imu_reader)
+WARNING|19-01-16 16:44:41.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:42.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:42.308|t:0112|ExVisualizer: CONFIG IS INVALID. [102.3024, 13.3001, 61.3672]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:42.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:43.168|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:42.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:42.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:43.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:43.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:44.011|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:43.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:44.210|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:43.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:44.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:44.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:44.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:45.260|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:44.862|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:45.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:45.314|t:0112|ExVisualizer: CONFIG IS INVALID. [103.2025, 13.3990, 60.3664]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:45.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:45.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:46.227|t:0592|Rate:  overslept=((loop_count: 17356) (0.0001s) (60.62%)) (/imu_reader)
+WARNING|19-01-16 16:44:46.310|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:45.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:46.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:46.767|t:0592|Rate:  overshoot=((loop_count: 17491) (0.0000s) (1.10%)) (/imu_reader)
+WARNING|19-01-16 16:44:46.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:46.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:47.360|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:46.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:47.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:47.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:47.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:48.369|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:47.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:48.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:48.337|t:0112|ExVisualizer: CONFIG IS INVALID. [103.5035, 13.2971, 60.2662]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:48.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:49.055|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:48.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:49.408|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:48.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:49.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:49.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:50.459|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:50.684|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:50.688|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:50.926|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:51.508|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:51.708|t:0592|Rate:  overslept=((loop_count: 18726) (0.0001s) (289.79%)) (/imu_reader)
+WARNING|19-01-16 16:44:51.164|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:51.367|t:0112|ExVisualizer: CONFIG IS INVALID. [103.8017, 13.2954, 59.9664]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:51.402|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:51.647|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:51.878|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:52.559|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:52.668|t:0592|Rate:  overshoot=((loop_count: 18966) (0.0003s) (7.25%)) (/imu_reader)
+WARNING|19-01-16 16:44:52.116|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:52.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:52.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:52.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:53.566|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:53.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:53.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:54.107|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:53.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:53.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:54.605|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:54.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:54.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:54.409|t:0112|ExVisualizer: CONFIG IS INVALID. [104.3011, 13.1941, 59.5668]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:54.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:54.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:55.656|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:55.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:55.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:55.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:55.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:56.662|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:56.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:56.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:56.614|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:56.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:57.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:57.712|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:57.888|t:0592|Rate:  overshoot=((loop_count: 20271) (0.0002s) (4.90%)) (/imu_reader)
+WARNING|19-01-16 16:44:57.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:44:57.448|t:0112|ExVisualizer: CONFIG IS INVALID. [104.6000, 12.9935, 59.3677]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:44:58.027|t:0592|Rate:  overslept=((loop_count: 20306) (0.0001s) (86.56%)) (/imu_reader)
+WARNING|19-01-16 16:44:57.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:57.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:58.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:58.764|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:58.362|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ERROR|19-01-16 16:44:59.107|t:0528|Localizer: Rover 2 outside operational range. Wait to reacquire fix, or check that the base station is configured correctly. (/localizer)
+WARNING|19-01-16 16:44:58.613|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:58.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:59.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:59.815|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:44:59.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:59.648|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:44:59.862|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:00.112|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:00.856|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:45:00.362|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+ INFO|19-01-16 16:45:00.450|t:0112|ExVisualizer: CONFIG IS INVALID. [104.7002, 12.5930, 59.5688]: Model is invalid for reason(s): Boom angle exceeds MAX joint limits; Stick angle exceeds MIN joint limits (/exvisualizer_26020_1547685815082)
+WARNING|19-01-16 16:45:00.709|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:00.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:01.113|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:01.906|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+WARNING|19-01-16 16:45:01.363|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:01.614|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:01.863|t:0072|tf: TF Exception: Could not find a connection between 'map' and 'base_link' because they are not part of the same tree.Tf has two or more unconnected trees. (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:02.468|t:0592|Rate:  overslept=((loop_count: 21416) (0.0001s) (54.13%)) (/imu_reader)
+^C INFO|19-01-16 16:45:02.048|t:0696|BuiltActionServer: Shutting down function thread (/kinematic_validation)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/matplotlib/backend_bases.py", line 1373, in _on_timer
+    ret = func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/matplotlib/animation.py", line 1481, in _step
+    still_going = Animation._step(self, *args)
+  File "/usr/local/lib/python2.7/dist-packages/matplotlib/animation.py", line 1217, in _step
+ INFO|19-01-16 16:45:02.050|t:0056|BuiltActionServer: Shutting down function thread (/arm_tester)
+    self._draw_next_frame(framedata, self._blit)
+  File "/usr/local/lib/python2.7/dist-packages/matplotlib/animation.py", line 1236, in _draw_next_frame
+    self._draw_frame(framedata)
+  File "/usr/local/lib/python2.7/dist-packages/matplotlib/animation.py", line 1772, in _draw_frame
+    self._drawn_artists = self._func(framedata, *self._args)
+  File "/home/ammar/built_ws/src/built/pybuilt/script/exvisualizer", line 426, in animate_model
+    ex_model.set_joint_angles(*data)
+  File "/home/ammar/built_ws/src/built/pybuilt/controls/vehicles/ex/kinematics/model.py", line 255, in set_joint_angles
+    self._compute_forward_kinematics()
+  File "/home/ammar/built_ws/src/built/pybuilt/controls/vehicles/ex/kinematics/model.py", line 405, in _compute_forward_kinematics
+    self._check_model_validity()
+  File "/home/ammar/built_ws/src/built/pybuilt/controls/vehicles/ex/kinematics/model.py", line 709, in _check_model_validity
+    self._check_track_collisions()
+  File "/home/ammar/built_ws/src/built/pybuilt/controls/vehicles/ex/kinematics/model.py", line 643, in _check_track_collisions
+    bucket_bpoly = self._generate_bucket_bpoly()
+  File "/home/ammar/built_ws/src/built/pybuilt/controls/vehicles/ex/kinematics/model.py", line 637, in _generate_bucket_bpoly
+    bucket_rear_bp = bucket_tip_bp.offset(xyz=(-self.gparam('bucket_cutting_edge_effective_length'), 0, 0))
+  File "/home/ammar/built_ws/src/built/pybuilt/util/built_super.py", line 13, in gparam
+    return BParam.instance().get(ns + param, default)
+  File "/home/ammar/built_ws/src/built/pybuilt/util/bparam.py", line 110, in get
+    with self.lock:
+  File "/usr/lib/python2.7/threading.py", line 169, in acquire
+    if self.__owner == me:
+KeyboardInterrupt
+[rosout-1] killing on exit
+****Keyboard interrupt, finishing reading stdout****
+WARNING|19-01-16 16:45:02.692|t:0592|Rate:  overshoot=((loop_count: 21472) (0.0001s) (2.50%)) (/imu_reader)
+^CAborted (core dumped)
+****IO error, running process has died****
+[master] killing on exit
+^C****Keyboard interrupt, finishing reading stdout****
+WARNING|19-01-16 16:45:02.967|t:0528|Localizer: R2 GPS position information: Differential, code phase only solution (DGPS), 1.191m std dev (/localizer)
+shutting down processing monitor...
+... shutting down processing monitor complete
+done
+^CWARNING|19-01-16 16:45:02.651|t:0072|rosout: unable to communicate with ROS Master, registrations are now out of sync (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:02.652|t:0072|rosout: unable to communicate with ROS Master, registrations are now out of sync (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:02.653|t:0072|rosout: unable to communicate with ROS Master, registrations are now out of sync (/rqt_gui_py_node_25986)
+WARNING|19-01-16 16:45:02.654|t:0072|rosout: unable to communicate with ROS Master, registrations are now out of sync (/rqt_gui_py_node_25986)
+^C******************************
+ INFO|19-01-16 16:45:02.668|t:0416|Blauncher: processes=['roscore', 'joy_node', 'exvisualizer', 'rviz'] crashed, shutting down (/blaunch)
+******************************
+^C^C-------[ali]: SIGINT nodes=['cat_ex_hw.py']-------
+^C^C[ali]: attempt 1/2. PIDs: [6210] for cat_ex_hw.py
+^C^C^C[ali]: attempt 2/2. PIDs: [6210] for cat_ex_hw.py
+^C^C^C-------[ali]: SIGINT nodes=[ALL]-------
+^C^C^C[ali]: attempt 1/3. PIDs: [7381] for performance_monitor.py
+[ali]: attempt 1/3. PIDs: [6211] for system.py
+[ali]: attempt 1/3. PIDs: [7843] for ifm_receiver.py
+[ali]: attempt 1/3. PIDs: [7086] for ex_imu_reader.py
+[ali]: attempt 1/3. PIDs: [6210] for cat_ex_hw.py
+[ali]: attempt 1/3. PIDs: [6875] for ex_imu_calibration.py
+[ali]: attempt 1/3. PIDs: [6875] for imu_calibration.py
+[ali]: attempt 1/3. PIDs: [7896] for action_file_logger.py
+[ali]: attempt 1/3. PIDs: [6658] for navigate.py
+[ali]: attempt 1/3. PIDs: [7276] for move_straight.py
+[ali]: attempt 1/3. PIDs: [6533] for dump.py
+[ali]: attempt 1/3. PIDs: [7239] for action_manager.py
+[ali]: attempt 1/3. PIDs: [7839] for excavate_volume.py
+[ali]: attempt 1/3. PIDs: [6590, 7664] for excavate.py
+[ali]: attempt 1/3. PIDs: [7760] for excavate_foundation.py
+[ali]: attempt 1/3. PIDs: [7983] for trench.py
+[ali]: attempt 1/3. PIDs: [7664] for test_excavate.py
+[ali]: attempt 1/3. PIDs: [6533] for ex_dump.py
+[ali]: attempt 1/3. PIDs: [6767, 10605] for terrain_map_publisher.py
+[ali]: attempt 1/3. PIDs: [6615] for collision_detector.py
+[ali]: attempt 1/3. PIDs: [6998] for localizer.py
+[ali]: attempt 1/3. PIDs: [7999] for ex_effector.py
+[ali]: attempt 1/3. PIDs: [7915] for arm_swing_server.py
+[ali]: attempt 1/3. PIDs: [7441] for joint_server.py
+[ali]: attempt 1/3. PIDs: [7441] for cab_joint_server.py
+^C^C[ali]: attempt 2/3. PIDs: [6210] for cat_ex_hw.py
+[ali]: attempt 2/3. PIDs: [6767, 10605] for terrain_map_publisher.py
+[ali]: attempt 2/3. PIDs: [6615] for collision_detector.py
+[ali]: attempt 2/3. PIDs: [6998] for localizer.py
+[ali]: attempt 2/3. PIDs: [7999] for ex_effector.py
+[ali]: attempt 3/3. PIDs: [6998] for localizer.py
+[ali]: attempt 3/3. PIDs: [7999] for ex_effector.py
+Waiting for processes to die, 2.00s until sending SIGKILL
+Waiting for processes to die, 1.40s until sending SIGKILL
+Waiting for processes to die, 0.80s until sending SIGKILL
+Waiting for processes to die, 0.20s until sending SIGKILL
+-------[ali]: SIGKILL nodes=[ALL]-------
+[ali]: attempt 1/100. PIDs: [6998] for localizer.py
+[ali]: attempt 1/100. PIDs: [7999] for ex_effector.py
+-------[local]: SIGINT nodes=['cat_ex_hw.py']-------
+-------[local]: SIGINT nodes=[ALL]-------
+-------All processes dead-------
+ammar@Ammar-Built:~/built_ws$ 
