@@ -12,7 +12,6 @@ class evaluate_pads(AmmarSuper):
 	def __init__(self, pads, coverage_area):
 		self.pads = pads
 		self.coverage_area = coverage_area
-		self.evaluate_pads()
 
 	def evaluate_pads(self):
 		num_pads = len(self.pads)
@@ -48,8 +47,36 @@ class evaluate_pads(AmmarSuper):
 				'area_regraded'] = on_foundation_lane.area - newly_graded_area
 			unprocessed_pad = unprocessed_pad.difference(pad.poly)
 			process_dict[i_pad] = copy.deepcopy(operation_dict)
-		pdb.set_trace()
 		return process_dict, unprocessed_pad
+
+	def grading_process_stats(self, process_dict, unprocessed_pad):
+		average_length = np.mean([process['length']
+								  for process in process_dict.values()])
+		average_width = np.mean([process['width']
+								 for process in process_dict.values()])
+		total_material = np.sum([process['material_moved']
+								 for process in process_dict.values()])
+		total_time = sum([process['lane_time']
+						  for process in process_dict.values()])
+		total_regrade = sum([process['area_regraded']
+							 for process in process_dict.values()])
+		total_lanes = sum([process['num_lanes']
+							 for process in process_dict.values()])
+		pad_transition_dist = 0
+		for i_process in range(1, len(process_dict.values()) - 1):
+			pad_transition_dist += np.linalg.norm(process_dict[i_process][
+												  'push_start_locs'][-1] - process_dict[i_process + 1]['push_start_locs'][0])
+		total_dist = sum([process['total_push_dist']
+						  for process in process_dict.values()]) + pad_transition_dist
+		total_area = self.coverage_area.area
+		grading_stats_dict = {'average_length': average_length, 'average_width': average_width, 'total_material': total_material, 'total_time': total_time, 'total_regrade': total_regrade,
+					  'pad_transition_dist': pad_transition_dist, 'total_dist': total_dist, 'total_area': total_area, 'total_lanes': total_lanes,
+					  'ungraded_area':unprocessed_pad.area}
+		# print('Pad Width: {average_width:.2f} m, Pad Length: {average_length:.2f} m, Total Lanes: {total_lanes:.0f}'.format(**grading_stats_dict))
+		# print('Pad Depth: {:.2f} m, Total Material: {:.2f} Ungraded Area: {:.2f}, m^3, Total Dist: {:.2f} (Pad Transition Dist: {:.2f}%), Total Regrade: {:.2f} ({:.2f}%), Estimated Time: {:.0f} sec ({:.2f} min)'.format(
+		# 	PAD_DEPTH, total_material, unprocessed_pad.area, total_dist, pad_transition_dist / total_dist * 100, total_regrade, total_regrade / total_area * 100, total_time, total_time / 60))
+		# print('Ungraded Area: {:.2f} m^3, Total Regrade: {:.2f} %'.format(unprocessed_pad.area, total_regrade / total_area * 100))
+		return grading_stats_dict
 
 
 if __name__ == '__main__':
@@ -59,3 +86,4 @@ if __name__ == '__main__':
 	simple_pads = erp.gen_foundation_pads()
 	simple_pads.draw(ax1)
 	ep = evaluate_pads(simple_pads, f1.poly)
+	pdb.set_trace()
