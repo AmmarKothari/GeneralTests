@@ -4,9 +4,14 @@ from enclosing_rectangle_pads import enclosing_rectangle_pads
 import copy
 import numpy as np
 import pdb
+import shapely.ops as so
 from constants import PAD_DEPTH, VPAT_CAPACITY, VPAT_WIDTH, PUSH_SPEED, REVERSE_SPEED, FOUNDATION_DIAMETER
 from helper_funcs import linear_interp_between_pts
 
+
+COST_MULTIPLIER = {
+	'ungraded_area': 10.0
+}
 
 class evaluate_pads(AmmarSuper):
 	def __init__(self, pads, coverage_area):
@@ -77,6 +82,16 @@ class evaluate_pads(AmmarSuper):
 		# 	PAD_DEPTH, total_material, unprocessed_pad.area, total_dist, pad_transition_dist / total_dist * 100, total_regrade, total_regrade / total_area * 100, total_time, total_time / 60))
 		# print('Ungraded Area: {:.2f} m^3, Total Regrade: {:.2f} %'.format(unprocessed_pad.area, total_regrade / total_area * 100))
 		return grading_stats_dict
+
+	def grading_score(self, process_dict, grading_stats_dict):
+		total_graded_poly = so.cascaded_union(
+			[p['pad'].poly for p in process_dict.values()])
+		total_useful_graded = self.coverage_area.area - \
+			self.coverage_area.difference(total_graded_poly).area
+		grade_score = - COST_MULTIPLIER['ungraded_area'] * grading_stats_dict['ungraded_area'] \
+		- grading_stats_dict['total_regrade'] \
+		- grading_stats_dict['total_dist'] + total_useful_graded
+		return grade_score
 
 
 if __name__ == '__main__':

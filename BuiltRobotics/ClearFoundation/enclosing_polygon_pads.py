@@ -1,6 +1,6 @@
 from ammar_super import AmmarSuper
 from constants import FOUNDATION_DIAMETER
-import numpy
+import numpy as np
 from foundation import foundation
 from bcolors import bcolors
 from pad import Pad
@@ -13,9 +13,17 @@ DEBUG = True
 
 class enclosing_polygon_pads(grade_area_ABC):
 	"""Generates a set of polygons that enclose the coverage area"""
-	def __init__(self, radius, grading_poly):
-		self.grading_poly = grading_poly
-		self.radius = radius
+	def __init__(self, grading_poly):
+		super(enclosing_polygon_pads, self).__init__(grading_poly)
+		self.estimate_radius(self.grading_poly)
+
+	def estimate_radius(self, grading_poly):
+		"""estimates the radius of a circle that encloses grading polygon area"""
+		xy = np.array([(x,y) for x,y in zip(*grading_poly.exterior.xy)])
+		center_pt = np.mean(xy, axis=0)
+		max_diff = np.max(xy - center_pt, axis=0)
+		self.radius = np.linalg.norm(max_diff)
+
 
 	def gen_foundation_pads(self, polygon_sides):
 		self.polygon_sides = polygon_sides

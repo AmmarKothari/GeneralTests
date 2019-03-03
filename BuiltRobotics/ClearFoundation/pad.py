@@ -12,13 +12,14 @@ class Pad(object):
 		self.fl = front_left
 		self.l = length
 		self.w = width
-		self.theta = theta
+		self.theta = theta # angle from back to front of rectangle
 		if self.bl is not None and self.br is not None and self.l is not None:
 			self.bl = np.array(self.bl)
 			self.br = np.array(self.br)
 			self.l = np.array(self.l)
 			self.w = np.linalg.norm(self.bl - self.br)
-			self.theta = np.arctan2(self.br[1] - self.bl[1], self.br[0] - self.bl[0]) - np.pi/2
+			# i changed this line from - to + for np.pi/2  -- this probably broke some other code
+			self.theta = np.arctan2(self.br[1] - self.bl[1], self.br[0] - self.bl[0])  + np.pi/2
 			self.fl = self.bl + self.rotation(self.theta) * self.l
 			self.fr = self.br + self.rotation(self.theta) * self.l
 		elif self.bl is not None and self.fl is not None  and self.w:
