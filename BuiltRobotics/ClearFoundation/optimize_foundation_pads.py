@@ -9,10 +9,9 @@ import pdb
 
 DEBUG = True
 
-class enclosing_rectangle_pads(grade_area_ABC):
-	"""Generates a set of polygons that enclose the coverage area"""
+class optimize_foundation_pads(grade_area_ABC):
 	def __init__(self, grading_poly):
-		super(enclosing_rectangle_pads, self).__init__(grading_poly)
+		super(optimize_foundation_pads, self).__init__(grading_poly)
 
 	def gen_foundation_pads(self, *args, **kwargs):
 		x_rect, y_rect = self.grading_poly.minimum_rotated_rectangle.exterior.xy
@@ -26,10 +25,7 @@ class enclosing_rectangle_pads(grade_area_ABC):
 		return self.pads
 
 	def draw(self, ax1 = None):
-		x_rect, y_rect = self.grading_poly.minimum_rotated_rectangle.exterior.xy
-		if not ax1:
-			fig1, ax1 = plt.subplots()
-		ax1.plot(x_rect, y_rect, 'r*-')
+		pass
 
 	def poly(self):
 		return self.grading_poly
@@ -47,9 +43,8 @@ if __name__ == '__main__':
 	fig1, ax1 = plt.subplots()
 	f1 = foundation(FOUNDATION_DIAMETER / 2)
 	f1.draw(ax1)
-	erp = enclosing_rectangle_pads(f1.poly)
-	erp.draw(ax1)
-	simple_pads = erp.gen_foundation_pads()
+	ofp = optimize_foundation_pads(f1.poly)
+	simple_pads = ofp.gen_foundation_pads()
 	simple_pads.draw(ax1)
 	plt.show()
 	pdb.set_trace()
