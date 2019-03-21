@@ -71,3 +71,9 @@ AttributeError: 'NoneType' object has no attribute 'r_header'
 35. Change dozer class names from d6txl to cat_d6txl
 
 36. In commands.py, have the method get_nodes return an alphabetized list
+
+37. Improve dozer calibration script
+	- take more points
+	- be smarter about moving
+	- reset implement to original location after moving it
+	- update script to work with new signal quests so we can calibrate the blade!
