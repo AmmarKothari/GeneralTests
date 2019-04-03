@@ -77,3 +77,7 @@ AttributeError: 'NoneType' object has no attribute 'r_header'
 	- be smarter about moving
 	- reset implement to original location after moving it
 	- update script to work with new signal quests so we can calibrate the blade!
+
+
+38. Clean up params for dozer related stuff -- its all mixed up and shit
+	- Remove kinematic params from yaml files
