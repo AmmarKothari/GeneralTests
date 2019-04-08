@@ -81,3 +81,17 @@ AttributeError: 'NoneType' object has no attribute 'r_header'
 
 38. Clean up params for dozer related stuff -- its all mixed up and shit
 	- Remove kinematic params from yaml files
+
+39. Remove all key strings and make variables at the top for HardwareControlsManager
+
+40. CatEx add an initialization step to set the controls
+
+41. Refactor hardware_controls -- should only need a signalControl and some of the __repr__ should be simpler
+
+42. move mvec into hardware manager
+
+43. Look at making controlswithmvecandhardwaremanager class not ABCMeta
+
+44. Add __repr__ for fake SQ back in
+
+45. Revisit kinematic measurement scripts for Bob (and Dozers)
