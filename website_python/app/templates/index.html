@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+<!-- Ciclk to <a href="ledOn">Open Gate</a><br> -->
+<!-- <div class="container">
+  <h2>Button Pressed: {{ButtonPressed}}</h2>
+  <form method="post">
+      <input type="submit" name="button" value="Record Point" >
+  </form>
+</div> -->
+{% block content %}
+Ciclk to <a href="{{ url_for('record_point') }}">Record Point</a><br>
+<form action="" method="post" novalidate>
+  {{ form.hidden_tag() }}
+  <p>{{ form.submit() }}</p>
+  {% for error in form.submit.errors %}
+  <span style="color: red;">[{{ error }}]</span>
+  {% endfor %}
+</form>
+{% endblock %}

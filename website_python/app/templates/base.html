@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <center>
+    
+    {% if ip_address %}
+    <h1>Listening to data from IP: {{ip_address}}</h1><br>
+    {% else %}
+    <h1>Listening to data from IP: No IP specified</h1><br>
+    {% endif %}
+    {% block rtk_fix %} {% endblock %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %} {% endblock %}
+    <h1> Points </h1>
+    {% for point in points %}
+    <div>{{ point.lat.h}}, {{ point.lat.m}}, {{ point.lat.s}}, {{ point.lat.dir}}, {{ point.lon.h}}, {{ point.lon.m}}, {{ point.lon.s}}, {{ point.lon.dir}}</div>
+    {% endfor %}
+  </body>
+</html>
