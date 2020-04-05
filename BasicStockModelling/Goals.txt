@@ -1,0 +1,4 @@
+1. import historical data
+2. create a model for future price movement based on monte carlo simulation
+3. Plot that price movement
+4. sample from historical data to predict future movement

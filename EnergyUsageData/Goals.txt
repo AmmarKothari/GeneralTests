@@ -1,0 +1,4 @@
+0. Encrypt key before pushing.
+1. Make a request
+2. Parse Data
+3. Plot energy created by different sources

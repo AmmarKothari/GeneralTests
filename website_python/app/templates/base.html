@@ -8,7 +8,11 @@
     {% else %}
     <h1>Listening to data from IP: No IP specified</h1><br>
     {% endif %}
-    {% block rtk_fix %} {% endblock %}
+    <script>
+        function rtk_fix(){
+            
+        }
+    </script>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
