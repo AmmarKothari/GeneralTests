@@ -1,0 +1,32 @@
+Issues making a QA foundation:
+1. Skipping small zones -- cant find a foundation that will cut an irregular shaped zone
+2. Navigates hitting geofence -- lots of manual intervention
+3. Placing spoil regions in good areas
+4. Forcing nav to dump still results in swing to dump -- need to investigate further
+5. When calculating nav to dump, only remove enough spoil region as needed so the rest can be left for nav to dump (instead of removing the entire reach space)
+6. Zonegen fails with error.  Unclear how to fix!
+INFO|19-08-21 18:59:01.363|t:020|ExcavateFoundation: Clipped Zone Poly Type: GEOMETRYCOLLECTION EMPTY, Clipped Overreach Poly: GEOMETRYCOLLECTION EMPTY (/excavate_foundation)
+ WARN|19-08-21 18:59:01.364|t:020|BuiltActionServer: action finishing failure: Unexpected multipoly, failing. (None) (/excavate_foundation)
+
+
+Other Ideas:
+Smaller bucket for dorothy (trenching bucket?)
+	- smaller scoop length
+	- smaller petal angular size
+
+
+Params to tweak
+- annulus width related
+	- outer_dig_zone_left_limit
+	- outer_dig_zone_right_limit
+	- zone_overlap_center
+
+- annulus width and radius related
+	- reach_deflation
+
+- skipping zones
+	- minimimum_scoop_fullness
+	- finish_scoop_fullness
+	- min_scoop_length
+
+

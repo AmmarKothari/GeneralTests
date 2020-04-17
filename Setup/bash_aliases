@@ -1,0 +1,113 @@
+gcm(){
+	git add ~/built_ws/
+	git commit --amend
+}
+
+gfa() {
+	git fetch --all
+}
+
+gs() {
+	git status
+}
+
+git_clean(){
+	find ~/built_ws -name *orig -delete
+	find ~/built_ws -name *BASE* -delete
+	find ~/built_ws -name *BACKUP* -delete
+	find ~/built_ws -name *LOCAL* -delete
+	find ~/built_ws -name *REMOTE* -delete
+}
+
+find_file(){
+	find ~/built_ws/src -print | grep -i $1
+}
+
+add_ssh_to_new_machine(){
+	ssh-copy-id built@$1
+	ssh-keyscan -H $1 ~/.ssh/known_hosts
+	ssh built@$1 sudo tee -a /root/.ssh/authorized_keys < ~/.ssh/id_rsa.pub
+}
+
+
+bkill() {
+	bscript kill local && reset
+}
+
+gd(){
+	git diff $@
+}
+
+git_delete_branch(){
+	git branch -D $1
+	git push origin --delete $1
+}
+
+check_vpn_status(){
+	sudo systemctl status openvpn@client.service
+}
+
+combine_logs(){
+	python /home/ammar/Projects/GeneralTests/BuiltRobotics/combine_logs.py $@
+}
+
+integration_test_command(){
+	pytest --forked -vvv --fulltrace -Wignore -m "ros_stack or large or medium" $@
+}
+
+print_integration_test_command(){
+	echo 'pytest --forked -vvv --fulltrace -Wignore -m "ros_stack or large or medium" <testcase>'
+	echo -n "pytest --forked -vvv --fulltrace -Wignore -m \"ros_stack or large or medium\"" | xclip -selection c
+}
+
+
+sync_and_relaunch(){
+	bscript sync $1 && bscript relaunch $1 $2
+}
+
+start_vpn(){
+	sudo systemctl restart openvpn@client.service
+	sleep 5
+	ifconfig | grep tun
+}
+
+wpytest(){
+	echo "pytest -Wignore $@"
+	pytest -Wignore $@
+}
+
+
+ros_tail(){
+	tail -f ~/.ros/log/latest/bstdout.log
+}
+
+develop_get(){
+	git checkout origin/develop $@
+}
+
+develop_diff(){
+	git diff origin/develop
+}
+
+develop_diff_name_only(){
+	git diff origin/develop --name-only
+}
+
+start_rqt_gui(){
+	rosrun --prefix "~/built_ws/bin/with_venv.bash venv" rqt_gui rqt_gui --perspective-file ~/built_ws/src/built/asset/ex/excavator.perspective __name:=rqt_gui __master:=http://127.0.0.1:11311
+}
+
+start_rviz(){
+	rosrun --prefix "~/built_ws/bin/with_venv.bash venv" rviz rviz -d ~/built_ws/src/built/asset/ex/ex.rviz __name:=rviz __master:=http://127.0.0.1:11311
+}
+
+make_gif(){
+	FILE=palette.png
+	if test -f "$FILE"; then
+    	echo "$FILE exist"
+	else
+		ffmpeg -i $1 -filter_complex "[0:v] palettegen" $FILE
+	fi
+	ffmpeg -i $1 -i $FILE -filter_complex "[0:v] scale=480:-1, paletteuse" -fs 10000000 $2
+}
+

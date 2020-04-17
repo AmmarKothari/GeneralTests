@@ -1,6 +1,6 @@
 from app import app
-from gps_record import setup_recording
+import gps_record
 
 if __name__ == '__main__':
-	setup_recording()
+	gps_record.setup_recording()
 	app.run(debug=True)

@@ -1,0 +1,1 @@
+ln -s ~/Projects/GeneralTests/Setup/bash_aliases ~/.bash_aliases
