@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/ammarkothari/Projects/GeneralTests/CppCodingInterview/delete_nodes_and_return_forest_1110/main.cpp
+iostream
+-
+assert.h
+-
+tree.cpp
+/Users/ammarkothari/Projects/GeneralTests/CppCodingInterview/delete_nodes_and_return_forest_1110/tree.cpp
+vector
+-
+
+/Users/ammarkothari/Projects/GeneralTests/CppCodingInterview/delete_nodes_and_return_forest_1110/tree.cpp
+cstddef
+-
+iostream
+-
+vector
+-
+fstream
+-
+

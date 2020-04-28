@@ -1,0 +1,9 @@
+1. Describe the mathematical formula for pantograph legs
+2. Create a simulation showing how the leg can move in x and y
+	- x only movement
+	- y only movement
+	- along x=y line movement
+
+3. Figure out the kinematics for the foot staying in a pose and the body moving
+4. Create trajectories for the body.
+5. (?) Trajectory optimization for the leg.

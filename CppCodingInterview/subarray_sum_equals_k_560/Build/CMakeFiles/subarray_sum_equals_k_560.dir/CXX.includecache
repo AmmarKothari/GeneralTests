@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/ammarkothari/Projects/GeneralTests/CppCodingInterview/subarray_sum_equals_k_560/main.cpp
+vector
+-
+string
+-
+set
+-
+iostream
+-
+queue
+-
+assert.h
+-
+

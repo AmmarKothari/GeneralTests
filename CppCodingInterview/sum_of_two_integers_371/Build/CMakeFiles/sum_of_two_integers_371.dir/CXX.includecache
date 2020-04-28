@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/ammarkothari/Projects/GeneralTests/CppCodingInterview/sum_of_two_integers_371/main.cpp
+iostream
+-
+assert.h
+-
+

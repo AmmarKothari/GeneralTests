@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/ammarkothari/Projects/GeneralTests/CppCodingInterview/symmetric_tree_101/main.cpp
+iostream
+-
+assert.h
+-
+tree.cpp
+/Users/ammarkothari/Projects/GeneralTests/CppCodingInterview/symmetric_tree_101/tree.cpp
+vector
+-
+
+/Users/ammarkothari/Projects/GeneralTests/CppCodingInterview/symmetric_tree_101/tree.cpp
+cstddef
+-
+iostream
+-
+vector
+-
+fstream
+-
+

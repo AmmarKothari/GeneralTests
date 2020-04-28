@@ -1,4 +1,0 @@
-CAT Error Codes Thrown when autonomous mode starts up
-
-5352-3(1)  -- get this when the right track is switched to labjack
-5332-3(1)  -- get thi when the left track is switched to labjack

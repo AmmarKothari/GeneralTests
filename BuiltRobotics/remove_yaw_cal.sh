@@ -1,1 +1,0 @@
- cp ~/Documents/dozer_vpat_server.py /home/ammar/built_ws/src/built/pybuilt/controls/vehicles/d6/servers/dozer_vpat_server.py

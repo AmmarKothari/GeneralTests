@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/ammarkothari/Projects/GeneralTests/CppCodingInterview/spiral_matrix_3_885/main.cpp
+vector
+-
+string
+-
+set
+-
+iostream
+-
+

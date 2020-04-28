@@ -1,1 +1,0 @@
-blaunch main -s terrain_map_publisher.py collision_detector.py ifm_receiver.py
