@@ -1,0 +1,78 @@
+Name: bot_logger
+
+API key: 57bff9d85b4c472daa72de8a6d13111d6b9cbfec6294409791b1cbf1e3f5b64b
+
+Secret: d14cc56e666f6bfa4466060597abfe98811770652bcfa7650e815481026df2c5624857b9efb6477408c96bb8645990c3392f7a089d4c2642ad531d00516bb82472e4282cb9b70e01a16b0362b27f87ffc75c3a21fd38554e766adb58f1cbe12904529e4f
+
+Access: BotsRead, AccountsRead
+
+
+Name: bot_updater
+
+API key: a33d18fa4028417da78d977751bee8f20142a02927f74f31b2124cbd8d12a9d0
+
+Secret: 3558d6d8c2d7ed9b824f06f7d77c4cff2628736f6a929d1b255a80605994c2f2183f83022ca67f0b6279492b5c3f4f117052585c566742f8dead10a364894e1188c744fa328c88fc00f02f5b9b452c163cfda4ea49481aa0a95f01dd87c5c8bacc2fdd2d
+
+Access: BotsRead, BotsWrite, AccountsRead, AccountsWrite
+
+
+
+curl -H "APIKEY:a33d18fa4028417da78d977751bee8f20142a02927f74f31b2124cbd8d12a9d0" -H "Signature:6f7d3a82ade23468ca331f3f00efd439a3bb619a04bd758bc8d13350850c49ef" -X PATCH "https://api.3commas.io/public/api/ver1/bots/1051710/update?name=TEST&base_order_volume=0.001&take_profit=1.5&safety_order_volume=0.001&martingale_volume_coefficient=2&martingale_step_coefficient=1&max_safety_orders=1&active_safety_orders_count=1&safety_order_step_percentage=2.5&take_profit_type=total&bot_id=274339&stop_loss_percentage=0&cooldown=0&pairs=BTC_MANA&pairs=BTC_TRX&pairs=BTC_WAN&trailing_enabled=true&trailing_deviation=0.5&strategy_list=%5B%7B%22strategy%22%3A%22cqs_telegram%22%7D%5D"
+
+
+google drive api key
+AIzaSyBuJWn_JYK-Oad8UV1_vVurgU0NXaU5jkM
+
+
+telegram keys:
+-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEAwVACPi9w23mF3tBkdZz+zwrzKOaaQdr01vAbU4E1pvkfj4sqDsm6
+lyDONS789sVoD/xCS9Y0hkkC3gtL1tSfTlgCMOOul9lcixlEKzwKENj1Yz/s7daS
+an9tqw3bfUV/nqgbhGX81v/+7RFAEd+RwFnK7a+XYl9sluzHRyVVaTTveB2GazTw
+Efzk2DWgkBluml8OREmvfraX3bkHZJTKX4EQSjBbbdJ2ZXIsRrYOXfaA+xayEGB+
+8hdlLmAjbCVfaigxX0CDqWeR1yFL9kwd9P0NsZRPsmoqVwMbMu7mStFai6aIhc3n
+Slv8kg9qv1m6XHVQY3PnEw+QQtqSIXklHwIDAQAB
+-----END RSA PUBLIC KEY-----
+
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAruw2yP/BCcsJliRoW5eB
+VBVle9dtjJw+OYED160Wybum9SXtBBLXriwt4rROd9csv0t0OHCaTmRqBcQ0J8fx
+hN6/cpR1GWgOZRUAiQxoMnlt0R93LCX/j1dnVa/gVbCjdSxpbrfY2g2L4frzjJvd
+l84Kd9ORYjDEAyFnEA7dD556OptgLQQ2e2iVNq8NZLYTzLp5YpOdO1doK+ttrltg
+gTCy5SrKeLoCPPbOgGsdxJxyz5KKcZnSLj16yE5HvJQn0CNpRdENvRUXe6tBP78O
+39oJ8BTHp9oIjd6XWXAsp2CvK45Ol8wFXGF710w9lwCGNbmNxNYhtIkdqfsEcwR5
+JwIDAQAB
+-----END PUBLIC KEY-----
+
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvfLHfYH2r9R70w8prHbl
+Wt/nDkh+XkgpflqQVcnAfSuTtO05lNPspQmL8Y2XjVT4t8cT6xAkdgfmmvnvRPOO
+KPi0OfJXoRVylFzAQG/j83u5K3kRLbae7fLccVhKZhY46lvsueI1hQdLgNV9n1cQ
+3TDS2pQOCtovG4eDl9wacrXOJTG2990VjgnIKNA0UMoP+KF03qzryqIt3oTvZq03
+DyWdGK+AZjgBLaDKSnC6qD2cFY81UryRWOab8zKkWAnhw2kFpcqhI0jdV5QaSCEx
+vnsjVaX0Y1N0870931/5Jb9ICe4nweZ9kSDF/gip3kWLG0o8XQpChDfyvsqB9OLV
+/wIDAQAB
+-----END PUBLIC KEY-----
+
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs/ditzm+mPND6xkhzwFI
+z6J/968CtkcSE/7Z2qAJiXbmZ3UDJPGrzqTDHkO30R8VeRM/Kz2f4nR05GIFiITl
+4bEjvpy7xqRDspJcCFIOcyXm8abVDhF+th6knSU0yLtNKuQVP6voMrnt9MV1X92L
+GZQLgdHZbPQz0Z5qIpaKhdyA8DEvWWvSUwwc+yi1/gGaybwlzZwqXYoPOhwMebzK
+Uk0xW14htcJrRrq+PXXQbRzTMynseCoPIoke0dtCodbA3qQxQovE16q9zz4Otv2k
+4j63cz53J+mhkVWAeWxVGI0lltJmWtEYK6er8VqqWot3nqmWMXogrgRLggv/Nbbo
+oQIDAQAB
+-----END PUBLIC KEY-----
+
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvmpxVY7ld/8DAjz6F6q0
+5shjg8/4p6047bn6/m8yPy1RBsvIyvuDuGnP/RzPEhzXQ9UJ5Ynmh2XJZgHoE9xb
+nfxL5BXHplJhMtADXKM9bWB11PU1Eioc3+AXBB8QiNFBn2XI5UkO5hPhbb9mJpjA
+9Uhw8EdfqJP8QetVsI/xrCEbwEXe0xvifRLJbY08/Gp66KpQvy7g8w7VB8wlgePe
+xW3pT13Ap6vuC+mQuJPyiHvSxjEKHgqePji9NP3tJUFQjcECqcm0yV7/2d0t/pbC
+m+ZH1sadZspQCEPPrtbkQBlvHb4OLiIWPGHKSMeRFvp3IWcmdJqXahxLCUS1Eh6M
+AQIDAQAB
+-----END PUBLIC KEY-----
+
+app_hash: 4c27a4b7d82164a8effc4fbcaa57babb
+app_id: 1289889

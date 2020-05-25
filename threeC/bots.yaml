@@ -1,0 +1,99 @@
+base_keiko:
+  name: 'base_keiko'
+  # Check that the account exists or specifically say create new account.
+  account_id: 105110
+  pairs: ['BNB_ADA',
+  'BNB_ALGO',
+  'BNB_ATOM',
+  'BNB_BAND',
+  'BNB_BLZ',
+  'BNB_CELR',
+  'BNB_DASH',
+  'BNB_ENJ',
+  'BNB_HBAR',
+  'BNB_IOST',
+  'BNB_IOTA',
+  'BNB_MATIC',
+  'BNB_NANO',
+  'BNB_ONE',
+  'BNB_ONT',
+  'BNB_REN',
+  'BNB_STX',
+  'BNB_TOMO',
+  'BNB_TRX',
+  'BNB_WABI',
+  'BNB_WAN']
+  max_active_deals: 21
+  base_order_volume: 0.2
+  base_order_volume_type: 'quote_currency'
+  take_profit: 2.64
+  safety_order_volume: 0.1
+  safety_order_volume_type: 'quote_currency'
+  martingale_volume_coefficient: 3.0
+  martingale_step_coefficient: 2.4
+  max_safety_orders: 3
+  active_safety_orders_count: 3
+  stop_loss_percentage: 0.0
+  cooldown: 0
+  trailing_enabled: False
+  trailing_deviation: 0.2
+  strategy: 'long'
+  safety_order_step_percentage: 1.3
+  take_profit_type: 'total' # or 'base'
+  # strategy_list: [{options: {},
+  #           strategy: 'keiko'
+  #           }]
+  # strategy_list: 'keiko'
+  # strategy_list: [{options:{time:"5m", type:"buy_or_strong_buy"}, strategy:"trading_view"}]
+  # strategy_list: [{options: {}, strategy: 'keiko'}]
+  strategy_list: [{strategy: "manual"}]
+  leverage_type: 'not_specified'
+  # leverage_custom_value: None
+  # min_price: None
+  # max_price: None
+  stop_loss_timeout_enabled: False
+  stop_loss_timeout_in_seconds: 0
+  min_volume_btc_24h: 0.0
+  tsl_enabled: False
+  # deal_start_delay_seconds: None
+  profit_currency: 'quote_currency'
+  start_order_type: 'limit'
+  stop_loss_type: 'stop_loss'
+  # disable_after_deals_count: None
+  allowed_deals_on_same_pair: 1
+
+# TEST:
+#   is_update: True
+#   name: 'TEST'
+#   id: 1051710
+#   pairs: 'BTC-ADA'
+#   base_order_volume: 0.001
+#   take_profit: 1.32
+#   safety_order_volume: 3
+  # martingale_volume_coefficient:
+  # martingale_step_coefficient:
+  # max_safety_orders:
+  # active_safety_orders_count:
+  # safety_order_step_percentage:
+  # take_profit_type:
+  # strategy_list: {[]}
+
+
+
+
+
+  
+  #  'id: 1038007,
+  #  'is_enabled: False,
+  #  'active_deals_count: 10
+  #  'deletable?: False
+  #  'created_at: '2020-05-11T08:12:20.093Z'
+  #  'updated_at: '2020-05-13T05:10:57.415Z'
+  #  'deals_counter: None
+  #  'easy_form_supported: False
+  #  'name: 'Keiko BNB (1.32%
+  # # 1x)'
+  #  'type: 'Bot::MultiBot'
+  #  'account_name: 'Paper Account 212003'
+  #  'finished_deals_profit_usd: '3.401504608757470780464080496'
+  #  'finished_deals_count: '27'
