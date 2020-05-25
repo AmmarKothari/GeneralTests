@@ -1,4 +1,6 @@
 import csv
+import multiprocessing
+
 import pdb
 import time
 from datetime import datetime
@@ -163,11 +165,12 @@ def _calculate_duration(all_deals):
 
 
 def _calculate_all_max_simultaneous_open_deals(all_deals):
-    count = 0
-    for deal in all_deals:
-        deal[MAX_SIMULTANEOUS_DEALS_KEY], deal[MAX_COIN_IN_DEALS_KEY] = _calculate_max_simultaneous_open_deals(deal, all_deals)
-        count += 1
-        # print('Count of deals analyzed: {}'.format(count))
+    calc_pool = multiprocessing.Pool()
+    pool_func = functools.partial(_calculate_max_simultaneous_open_deals, all_deals=all_deals)
+    result = calc_pool.map(pool_func, all_deals)
+    for deal, (max_simul, max_coin) in zip(all_deals, result):
+        deal[MAX_SIMULTANEOUS_DEALS_KEY] = max_simul
+        deal[MAX_COIN_IN_DEALS_KEY] = max_coin
     return all_deals
 
 

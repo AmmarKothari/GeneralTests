@@ -1,20 +1,18 @@
 import collections
-import csv
 from datetime import datetime
-import io
 
 import pdb
 import pygsheets
 import threeCDataGetter as tcdg
 
-from constants import CSV_ACCOUNT_VALUE_LOG, gsheet_date_only_format, GSHEET_UPDATE_LOG, gsheet_date_format
+from constants import gsheet_date_only_format, GSHEET_UPDATE_LOG, gsheet_date_format
 
 
 class GSheetWriter:
     def __init__(self, service_file, cw, output_gsheet):
-        self.gc = pygsheets.authorize(service_file=service_file)
         self.cw = cw
 
+        self.gc = pygsheets.authorize(service_file=service_file)
         self.sh = self.gc.open(output_gsheet)
 
         self.account_info = tcdg.AccountInfo(self.cw)
@@ -35,8 +33,7 @@ class GSheetWriter:
         wks.update_row(1, data_matrix)
 
     def write_bot_id_to_names_map_to_gsheet(self, bots, sheet_name):
-        data_matrix = []
-        data_matrix.append(['ID', 'Name'])
+        data_matrix = [['ID', 'Name']]
         for bot in bots:
             data_matrix.append([bot['id'], bot['name']])
         wks = _get_worksheet_by_name(self.sh, sheet_name)
@@ -45,15 +42,6 @@ class GSheetWriter:
     def write_account_stats(self, sheet_name, account_key):
         # NOTE: Things will probably break if accounts are added
         records = collections.defaultdict(dict)
-        # try:
-        #     with open(CSV_ACCOUNT_VALUE_LOG, 'r') as csv_f:
-        #         reader = csv.DictReader(csv_f)
-        #         # Convert to a dictionary whose key is the date
-        #         for record in reader:
-        #             records[record['Date']] = record
-        # except io.UnsupportedOperation:
-        #     # File doesn't exist
-        #     pass
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         all_rows = wks.get_all_values()
         for row in all_rows[1:]:
@@ -68,12 +56,6 @@ class GSheetWriter:
         records[date]['Date'] = date
         records[date]['Value'] = self.account_info.get_account_balance(account_id)
         records[date]['Profit'] = self.account_info.get_account_profit(account_id)
-
-        # with open(CSV_ACCOUNT_VALUE_LOG, 'w') as csv_f:
-        #     records_list = list(records.values())
-        #     writer = csv.DictWriter(csv_f, list(records_list[0].keys()))
-        #     writer.writeheader()
-        #     writer.writerows(records_list)
 
         # Would be good to use a function to write these values to sheet from dictionary.  Could use some error checking.
         data_matrix = []
