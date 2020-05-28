@@ -9,6 +9,7 @@ import functools
 import yaml
 
 from constants import gsheet_date_format, threeC_date_format
+from helper_classes import MaxValueTracker
 
 BOTS_FILENAME = 'bots.yaml'
 LOG_FILENAMES = {'BOTINFO': 'bot_info.csv',
@@ -21,6 +22,8 @@ DEAL_END_KEY = 'updated_at'
 CONVERT_TO_DATE_TIME = [DEAL_START_KEY, DEAL_END_KEY, 'closed_at']
 MAX_SIMULTANEOUS_DEALS_KEY = 'max_simultaneous_deals'
 MAX_COIN_IN_DEALS_KEY = 'max_coin_in_deals'
+MAX_COIN_RESERVED_IN_DEALS_KEY = 'max_coin_reserved_in_deals'
+MAX_SIMULTANEOUS_DEALS_SAME_BOT_KEY = 'max_simultaneous_same_bot_deals'
 
 
 # ----------------
@@ -106,8 +109,11 @@ class BotInfo:
 
 
 class AccountInfo:
-    def __init__(self, cw):
+    def __init__(self, cw, real=True):
         self.cw = cw
+        if real:
+            success, accounts = self.cw.request(entity='users', action='change_mode', payload={'mode': 'real'})
+            _check_if_request_successful(success)
 
     @property
     @functools.lru_cache()
@@ -165,21 +171,28 @@ def _calculate_duration(all_deals):
 
 
 def _calculate_all_max_simultaneous_open_deals(all_deals):
+    # pdb.set_trace()
     calc_pool = multiprocessing.Pool()
+    all_deals = sorted(all_deals, key=lambda x: datetime.strptime(x['created_at'], gsheet_date_format), reverse=False)
     pool_func = functools.partial(_calculate_max_simultaneous_open_deals, all_deals=all_deals)
     result = calc_pool.map(pool_func, all_deals)
-    for deal, (max_simul, max_coin) in zip(all_deals, result):
+    for deal, (max_simul, max_coin, max_reserved, max_simul_same) in zip(all_deals, result):
         deal[MAX_SIMULTANEOUS_DEALS_KEY] = max_simul
         deal[MAX_COIN_IN_DEALS_KEY] = max_coin
+        deal[MAX_COIN_RESERVED_IN_DEALS_KEY] = max_reserved
+        deal[MAX_SIMULTANEOUS_DEALS_SAME_BOT_KEY] = max_simul_same
     return all_deals
 
 
 def _calculate_max_simultaneous_open_deals(current_deal, all_deals):
-    """Returns the number of transactions that are overlapping."""
-    max_simultaneous_count = 0
+    """Returns the number of transactions that are overlapping.
+
+    Note: all_deals should already be sorted by created_at date"""
+    simultaneous_count = MaxValueTracker()
     max_coin_in_deals = 0
+    max_reserved_in_deals = 0
+    max_simultaneous_same_bot_count = 0
     overlap_deals = []
-    all_deals = sorted(all_deals, key=lambda x: datetime.strptime(x['created_at'], gsheet_date_format), reverse=True)
     for deal in all_deals:
         if deal['from_currency'] != current_deal['from_currency']:
             continue
@@ -193,14 +206,22 @@ def _calculate_max_simultaneous_open_deals(current_deal, all_deals):
                                    overlap_deal[DEAL_START_KEY]):
                     new_overlap_deals.append(overlap_deal)
             overlap_deals = new_overlap_deals
-            max_simultaneous_count = max(max_simultaneous_count, len(overlap_deals))
+            simultaneous_count.update_max_value(len(overlap_deals))
             current_max_coin = 0
+            current_max_reserved = 0
+            current_max_simultaneous_same_bot_count = 0
             for d in overlap_deals:
                 # Failed to open deals have none for bought amount
                 if d['bought_volume']:
                     current_max_coin += float(d['bought_volume'])
+                    current_max_reserved += float(d['reserved_base_coin'])
+                if deal['bot_id'] == d['bot_id']:
+                    current_max_simultaneous_same_bot_count += 1
             max_coin_in_deals = max(max_coin_in_deals, current_max_coin)
-    return max_simultaneous_count, max_coin_in_deals
+            max_reserved_in_deals = max(max_reserved_in_deals, current_max_reserved)
+            max_simultaneous_same_bot_count = max(current_max_simultaneous_same_bot_count, max_simultaneous_same_bot_count)
+
+    return simultaneous_count.max_value, max_coin_in_deals, max_reserved_in_deals, max_simultaneous_same_bot_count
 
 
 def _is_overlapping(start_1, end_1, start_2, end_2):

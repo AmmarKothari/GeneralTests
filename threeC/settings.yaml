@@ -16,5 +16,5 @@ GSHEET_TAB_NAME_ACCOUNT_VALUE: "Raw_AccountValue"
 
 # Grouping of bots by ids to give them an easier to remember name and group similar bots.
 bot_groups:
-  Berlin: [1035623, 1054875, 1054872, 1054867, 1054863, 1054858, 1054856, 1054855]
+  Berlin: [1035623, 1054875, 1054872, 1054867, 1054863, 1054858, 1054856, 1054855, 1076305, 1076302]
   Oslo: [1042508]
