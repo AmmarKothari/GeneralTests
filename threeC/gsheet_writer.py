@@ -3,6 +3,8 @@ from datetime import datetime
 
 import pdb
 import pygsheets
+
+import account_info
 import threeCDataGetter as tcdg
 
 from constants import gsheet_date_only_format, GSHEET_UPDATE_LOG, gsheet_date_format
@@ -15,7 +17,7 @@ class GSheetWriter:
         self.gc = pygsheets.authorize(service_file=service_file)
         self.sh = self.gc.open(output_gsheet)
 
-        self.account_info = tcdg.AccountInfo(self.cw)
+        self.account_info = account_info.AccountInfo(self.cw)
 
     def write_log_to_gsheet(self, bot_name, deals):
         if len(deals) == 0:
@@ -30,6 +32,10 @@ class GSheetWriter:
         # Write to sheet
         wks = _get_worksheet_by_name(self.sh, bot_name)
         wks.clear(end='ZZ10000')
+        if len(data_matrix) > wks.rows:
+            print('Additional rows added')
+            additional_rows = len(data_matrix) - wks.rows + 1
+            wks.add_rows(additional_rows)
         wks.update_row(1, data_matrix)
 
     def write_bot_id_to_names_map_to_gsheet(self, bots, sheet_name):
@@ -56,7 +62,6 @@ class GSheetWriter:
         records[date]['Date'] = date
         records[date]['Value'] = self.account_info.get_account_balance(account_id)
         records[date]['Profit'] = self.account_info.get_account_profit(account_id)
-
         # Would be good to use a function to write these values to sheet from dictionary.  Could use some error checking.
         data_matrix = []
         headers = ['Date', 'Value', 'Profit']
@@ -66,11 +71,10 @@ class GSheetWriter:
 
         wks.update_row(1, data_matrix)
 
-    def update_last_write(self):
+    def update_last_write(self, elapsed_time=-1):
         wks = _get_worksheet_by_name(self.sh, GSHEET_UPDATE_LOG)
         wks.update_row(1, ['Last Update'])
-        wks.insert_rows(1, number=1, values=[datetime.utcnow().strftime(gsheet_date_format)])
-
+        wks.insert_rows(1, number=1, values=[datetime.utcnow().strftime(gsheet_date_format), elapsed_time])
 
 
 def _get_if_sheet_exists(sh, name):

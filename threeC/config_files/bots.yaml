@@ -43,10 +43,10 @@ base_keiko:
   # strategy_list: [{options: {},
   #           strategy: 'keiko'
   #           }]
-  # strategy_list: 'keiko'
+  strategy_list: []
   # strategy_list: [{options:{time:"5m", type:"buy_or_strong_buy"}, strategy:"trading_view"}]
-  # strategy_list: [{options: {}, strategy: 'keiko'}]
-  strategy_list: [{strategy: "manual"}]
+#  strategy_list: [{options: {}, strategy: 'keiko'}]
+#  strategy_list: [{strategy: "manual"}]
   leverage_type: 'not_specified'
   # leverage_custom_value: None
   # min_price: None
