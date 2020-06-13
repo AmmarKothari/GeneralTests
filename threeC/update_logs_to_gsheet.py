@@ -1,3 +1,5 @@
+import time
+
 import pdb
 import sys
 from py3cw import request as cw_req
@@ -14,9 +16,9 @@ from slack_updater import SlackUpdater
 
 
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read("config_files/config.ini")
 
-with open("settings.yaml") as settings_f:
+with open("config_files/settings.yaml") as settings_f:
 	settings = yaml.load(settings_f, Loader=yaml.Loader)
 
 py3cw = cw_req.Py3CW(key=config['threeC']['key'], secret=config['threeC']['secret'])
@@ -24,13 +26,14 @@ py3cw = cw_req.Py3CW(key=config['threeC']['key'], secret=config['threeC']['secre
 su = SlackUpdater(config['threeC']['slack_bot_token'])
 
 try:
+	start_time = time.time()
 	gwriter = gsheet_writer.GSheetWriter(os.path.expanduser(settings['GSHEET_SERVICE_FILE']), py3cw,
 										 settings['GSHEET_LOG_FILE'])
 	gwriter.write_account_stats(settings['GSHEET_TAB_NAME_ACCOUNT_VALUE'], constants.MAIN_ACCOUNT_KEY)
 	bots = tcdg.get_bots(py3cw)
 	gwriter.write_bot_id_to_names_map_to_gsheet(bots, settings['GSHEET_TAB_NAME_BOT_IDS'])
 
-	data = tcdg.get_data(py3cw)
+	data = tcdg.get_data(py3cw, use_cache=False)
 
 	filtered_deals = []
 	for bot_group_key in settings['bot_groups']:
@@ -40,8 +43,9 @@ try:
 				deal['bot_group'] = bot_group_key
 			filtered_deals.extend(bot_deals)
 	filtered_deals = sorted(filtered_deals, key=lambda x: int(x['id']), reverse=True)
-	gwriter.write_log_to_gsheet(settings['GSHEET_TAB_NAME'], filtered_deals)
-	gwriter.update_last_write()
+	gwriter.write_log_to_gsheet(settings['GSHEET_TAB_NAME_LOGS'], filtered_deals)
+	elapsed_time = time.time() - start_time
+	gwriter.update_last_write(elapsed_time)
 	print('Successfully updated information.')
 	try:
 		with open(LAST_RUN_SUCCESS_CACHE, 'r'):
@@ -54,6 +58,9 @@ try:
 except Exception:
 	if len(sys.argv) == 1:
 		su.send_error_message()
-		os.remove(LAST_RUN_SUCCESS_CACHE)
+		try:
+			os.remove(LAST_RUN_SUCCESS_CACHE)
+		except FileNotFoundError:
+			pass
 	print('Failed to update information.')
 	raise
