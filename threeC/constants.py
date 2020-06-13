@@ -10,4 +10,4 @@ MAIN_ACCOUNT_KEY = 'Exchange Wallet'
 
 GSHEET_UPDATE_LOG = 'Raw_UpdateLog'
 
-LAST_RUN_SUCCESS_CACHE = 'last_run_successful.cache'
+LAST_RUN_SUCCESS_CACHE = 'cache_files/last_run_successful.cache'
