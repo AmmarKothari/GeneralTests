@@ -1,11 +1,9 @@
 import collections
 from datetime import datetime
 
-import pdb
 import pygsheets
 
 import account_info
-import threeCDataGetter as tcdg
 
 from constants import gsheet_date_only_format, GSHEET_UPDATE_LOG, gsheet_date_format
 
@@ -18,6 +16,8 @@ class GSheetWriter:
         self.sh = self.gc.open(output_gsheet)
 
         self.account_info = account_info.AccountInfo(self.cw)
+
+    # TODO: Add method that can change from datetime to gsheet time string for an entire column
 
     def write_log_to_gsheet(self, bot_name, deals):
         if len(deals) == 0:

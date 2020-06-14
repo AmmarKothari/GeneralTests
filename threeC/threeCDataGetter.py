@@ -1,170 +1,30 @@
 import csv
+import functools
 import hashlib
 import multiprocessing
 import multiprocessing.pool
-import os
-import pickle
-
-import pdb
 import time
 from datetime import datetime
-import functools
 
-import yaml
+import pdb
 
-from constants import gsheet_date_format, threeC_date_format
+from bot_info import BotInfo
+from constants import gsheet_date_format, threeC_date_format, DEAL_START_KEY, DEAL_END_KEY
+from time_converters import gsheet_time_to_datetime
 from helper_classes import MaxValueTracker
 
-BOTS_FILENAME = 'bots.yaml'
 LOG_FILENAMES = {'BOTINFO': 'bot_info.csv',
                  'DEAL_LOG': 'deal_log_{}.csv'}
 
-MAX_DEALS_PER_REQUEST = 1000
-
-DEAL_START_KEY = 'created_at'
-DEAL_UPDATED_KEY = 'updated_at'
-DEAL_END_KEY = 'closed_at'
-CONVERT_TO_DATE_TIME = [DEAL_START_KEY, DEAL_UPDATED_KEY, DEAL_END_KEY]
 MAX_SIMULTANEOUS_DEALS_KEY = 'max_simultaneous_deals'
 MAX_COIN_IN_DEALS_KEY = 'max_coin_in_deals'
 MAX_COIN_RESERVED_IN_DEALS_KEY = 'max_coin_reserved_in_deals'
 MAX_SIMULTANEOUS_DEALS_SAME_BOT_KEY = 'max_simultaneous_same_bot_deals'
 
-CACHED_DEALS_FN = 'cache_files/raw_bot_logs.p'
-CACHE_LIFETIME_S = 600
-
 
 # ----------------
 # Getting Data
 # ----------------
-
-def _load_yaml():
-    with open(BOTS_FILENAME) as bot_yaml:
-        settings_dict = yaml.load(bot_yaml)
-    return settings_dict
-
-
-def _check_if_request_successful(success):
-    if success:
-        raise Exception('Failed to get data')
-
-
-def get_bots(cw):
-    success, bots = cw.request(entity='bots', action='')
-    _check_if_request_successful(success)
-    return bots
-
-
-def _get_all_deals(cw):
-    all_deals = []
-    offset = 0
-    print('Fetching all deals')
-    start = time.time()
-    fetch_counter = 0
-    while True:
-        success, deals = cw.request(entity='deals', action='',
-                                    payload={'limit': MAX_DEALS_PER_REQUEST, 'offset': offset})
-        fetch_counter += 1
-        _check_if_request_successful(success)
-        all_deals.extend(deals)
-        if len(deals) < MAX_DEALS_PER_REQUEST:
-            break
-        offset += MAX_DEALS_PER_REQUEST
-    end = time.time()
-    print('Done fetching {} deals in {:.3} s'.format(len(all_deals), end-start))
-    return all_deals
-
-
-def _cache_deals_to_file(all_deals):
-    pickle.dump(all_deals, open(CACHED_DEALS_FN, 'wb'))
-
-
-def _read_deals_from_cache():
-    all_deals = pickle.load(open(CACHED_DEALS_FN, 'rb'))
-    print('Loading deals from cache')
-    return all_deals
-
-
-def _cache_valid():
-    is_valid = False
-    try:
-        if (time.time() - os.path.getmtime(CACHED_DEALS_FN)) < CACHE_LIFETIME_S:
-            is_valid = True
-    except FileNotFoundError:
-        pass
-    return is_valid
-
-
-def get_data(cw, use_cache=False):
-    cached_deals = _read_deals_from_cache()
-    if use_cache and _cache_valid():
-        all_deals = cached_deals
-    else:
-        all_deals = _get_all_deals(cw)
-        # all_deals = cached_deals
-        cached_deals = _update_date_format(cached_deals)
-        all_deals = _update_date_format(all_deals)
-        new_deals = _get_deals_that_need_update(all_deals, cached_deals)
-        print('Total Deals to evaluate: {}'.format(len(new_deals)))
-        new_deals = _calculate_duration(new_deals)
-        new_deals = _calculate_all_max_simultaneous_open_deals(new_deals, all_deals)
-        all_deals = _update_deals(new_deals, all_deals)
-        # new_deals = _get_updated_and_new_deals(all_deals, cached_deals)
-        # relevant_deals = _get_relevant_deals(all_deals, new_deals)
-        # all_deals = _update_date_format(all_deals)
-        # all_deals = _calculate_duration(all_deals)
-        # all_deals = _calculate_all_max_simultaneous_open_deals(all_deals)
-        _cache_deals_to_file(all_deals)
-    return all_deals
-
-
-def _update_deals(new_deals, all_deals):
-    # sorted_deals = sorted(all_deals, key=lambda x: x[])
-    for new_deal in new_deals:
-        _update_deal(new_deal, all_deals)
-    return all_deals
-
-
-def _update_deal(new_deal, all_deals):
-    for i, deal in enumerate(all_deals):
-        if deal['id'] == new_deal['id']:
-            all_deals[i] = new_deal
-            return
-    all_deals.append(new_deal)
-
-
-def _get_deals_that_need_update(all_deals, cached_deals):
-    """All deals that are new or have a new deal status since the last update."""
-
-    # Get a dictionary of id: date
-    cached_deals_info = {}
-    for deal in cached_deals:
-        cached_deals_info[deal['id']] = deal['updated_at']
-
-    # Add deal indexes to set if deal id is not in keys or update time has changed
-    updated_and_new_deals_idx = set()
-    updated_and_new_deals = []
-    for idx, deal in enumerate(all_deals):
-        cached_deal_ids = list(cached_deals_info.keys())
-        if deal['id'] in cached_deal_ids:
-            if cached_deals_info[deal['id']] == deal['updated_at']:
-                continue
-        updated_and_new_deals.append(deal)
-        updated_and_new_deals_idx.add(idx)
-    print('New/Updated deals found: {}'.format(len(updated_and_new_deals_idx)))
-
-    # Get all the deals that have a close date newer than the oldest created at date of new/updated deals.
-    earliest_deal = sort_deals_by_key(updated_and_new_deals, 'created_at')[-1]
-    sorted_all_deals = sort_deals_by_key(all_deals, 'closed_at')
-    overlapping_deals = 0
-    for idx, d in enumerate(sorted_all_deals):
-        if d['closed_at'] and gsheet_time_to_datetime(d['closed_at']) >= gsheet_time_to_datetime(earliest_deal['created_at']):
-            overlapping_deals += 1
-            # print('Adding a deal that overlaps with an updated deal')
-            updated_and_new_deals_idx.add(idx)
-    print(f'Overlapping deals: {overlapping_deals}')
-    need_updating = [all_deals[i] for i in updated_and_new_deals_idx]
-    return need_updating
 
 
 def _get_deal_hash(deal):
@@ -229,60 +89,14 @@ def get_deals(filtered_deals):
 # ----------------
 # Calculations
 # ----------------
-def threec_to_gsheet_time_format(threec_time):
-    return datetime.strptime(threec_time, threeC_date_format).strftime(gsheet_date_format)
-
-
-def gsheet_time_to_datetime(gsheet_time):
-    return datetime.strptime(gsheet_time, gsheet_date_format)
-
-
-def sort_deals_by_key(deals, key):
-    def _sorter_helper(d):
-        if d[key]:
-            return datetime.strptime(d[key], gsheet_date_format)
-        else:
-            return datetime.utcnow()
-    return sorted(deals, key=_sorter_helper, reverse=True)
-
-
-def _update_date_format(all_deals):
-    for deal in all_deals:
-        for key in CONVERT_TO_DATE_TIME:
-            if deal[key]:
-                try:
-                    deal[key] = threec_to_gsheet_time_format(deal[key])
-                except ValueError:
-                    # if the value has already been converted
-                    pass
-                if 'T' in deal[key]:
-                    raise Exception('Failed to convert to proper date format.')
-            else:
-                deal[key] = None
-    return all_deals
-
-
-def _calculate_duration(all_deals):
-    for deal in all_deals:
-        if deal[CONVERT_TO_DATE_TIME[2]]:
-            end_time = datetime.strptime(deal[CONVERT_TO_DATE_TIME[2]], gsheet_date_format)
-        else:
-            end_time = datetime.utcnow()
-
-        duration = end_time - datetime.strptime(deal[CONVERT_TO_DATE_TIME[0]], gsheet_date_format)
-        duration = duration.total_seconds()
-        deal['duration'] = duration
-    return all_deals
 
 
 def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals):
     print('Starting calculation for all max simultaneous deals')
     start_time = time.time()
-    # calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    calc_pool = multiprocessing.pool.ThreadPool(1)
-    # TODO: all deals that have an end time after the earliest start time of a deal that changed needs to be updated
+    calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    # calc_pool = multiprocessing.pool.ThreadPool(1)
     all_deals = sorted(all_deals, key=lambda x: datetime.strptime(x['created_at'], gsheet_date_format), reverse=True)
-    # all_deals = sorted(all_deals, key=lambda x: datetime.strptime(x['created_at'], gsheet_date_format), reverse=True)[:100]
     pool_func = functools.partial(_calculate_max_simultaneous_open_deals, all_deals=all_deals)
     result = calc_pool.map(pool_func, new_deals, chunksize=10)
     calc_pool.close()
@@ -309,6 +123,15 @@ def _calculate_max_simultaneous_open_deals(current_deal, all_deals):
     for deal in all_deals:
         if deal['from_currency'] != current_deal['from_currency']:
             continue
+        # now = datetime.utcnow().strftime(gsheet_date_format)
+        # # TODO: continue if current_deal start is after end of deal)
+        # deal_end = gsheet_time_to_datetime(deal[DEAL_END_KEY]) if deal[DEAL_END_KEY] else now
+        # if gsheet_time_to_datetime(current_deal[DEAL_START_KEY]) > deal_end:
+        #     continue
+        # # TODO: break if current_deal end is before start of deal
+        # current_end = gsheet_time_to_datetime(current_deal[DEAL_END_KEY]) if current_deal[DEAL_END_KEY] else now
+        # if current_end < gsheet_time_to_datetime(deal[DEAL_START_KEY]):
+        #     break
         is_overlapping = _is_overlapping(deal[DEAL_START_KEY], deal[DEAL_END_KEY], current_deal[DEAL_START_KEY],
                                          current_deal[DEAL_END_KEY])
         if is_overlapping:
@@ -369,12 +192,12 @@ def _is_overlapping(start_1, end_1, start_2, end_2):
 # ----------------
 
 def write_bot_info_to_log(cw):
-    bots = get_bots(cw)
-    header = bots[0].keys()
+    bot_info = BotInfo(cw)
+    header = bot_info.bots[0].keys()
     with open(LOG_FILENAMES['BOTINFO'], 'w') as bot_f:
         dict_writer = csv.DictWriter(bot_f, header)
         dict_writer.writeheader()
-        dict_writer.writerows(bots)
+        dict_writer.writerows(bot_info.bots)
 
 
 def print_bot_id_to_name_mapping(cw):

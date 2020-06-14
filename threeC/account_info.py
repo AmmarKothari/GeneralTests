@@ -1,6 +1,6 @@
 import functools
 
-from threeCDataGetter import _check_if_request_successful
+from request_helper import _check_if_request_successful
 
 
 class AccountInfo:

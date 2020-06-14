@@ -8,10 +8,13 @@ import os
 import yaml
 
 import constants
+import deal_handlers
 import gsheet_writer
 
 import threeCDataGetter as tcdg
+from bot_info import BotInfo
 from constants import LAST_RUN_SUCCESS_CACHE
+from deal_handlers import DealHandler
 from slack_updater import SlackUpdater
 
 
@@ -30,10 +33,11 @@ try:
 	gwriter = gsheet_writer.GSheetWriter(os.path.expanduser(settings['GSHEET_SERVICE_FILE']), py3cw,
 										 settings['GSHEET_LOG_FILE'])
 	gwriter.write_account_stats(settings['GSHEET_TAB_NAME_ACCOUNT_VALUE'], constants.MAIN_ACCOUNT_KEY)
-	bots = tcdg.get_bots(py3cw)
-	gwriter.write_bot_id_to_names_map_to_gsheet(bots, settings['GSHEET_TAB_NAME_BOT_IDS'])
+	bot_info = BotInfo(py3cw)
+	gwriter.write_bot_id_to_names_map_to_gsheet(bot_info.bots, settings['GSHEET_TAB_NAME_BOT_IDS'])
 
-	data = tcdg.get_data(py3cw, use_cache=False)
+	deal_handler = DealHandler(py3cw)
+	data = deal_handlers.get_data(py3cw, use_cache=False)
 
 	filtered_deals = []
 	for bot_group_key in settings['bot_groups']:
@@ -46,7 +50,7 @@ try:
 	gwriter.write_log_to_gsheet(settings['GSHEET_TAB_NAME_LOGS'], filtered_deals)
 	elapsed_time = time.time() - start_time
 	gwriter.update_last_write(elapsed_time)
-	print('Successfully updated information.')
+	print('Successfully updated information in {:.3}.'.format(elapsed_time))
 	try:
 		with open(LAST_RUN_SUCCESS_CACHE, 'r'):
 			pass
@@ -54,6 +58,7 @@ try:
 		with open(LAST_RUN_SUCCESS_CACHE, 'w'):
 			su.send_success_message()
 			pass
+		raise
 
 except Exception:
 	if len(sys.argv) == 1:
