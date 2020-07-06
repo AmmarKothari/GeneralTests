@@ -1,3 +1,36 @@
+test:
+  name: 'test'
+  account_id: 29024320
+  pairs: ['BTC_DATA', 'BTC_OMG']
+  max_active_deals: 4
+  base_order_volume: 0.1
+  base_order_volume_type: 'quote_currency'
+  take_profit: 1.0
+  safety_order_volume: 0.1
+  safety_order_volume_type: 'quote_currency'
+  martingale_volume_coefficient: 1.0
+  martingale_step_coefficient: 1.0
+  max_safety_orders: 1
+  active_safety_orders_count: 1
+  stop_loss_percentage: 0.0
+  cooldown: 0
+  trailing_enabled: False
+  trailing_deviation: 0.1
+  strategy: 'long'
+  safety_order_step_percentage: 1.0
+  take_profit_type: 'total'
+  strategy_list: [{strategy: "trading_view", options: {time: "5m", type: "buy_or_strong_buy"}}]
+  leverage_type: 'not_specified'
+  stop_loss_timeout_enabled: False
+  stop_loss_timeout_in_seconds: 0
+  min_volume_btc_24h: 0.0
+  tsl_enabled: False
+  profit_currency: 'quote_currency'
+  start_order_type: 'limit'
+  stop_loss_type: 'stop_loss'
+  allowed_deals_on_same_pair: 2
+
+
 base_keiko:
   name: 'base_keiko'
   # Check that the account exists or specifically say create new account.

@@ -1,14 +1,17 @@
 import functools
 
-from request_helper import _check_if_request_successful
+from request_helper import _check_if_request_successful, _check_with_retry
 
 
 class AccountInfo:
     def __init__(self, cw, real=True):
         self.cw = cw
         if real:
-            success, accounts = self.cw.request(entity='users', action='change_mode', payload={'mode': 'real'})
-            _check_if_request_successful(success)
+            mode = 'real'
+        else:
+            mode = 'paper'
+        success, accounts = self.cw.request(entity='users', action='change_mode', payload={'mode': mode})
+        _check_if_request_successful(success)
 
     @property
     @functools.lru_cache()
@@ -36,8 +39,8 @@ class AccountInfo:
                 return float(account['day_profit_btc'])
 
     def get_btc_in_account(self, account_id):
-        success, pairs_info = self.cw.request(entity='accounts', action='pie_chart_data', action_id=str(account_id))
-        _check_if_request_successful(success)
+        request_func = functools.partial(self.cw.request, entity='accounts', action='pie_chart_data', action_id=str(account_id))
+        pairs_info = _check_with_retry(request_func)
         for pair in pairs_info:
             if pair['code'] == 'BTC':
                 return pair['amount']

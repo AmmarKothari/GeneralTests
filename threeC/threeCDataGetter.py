@@ -94,8 +94,8 @@ def get_deals(filtered_deals):
 def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals):
     print('Starting calculation for all max simultaneous deals')
     start_time = time.time()
-    calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    # calc_pool = multiprocessing.pool.ThreadPool(1)
+    # calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    calc_pool = multiprocessing.pool.ThreadPool(1)
     all_deals = sorted(all_deals, key=lambda x: datetime.strptime(x['created_at'], gsheet_date_format), reverse=True)
     pool_func = functools.partial(_calculate_max_simultaneous_open_deals, all_deals=all_deals)
     result = calc_pool.map(pool_func, new_deals, chunksize=10)
@@ -113,7 +113,7 @@ def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals):
 def _calculate_max_simultaneous_open_deals(current_deal, all_deals):
     """Returns the number of transactions that are overlapping.
 
-    Note: all_deals should already be sorted by created_at date
+    Note: all_deals should already be sorted by created_at date from newest to oldest
     """
     simultaneous_count = MaxValueTracker()
     coin_in_deals = MaxValueTracker()
@@ -123,7 +123,7 @@ def _calculate_max_simultaneous_open_deals(current_deal, all_deals):
     for deal in all_deals:
         if deal['from_currency'] != current_deal['from_currency']:
             continue
-        # now = datetime.utcnow().strftime(gsheet_date_format)
+        now = datetime.utcnow()
         # # TODO: continue if current_deal start is after end of deal)
         # deal_end = gsheet_time_to_datetime(deal[DEAL_END_KEY]) if deal[DEAL_END_KEY] else now
         # if gsheet_time_to_datetime(current_deal[DEAL_START_KEY]) > deal_end:

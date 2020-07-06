@@ -52,3 +52,12 @@ class DealCacher:
     @functools.lru_cache()
     def cached_deal_ids(self):
         return list(self.cached_deals_info.keys())
+
+    @property
+    @functools.lru_cache()
+    def open_deals(self):
+        open_deals = []
+        for deal in self.cached_deals:
+            if deal['status'] == 'bought':
+                open_deals.append(deal)
+        return open_deals

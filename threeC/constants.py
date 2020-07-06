@@ -10,7 +10,10 @@ MAIN_ACCOUNT_KEY = 'Exchange Wallet'
 
 GSHEET_UPDATE_LOG = 'Raw_UpdateLog'
 
-LAST_RUN_SUCCESS_CACHE = 'cache_files/last_run_successful.cache'
+CONFIG_ROOT = "config_files"
+CACHE_ROOT = "cache_files"
+
+LAST_RUN_SUCCESS_CACHE = f'{CACHE_ROOT}/last_run_successful.cache'
 DEAL_START_KEY = 'created_at'
 DEAL_UPDATED_KEY = 'updated_at'
 DEAL_END_KEY = 'closed_at'

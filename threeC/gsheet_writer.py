@@ -1,6 +1,7 @@
 import collections
 from datetime import datetime
 
+import googleapiclient
 import pygsheets
 
 import account_info
@@ -8,12 +9,22 @@ import account_info
 from constants import gsheet_date_only_format, GSHEET_UPDATE_LOG, gsheet_date_format
 
 
+MAX_RETRIES = 5
+
+
 class GSheetWriter:
     def __init__(self, service_file, cw, output_gsheet):
         self.cw = cw
 
         self.gc = pygsheets.authorize(service_file=service_file)
-        self.sh = self.gc.open(output_gsheet)
+        retry_counter = 0
+        try:
+            self.sh = self.gc.open(output_gsheet)
+        except googleapiclient.errors.HttpError:
+            retry_counter += 1
+            print(f'Failed to connect to GSheets.  Retry attempt: {retry_counter}')
+            if retry_counter > MAX_RETRIES:
+                raise
 
         self.account_info = account_info.AccountInfo(self.cw)
 
@@ -46,29 +57,29 @@ class GSheetWriter:
         wks.update_row(1, data_matrix)
 
     def write_account_stats(self, sheet_name, account_key):
+        # TODO: remove lookup of account data from this class/function
         # NOTE: Things will probably break if accounts are added
+        HEADER = ['Date', 'Value', 'Profit', 'BTC']
         records = collections.defaultdict(dict)
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         all_rows = wks.get_all_values()
         for row in all_rows[1:]:
             if not row[0]:
                 break
-            records[row[0]]['Date'] = row[0]
-            records[row[0]]['Value'] = row[1]
-            records[row[0]]['Profit'] = row[2]
+            for i, h in enumerate(HEADER):
+                records[row[0]][h] = row[i]
 
         date = datetime.utcnow().strftime(gsheet_date_only_format)
         account_id = self.account_info.account_ids[account_key]
         records[date]['Date'] = date
         records[date]['Value'] = self.account_info.get_account_balance(account_id)
         records[date]['Profit'] = self.account_info.get_account_profit(account_id)
+        records[date]['BTC'] = self.account_info.get_btc_in_account(account_id)
         # Would be good to use a function to write these values to sheet from dictionary.  Could use some error checking.
         data_matrix = []
-        headers = ['Date', 'Value', 'Profit']
-        data_matrix.append(headers)
+        data_matrix.append(HEADER)
         for k, v in records.items():
             data_matrix.append(list(v.values()))
-
         wks.update_row(1, data_matrix)
 
     def update_last_write(self, elapsed_time=-1):

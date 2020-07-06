@@ -4,7 +4,7 @@ import time
 from constants import CONVERT_TO_DATE_TIME, gsheet_date_format, threeC_date_format
 from request_helper import _check_if_request_successful
 
-MAX_DEALS_PER_REQUEST = 100
+MAX_DEALS_PER_REQUEST = 1000
 
 
 class APIDealHandler:

@@ -29,6 +29,7 @@ py3cw = cw_req.Py3CW(key=config['threeC']['key'], secret=config['threeC']['secre
 su = SlackUpdater(config['threeC']['slack_bot_token'])
 
 try:
+	# TODO: Add a singleton class here to avoid this from being run multiple times simultaneously on cloud instance.
 	start_time = time.time()
 	gwriter = gsheet_writer.GSheetWriter(os.path.expanduser(settings['GSHEET_SERVICE_FILE']), py3cw,
 										 settings['GSHEET_LOG_FILE'])
@@ -50,15 +51,13 @@ try:
 	gwriter.write_log_to_gsheet(settings['GSHEET_TAB_NAME_LOGS'], filtered_deals)
 	elapsed_time = time.time() - start_time
 	gwriter.update_last_write(elapsed_time)
-	print('Successfully updated information in {:.3}.'.format(elapsed_time))
+	print('Successfully updated information in {:.3f}.'.format(elapsed_time))
 	try:
 		with open(LAST_RUN_SUCCESS_CACHE, 'r'):
 			pass
 	except Exception:
 		with open(LAST_RUN_SUCCESS_CACHE, 'w'):
 			su.send_success_message()
-			pass
-		raise
 
 except Exception:
 	if len(sys.argv) == 1:
