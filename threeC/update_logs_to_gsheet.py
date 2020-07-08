@@ -1,3 +1,4 @@
+import datetime
 import time
 
 import pdb
@@ -29,6 +30,7 @@ py3cw = cw_req.Py3CW(key=config['threeC']['key'], secret=config['threeC']['secre
 su = SlackUpdater(config['threeC']['slack_bot_token'])
 
 try:
+	print("Starting calculation at {}".format(datetime.datetime.now().strftime("%D - %H:%M")))
 	# TODO: Add a singleton class here to avoid this from being run multiple times simultaneously on cloud instance.
 	start_time = time.time()
 	gwriter = gsheet_writer.GSheetWriter(os.path.expanduser(settings['GSHEET_SERVICE_FILE']), py3cw,
