@@ -5,6 +5,8 @@ import pdb
 import yaml
 from py3cw import request as cw_req
 
+import account_info as account_info_module
+import bot_info
 import deal_handlers
 
 config = configparser.ConfigParser()
@@ -20,6 +22,7 @@ class PairSummary:
         self.durations = list()
         self.bot_ids_with_open_trades = list()
         self.bot_ids_that_can_trade = list()
+        self.total_deals = 0
 
     def should_open_new_bot(self):
         # TODO: Check number of simultaneous deals for each bot?
@@ -43,7 +46,8 @@ with open("config_files/settings.yaml") as settings_f:
 
 
 py3cw = cw_req.Py3CW(key=config['threeC']['key'], secret=config['threeC']['secret'])
-
+account_info = account_info_module.AccountInfo(py3cw, real=True)
+bots_info = bot_info.BotInfo(py3cw)
 
 deal_handler = deal_handlers.DealHandler(py3cw)
 
@@ -61,6 +65,16 @@ for deal in open_deals:
         if deal['id'] not in deal_summary[pair_id].bot_ids_with_open_trades:
             deal_summary[pair_id].bot_ids_with_open_trades.append(deal['id'])
         deal_summary[pair_id].durations.sort()
+
+for bot in bots_info.bots:
+    for pair in bot['pairs']:
+        base_id, alt_id = pair.split('_')
+
+        if alt_id in deal_summary.keys():
+            deal_summary[alt_id].bot_ids_that_can_trade.append(bot['id'])
+            deal_summary[alt_id].total_deals += bot['allowed_deals_on_same_pair']
+        pdb.set_trace()
+
 
 # For each pair:
 for pair in deal_summary.values():
