@@ -37,8 +37,12 @@ class PairSummary:
         if self.count < len(self.bot_ids_with_open_trades):
             return True
 
+    @property
+    def remaining_trades(self):
+        return self.total_deals - self.count
+
     def __repr__(self):
-        return f"{self.id}: {self.count} on bots {self.bot_ids_with_open_trades}"
+        return f"{self.id}: {self.count} on bots {self.bot_ids_with_open_trades}. Max trades: {self.total_deals}. Remaining trades: {self.remaining_trades}"
 
 
 with open("config_files/settings.yaml") as settings_f:
@@ -73,7 +77,8 @@ for bot in bots_info.bots:
         if alt_id in deal_summary.keys():
             deal_summary[alt_id].bot_ids_that_can_trade.append(bot['id'])
             deal_summary[alt_id].total_deals += bot['allowed_deals_on_same_pair']
-        pdb.set_trace()
+print([d.remaining_trades for d in deal_summary.values()])
+pdb.set_trace()
 
 
 # For each pair:
