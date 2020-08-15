@@ -21,4 +21,4 @@ def _check_with_retry(request_func):
         except RequestError:
             failure_counter += 1
             print(f"Failed to get data {failure_counter} times.  Retrying.")
-
+    raise ReqestError(f"Exceed max number of retries ({failure_counter})")

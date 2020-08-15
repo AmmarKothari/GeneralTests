@@ -10,8 +10,10 @@ class AccountInfo:
             mode = 'real'
         else:
             mode = 'paper'
-        success, accounts = self.cw.request(entity='users', action='change_mode', payload={'mode': mode})
-        _check_if_request_successful(success)
+
+        # import pdb; pdb.set_trace()
+        # request_func = functools.partial(self.cw.request, entity='users', action='change_mode', payload={'mode': mode})
+        # accounts = _check_with_retry(request_func)
 
     @property
     @functools.lru_cache()
