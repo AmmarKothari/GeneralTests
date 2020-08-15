@@ -2,3 +2,4 @@
 *.pyc
 */venv/*
 */.idea/*
+threeC/threeC_env/*
