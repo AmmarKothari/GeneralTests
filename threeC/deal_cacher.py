@@ -6,7 +6,7 @@ import time
 from constants import DEAL_UPDATED_KEY
 
 
-CACHE_LIFETIME_S = 600
+CACHE_LIFETIME_S = 6000
 
 
 class DealCacher:

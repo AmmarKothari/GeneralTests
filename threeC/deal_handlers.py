@@ -1,6 +1,8 @@
 import functools
 from datetime import datetime
 
+import constants
+import time_converters
 from api_deal_handler import APIDealHandler
 from constants import DEAL_UPDATED_KEY, DEAL_START_KEY, DEAL_END_KEY
 from deal_cacher import DealCacher
@@ -23,6 +25,35 @@ def get_data(cw, use_cache=False):
         deal_handler.update_deals(new_deals)
         deal_handler.cache_deals_to_file()
     return deal_handler.all_deals
+
+
+class Deal:
+    def __init__(self, deal):
+        self.deal = deal
+
+    def get_created_at(self):
+        return time_converters.gsheet_time_to_datetime(self.deal[constants.DEAL_START_KEY])
+
+    def get_updated_at(self):
+        return time_converters.gsheet_time_to_datetime(self.deal[constants.DEAL_UPDATED_KEY])
+
+    def get_closed_at(self):
+        if self.deal[constants.DEAL_END_KEY]:
+            return time_converters.gsheet_time_to_datetime(self.deal[constants.DEAL_END_KEY])
+        else:
+            return datetime.utcnow()
+
+    def get_base_currency(self):
+        return self.deal['from_currency']
+
+    def get_alt_currency(self):
+        return self.deal['to_currency']
+
+    def is_valid_trade(self):
+        return self.deal['status'] != 'failed'
+
+    def __repr__(self):
+        return f'Base: {self.get_base_currency()} Alt: {self.get_alt_currency()}'
 
 
 class DealHandler:
