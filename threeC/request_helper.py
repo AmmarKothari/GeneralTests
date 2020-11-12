@@ -7,7 +7,7 @@ class RequestError(Exception):
 
 def _check_if_request_successful(success):
     if success:
-        raise RequestError('Failed to get data')
+        raise RequestError('Failed to get data: {}'.format(success))
 
 
 def _check_with_retry(request_func):

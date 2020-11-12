@@ -19,6 +19,7 @@ def get_data(cw, use_cache=False):
     # If the cached deals is valid, return those so computation takes less time.  Mostly for debugging.
     if not (use_cache and deal_handler.deal_cacher.cache_valid()):
         deal_handler.fetch_deals()
+        # TODO: Update the duration of all deals.
         need_updating = deal_handler.get_deals_that_need_updating()
         need_updating = _calculate_duration(need_updating)
         new_deals = _calculate_all_max_simultaneous_open_deals(need_updating, deal_handler.api_deals)
@@ -52,16 +53,23 @@ class Deal:
     def is_valid_trade(self):
         return self.deal['status'] != 'failed'
 
+    def get_id(self):
+        return self.deal['id']
+
+    def get_bot_id(self):
+        return self.deal['bot_id']
+
     def __repr__(self):
-        return f'Base: {self.get_base_currency()} Alt: {self.get_alt_currency()}'
+        return f'Base: {self.get_base_currency()} - Alt: {self.get_alt_currency()}'
 
 
 class DealHandler:
-    def __init__(self, cw):
+    def __init__(self, cw, use_cache=False):
         self.cw = cw
         self.all_deals = []
         self.api_deals = []
         self.deal_cacher = DealCacher(CACHED_DEALS_FN)
+        self.use_cache = use_cache
 
     def fetch_deals(self):
         self.api_deals = APIDealHandler(self.cw).get_all_deals()
@@ -69,10 +77,21 @@ class DealHandler:
     def use_cache_deals(self):
         self.all_deals = self.deal_cacher.cached_deals
 
+    def get_all_deals(self):
+        # TODO: This removes the duration and the max simultaneous from the deal info.
+        self.use_cache_deals()
+
+        # If the cached deals is valid, return those so computation takes less time.  Mostly for debugging.
+        if not (self.use_cache and self.deal_cacher.cache_valid()):
+            self.fetch_deals()
+            self.all_deals = self.api_deals
+            self.cache_deals_to_file()
+        return self.all_deals
+
     def cache_deals_to_file(self):
         self.deal_cacher.cache_deals_to_file(self.all_deals)
 
-    @functools.lru_cache()
+    # @functools.lru_cache()
     def get_deals_that_need_updating(self):
         """Deals that have a changed compared to cache or are new deals."""
         # Add deal indexes to set if deal id is not in keys or update time has changed

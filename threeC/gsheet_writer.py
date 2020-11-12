@@ -18,14 +18,15 @@ class GSheetWriter:
 
         self.gc = pygsheets.authorize(service_file=service_file)
         retry_counter = 0
-        try:
-            self.sh = self.gc.open(output_gsheet)
-        except googleapiclient.errors.HttpError:
-            retry_counter += 1
-            print(f'Failed to connect to GSheets.  Retry attempt: {retry_counter}')
-            if retry_counter > MAX_RETRIES:
-                raise
-
+        while retry_counter <= MAX_RETRIES:
+            try:
+                self.sh = self.gc.open(output_gsheet)
+                break
+            except googleapiclient.errors.HttpError:
+                retry_counter += 1
+                print(f'Failed to connect to GSheets.  Retry attempt: {retry_counter}')
+                if retry_counter > MAX_RETRIES:
+                    raise
         self.account_info = account_info.AccountInfo(self.cw)
 
     # TODO: Add method that can change from datetime to gsheet time string for an entire column
@@ -58,8 +59,14 @@ class GSheetWriter:
 
     def write_account_stats(self, sheet_name, account_key):
         # TODO: remove lookup of account data from this class/function
+        # TODO: Don't read and write the whole thing every time.  Just add a row at the bottom and add values there. Unclear if headers should be updated?
         # NOTE: Things will probably break if accounts are added
-        HEADER = ['Date', 'Value', 'Profit', 'BTC']
+        HEADER = ['Date', 'Value', 'Profit',
+                  'BTC', 'BTC_Available', 'BTC_Reserved',
+                  'BNB', 'BNB_Available', 'BNB_Reserved',
+                  'ETH', 'ETH_Available', 'ETH_Reserved',
+                  'USDT', 'USDT_Available', 'USDT_Reserved'
+                  ]
         records = collections.defaultdict(dict)
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         all_rows = wks.get_all_values()
@@ -74,7 +81,23 @@ class GSheetWriter:
         records[date]['Date'] = date
         records[date]['Value'] = self.account_info.get_account_balance(account_id)
         records[date]['Profit'] = self.account_info.get_account_profit(account_id)
-        records[date]['BTC'] = self.account_info.get_btc_in_account(account_id)
+
+        records[date]['BTC'] = self.account_info.get_coin_in_account('BTC', account_id)
+        records[date]['BTC_Available'] = self.account_info.get_coin_available('BTC', account_id)
+        records[date]['BTC_Reserved'] = self.account_info.get_coin_reserved('BTC', account_id)
+
+        records[date]['BNB'] = self.account_info.get_coin_in_account('BNB', account_id)
+        records[date]['BNB_Available'] = self.account_info.get_coin_available('BNB', account_id)
+        records[date]['BNB_Reserved'] = self.account_info.get_coin_reserved('BNB', account_id)
+
+        records[date]['ETH'] = self.account_info.get_coin_in_account('ETH', account_id)
+        records[date]['ETH_Available'] = self.account_info.get_coin_available('ETH', account_id)
+        records[date]['ETH_Reserved'] = self.account_info.get_coin_reserved('ETH', account_id)
+
+        records[date]['USDT'] = self.account_info.get_coin_in_account('USDT', account_id)
+        records[date]['USDT_Available'] = self.account_info.get_coin_available('USDT', account_id)
+        records[date]['USDT_Reserved'] = self.account_info.get_coin_reserved('USDT', account_id)
+
         # Would be good to use a function to write these values to sheet from dictionary.  Could use some error checking.
         data_matrix = []
         data_matrix.append(HEADER)

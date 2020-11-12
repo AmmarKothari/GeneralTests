@@ -1,5 +1,5 @@
 
-# Name of the file that was dowloaded from google api to enable access from python
+# Name of the file that was downloaded from google api to enable access from python
 GSHEET_SERVICE_FILE: "config_files/my-project-1472545352517-b199b7c6ff37.json"
 
 # Name of the document where you want the logs written to
@@ -16,5 +16,6 @@ GSHEET_TAB_NAME_ACCOUNT_VALUE: "Raw_AccountValue"
 
 # Grouping of bots by ids to give them an easier to remember name and group similar bots.
 bot_groups:
-  Berlin: [1076305, 1076302, 1054875, 1054872, 1054867, 1054863, 1054858, 1054856, 1054855, 1035623]
+  Berlin: [1076302, 1054875, 1054872, 1054867, 1054863, 1054858, 1054856, 1054855, 1035623, 1606912]
   Oslo: [1042508]
+  Rio: [1422849]

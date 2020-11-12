@@ -34,11 +34,9 @@ def _get_deal_hash(deal):
 def _get_updated_and_new_deals(all_deals, cached_deals):
     """All deals that are new or have a new deal status since the last update."""
     cached_deal_hashes = []
-    pdb.set_trace()
     for deal in cached_deals:
         deal_hash = _get_deal_hash(deal)
         cached_deal_hashes.append(deal_hash)
-    pdb.set_trace()
     relevant_deals = []
     for deal in all_deals:
         if _get_deal_hash(deal) in cached_deal_hashes:
@@ -91,21 +89,22 @@ def get_deals(filtered_deals):
 # ----------------
 
 
-def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals):
+def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals, fast=True):
     print('Starting calculation for all max simultaneous deals')
     start_time = time.time()
-    # calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    calc_pool = multiprocessing.pool.ThreadPool(1)
-    all_deals = sorted(all_deals, key=lambda x: datetime.strptime(x['created_at'], gsheet_date_format), reverse=True)
-    pool_func = functools.partial(_calculate_max_simultaneous_open_deals, all_deals=all_deals)
-    result = calc_pool.map(pool_func, new_deals, chunksize=10)
-    calc_pool.close()
-    calc_pool.join()
-    for deal, (max_simul, max_coin, max_reserved, max_simul_same) in zip(new_deals, result):
-        deal[MAX_SIMULTANEOUS_DEALS_KEY] = max_simul
-        deal[MAX_COIN_IN_DEALS_KEY] = max_coin
-        deal[MAX_COIN_RESERVED_IN_DEALS_KEY] = max_reserved
-        deal[MAX_SIMULTANEOUS_DEALS_SAME_BOT_KEY] = max_simul_same
+    if not fast:
+        # calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        calc_pool = multiprocessing.pool.ThreadPool(1)
+        all_deals = sorted(all_deals, key=lambda x: datetime.strptime(x['created_at'], gsheet_date_format), reverse=True)
+        pool_func = functools.partial(_calculate_max_simultaneous_open_deals, all_deals=all_deals)
+        result = calc_pool.map(pool_func, new_deals, chunksize=10)
+        calc_pool.close()
+        calc_pool.join()
+        for deal, (max_simul, max_coin, max_reserved, max_simul_same) in zip(new_deals, result):
+            deal[MAX_SIMULTANEOUS_DEALS_KEY] = max_simul
+            deal[MAX_COIN_IN_DEALS_KEY] = max_coin
+            deal[MAX_COIN_RESERVED_IN_DEALS_KEY] = max_reserved
+            deal[MAX_SIMULTANEOUS_DEALS_SAME_BOT_KEY] = max_simul_same
     print('Total Elapsed Time: {:.3f}'.format(time.time() - start_time))
     return new_deals
 

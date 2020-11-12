@@ -7,6 +7,7 @@ from py3cw import request as cw_req
 import configparser
 import os
 import yaml
+from tendo import singleton
 
 import constants
 import deal_handlers
@@ -18,6 +19,7 @@ from constants import LAST_RUN_SUCCESS_CACHE
 from deal_handlers import DealHandler
 from slack_updater import SlackUpdater
 
+lock = singleton.SingleInstance()
 
 config = configparser.ConfigParser()
 config.read("config_files/config.ini")
@@ -26,21 +28,22 @@ with open("config_files/settings.yaml") as settings_f:
 	settings = yaml.load(settings_f, Loader=yaml.Loader)
 
 py3cw = cw_req.Py3CW(key=config['threeC']['key'], secret=config['threeC']['secret'])
+import pdb; pdb.set_trace()
 
 su = SlackUpdater(config['threeC']['slack_bot_token'])
 
 try:
 	print("Starting calculation at {}".format(datetime.datetime.now().strftime("%D - %H:%M")))
-	# TODO: Add a singleton class here to avoid this from being run multiple times simultaneously on cloud instance.
 	start_time = time.time()
 	gwriter = gsheet_writer.GSheetWriter(os.path.expanduser(settings['GSHEET_SERVICE_FILE']), py3cw,
 										 settings['GSHEET_LOG_FILE'])
 	gwriter.write_account_stats(settings['GSHEET_TAB_NAME_ACCOUNT_VALUE'], constants.MAIN_ACCOUNT_KEY)
 	bot_info = BotInfo(py3cw)
-	gwriter.write_bot_id_to_names_map_to_gsheet(bot_info.bots, settings['GSHEET_TAB_NAME_BOT_IDS'])
 
+	# TODO: Clear sheet before writing
+	gwriter.write_bot_id_to_names_map_to_gsheet(bot_info.bots, settings['GSHEET_TAB_NAME_BOT_IDS'])
 	deal_handler = DealHandler(py3cw)
-	data = deal_handlers.get_data(py3cw, use_cache=False)
+	data = deal_handlers.get_data(py3cw, use_cache=True)
 
 	filtered_deals = []
 	for bot_group_key in settings['bot_groups']:
@@ -61,9 +64,9 @@ try:
 		with open(LAST_RUN_SUCCESS_CACHE, 'w'):
 			su.send_success_message()
 
-except Exception:
+except Exception as e:
 	if len(sys.argv) == 1:
-		su.send_error_message()
+		su.send_error_message(str(e))
 		try:
 			os.remove(LAST_RUN_SUCCESS_CACHE)
 		except FileNotFoundError:

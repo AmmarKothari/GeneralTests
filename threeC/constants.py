@@ -5,7 +5,7 @@ threeC_date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
 gsheet_date_format = '%m-%d-%Y %H:%M:%S.%f'
 gsheet_date_only_format = '%m-%d-%Y'
 
-
+# TODO: Move this to config file
 MAIN_ACCOUNT_KEY = 'Exchange Wallet'
 
 GSHEET_UPDATE_LOG = 'Raw_UpdateLog'

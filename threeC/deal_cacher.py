@@ -2,6 +2,7 @@ import functools
 import os
 import pickle
 import time
+import sqlitedict
 
 from constants import DEAL_UPDATED_KEY
 
@@ -15,10 +16,14 @@ class DealCacher:
         self.cache_fn = cache_fn
 
     def cache_deals_to_file(self, all_deals):
+        # import pdb; pdb.set_trace()
         pickle.dump(all_deals, open(self.cache_fn, 'wb'))
 
     def _get_cached_deals_from_file(self):
         return pickle.load(open(self.cache_fn, 'rb'))
+        # deals_cache = sqlitedict.SqliteDict('cache_files/my_db.sqlite', autocommit=True)
+        # print('Loaded {} deals from cache.'.format(len(list(deals_cache.keys()))))
+        # return deals_cache
 
     def cache_valid(self):
         is_valid = False

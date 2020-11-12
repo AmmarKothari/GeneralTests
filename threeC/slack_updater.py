@@ -29,9 +29,9 @@ class SlackUpdater:
         self.username = "threeclogupdates"
         self.icon_emoji = ":robot_face:"
 
-    def send_error_message(self):
+    def send_error_message(self, error_msg=''):
         # Should probably check if it failed here, but just gonna keep living my life
-        response = self.slack_web_client.chat_postMessage(**self.get_error_message_payload())
+        response = self.slack_web_client.chat_postMessage(**self.get_error_message_payload(error_msg))
 
     def send_success_message(self):
         # Should probably check if it failed here, but just gonna keep living my life
@@ -55,8 +55,11 @@ class SlackUpdater:
             ],
         }
 
-    def get_error_message_payload(self):
-        return self._get_message_payload(ERROR_UPDATE)
+    def get_error_message_payload(self, error_msg):
+        message_payload = self._get_message_payload(ERROR_UPDATE)
+        if error_msg:
+            message_payload["blocks"][0]["text"]["text"] = (message_payload["blocks"][0]["text"]["text"] + '\n Error message: {}'.format(error_msg))
+        return message_payload
 
     def get_success_message_payload(self):
         return self._get_message_payload(SUCCESS_UPDATE)
