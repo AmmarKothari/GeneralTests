@@ -2,7 +2,7 @@ import configparser
 import json
 
 import pdb
-import py3cw
+import py3cw  # type: ignore
 import yaml
 
 import constants

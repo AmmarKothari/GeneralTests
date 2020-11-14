@@ -2,7 +2,7 @@ from datetime import datetime
 import time
 
 from constants import CONVERT_TO_DATE_TIME, gsheet_date_format, threeC_date_format
-from request_helper import _check_if_request_successful
+from request_helper import check_if_request_successful
 
 MAX_DEALS_PER_REQUEST = 1000
 
@@ -23,7 +23,7 @@ class APIDealHandler:
             success, deals = self.cw.request(entity='deals', action='',
                                              payload={'limit': MAX_DEALS_PER_REQUEST, 'offset': offset})
             fetch_counter += 1
-            _check_if_request_successful(success)
+            check_if_request_successful(success)
             self.all_deals.extend(deals)
             if len(deals) < MAX_DEALS_PER_REQUEST:
                 break

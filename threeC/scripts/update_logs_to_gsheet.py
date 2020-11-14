@@ -1,23 +1,22 @@
 import datetime
 import time
-
-import pdb
 import sys
-from py3cw import request as cw_req
 import configparser
 import os
 import yaml
 from tendo import singleton
 
+
+from py3cw import request as py3cw_req
+
 import constants
 import deal_handlers
 import gsheet_writer
-
 import threeCDataGetter as tcdg
 from bot_info import BotInfo
 from constants import LAST_RUN_SUCCESS_CACHE
 from deal_handlers import DealHandler
-from slack_updater import SlackUpdater
+import slack_updater
 
 lock = singleton.SingleInstance()
 
@@ -27,10 +26,10 @@ config.read("config_files/config.ini")
 with open("config_files/settings.yaml") as settings_f:
 	settings = yaml.load(settings_f, Loader=yaml.Loader)
 
-py3cw = cw_req.Py3CW(key=config['threeC']['key'], secret=config['threeC']['secret'])
+py3cw = py3cw_req.Py3CW(key=config['threeC']['key'], secret=config['threeC']['secret'])
 import pdb; pdb.set_trace()
 
-su = SlackUpdater(config['threeC']['slack_bot_token'])
+su = slack_updater.SlackUpdater(config['threeC']['slack_bot_token'])
 
 try:
 	print("Starting calculation at {}".format(datetime.datetime.now().strftime("%D - %H:%M")))
