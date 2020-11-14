@@ -27,14 +27,16 @@ with open("config_files/settings.yaml") as settings_f:
 	settings = yaml.load(settings_f, Loader=yaml.Loader)
 
 py3cw = py3cw_req.Py3CW(key=config['threeC']['key'], secret=config['threeC']['secret'])
-import pdb; pdb.set_trace()
 
 su = slack_updater.SlackUpdater(config['threeC']['slack_bot_token'])
 
 try:
 	print("Starting calculation at {}".format(datetime.datetime.now().strftime("%D - %H:%M")))
 	start_time = time.time()
-	gwriter = gsheet_writer.GSheetWriter(os.path.expanduser(settings['GSHEET_SERVICE_FILE']), py3cw,
+	import pdb;
+
+	pdb.set_trace()
+	gwriter = gsheet_writer.GSheetWriter(os.path.expanduser(settings['GSHEET_SERVICE_FILE']),
 										 settings['GSHEET_LOG_FILE'])
 	gwriter.write_account_stats(settings['GSHEET_TAB_NAME_ACCOUNT_VALUE'], constants.MAIN_ACCOUNT_KEY)
 	bot_info = BotInfo(py3cw)

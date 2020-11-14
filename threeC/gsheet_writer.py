@@ -1,7 +1,7 @@
 import collections
 from datetime import datetime
 
-import googleapiclient
+import googleapiclient.errors
 import pygsheets
 
 import account_info
@@ -13,11 +13,9 @@ MAX_RETRIES = 5
 
 
 class GSheetWriter:
-    def __init__(self, service_file, cw, output_gsheet):
-        self.cw = cw
-
+    def __init__(self, service_file: str, output_gsheet: str):
         self.gc = pygsheets.authorize(service_file=service_file)
-        retry_counter = 0
+        retry_counter: int = 0
         while retry_counter <= MAX_RETRIES:
             try:
                 self.sh = self.gc.open(output_gsheet)
@@ -27,7 +25,6 @@ class GSheetWriter:
                 print(f'Failed to connect to GSheets.  Retry attempt: {retry_counter}')
                 if retry_counter > MAX_RETRIES:
                     raise
-        self.account_info = account_info.AccountInfo(self.cw)
 
     # TODO: Add method that can change from datetime to gsheet time string for an entire column
 

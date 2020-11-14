@@ -1,7 +1,6 @@
 import time
 from typing import Any, Dict
 
-import pdb
 import slack
 
 ERROR_UPDATE = {
