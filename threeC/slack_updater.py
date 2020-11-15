@@ -51,7 +51,7 @@ class SlackUpdater:
                 return member["id"]
         raise Exception("No member by that name.")
 
-    def _get_message_payload(self, block: Dict[str:Any]) -> Dict[str, Any]:
+    def _get_message_payload(self, block: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "ts": time.time(),
             "channel": self.channel,

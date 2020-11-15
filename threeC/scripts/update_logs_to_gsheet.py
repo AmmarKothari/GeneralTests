@@ -9,6 +9,7 @@ from tendo import singleton
 
 from py3cw import request as py3cw_req
 
+import account_info as account_info_module
 import constants
 import deal_handlers
 import gsheet_writer
@@ -33,11 +34,12 @@ su = slack_updater.SlackUpdater(config['threeC']['slack_bot_token'])
 try:
 	print("Starting calculation at {}".format(datetime.datetime.now().strftime("%D - %H:%M")))
 	start_time = time.time()
-	import pdb;
-
-	pdb.set_trace()
 	gwriter = gsheet_writer.GSheetWriter(os.path.expanduser(settings['GSHEET_SERVICE_FILE']),
 										 settings['GSHEET_LOG_FILE'])
+
+	account_info = account_info_module.AccountInfo(py3cw, real=True)
+	account_stats = account_info.get_account_stats(config['threeC']['main_account_key'])
+	import pdb; pdb.set_trace()
 	gwriter.write_account_stats(settings['GSHEET_TAB_NAME_ACCOUNT_VALUE'], constants.MAIN_ACCOUNT_KEY)
 	bot_info = BotInfo(py3cw)
 

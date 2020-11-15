@@ -1,10 +1,10 @@
 import collections
 from datetime import datetime
+from typing import List, Any, Dict
 
-import googleapiclient.errors
-import pygsheets
-
-import account_info
+import googleapiclient.errors  # type: ignore
+import pygsheets  # type:ignore
+import pygsheets.client  # type:ignore
 
 from constants import gsheet_date_only_format, GSHEET_UPDATE_LOG, gsheet_date_format
 
@@ -14,23 +14,25 @@ MAX_RETRIES = 5
 
 class GSheetWriter:
     def __init__(self, service_file: str, output_gsheet: str):
-        self.gc = pygsheets.authorize(service_file=service_file)
+        self.gc: pygsheets.client.Client = pygsheets.authorize(
+            service_file=service_file
+        )
         retry_counter: int = 0
         while retry_counter <= MAX_RETRIES:
             try:
-                self.sh = self.gc.open(output_gsheet)
+                self.sh: pygsheets.spreadsheet.Spreadsheet = self.gc.open(output_gsheet)
                 break
             except googleapiclient.errors.HttpError:
                 retry_counter += 1
-                print(f'Failed to connect to GSheets.  Retry attempt: {retry_counter}')
+                print(f"Failed to connect to GSheets.  Retry attempt: {retry_counter}")
                 if retry_counter > MAX_RETRIES:
                     raise
 
     # TODO: Add method that can change from datetime to gsheet time string for an entire column
 
-    def write_log_to_gsheet(self, bot_name, deals):
+    def write_log_to_gsheet(self, bot_name: str, deals: List[Dict[str, Any]]) -> None:
         if len(deals) == 0:
-            print('No deals to write logs for')
+            print("No deals to write logs for")
             return
 
         # Gets all data into a list of lists
@@ -40,62 +42,39 @@ class GSheetWriter:
 
         # Write to sheet
         wks = _get_worksheet_by_name(self.sh, bot_name)
-        wks.clear(end='ZZ10000')
+        wks.clear(end="ZZ10000")
         if len(data_matrix) > wks.rows:
-            print('Additional rows added')
+            print("Additional rows added")
             additional_rows = len(data_matrix) - wks.rows + 1
             wks.add_rows(additional_rows)
         wks.update_row(1, data_matrix)
 
-    def write_bot_id_to_names_map_to_gsheet(self, bots, sheet_name):
-        data_matrix = [['ID', 'Name']]
+    def write_bot_id_to_names_map_to_gsheet(
+        self, bots: List[Dict[str, Any]], sheet_name: str
+    ) -> None:
+        data_matrix = [["ID", "Name"]]
         for bot in bots:
-            data_matrix.append([bot['id'], bot['name']])
+            data_matrix.append([bot["id"], bot["name"]])
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         wks.update_row(1, data_matrix)
 
-    def write_account_stats(self, sheet_name, account_key):
-        # TODO: remove lookup of account data from this class/function
+    def write_account_stats(self, sheet_name: str, account_key: str) -> None:
         # TODO: Don't read and write the whole thing every time.  Just add a row at the bottom and add values there. Unclear if headers should be updated?
-        # NOTE: Things will probably break if accounts are added
-        HEADER = ['Date', 'Value', 'Profit',
-                  'BTC', 'BTC_Available', 'BTC_Reserved',
-                  'BNB', 'BNB_Available', 'BNB_Reserved',
-                  'ETH', 'ETH_Available', 'ETH_Reserved',
-                  'USDT', 'USDT_Available', 'USDT_Reserved'
-                  ]
+        # Would be good to use a function to write these values to sheet from dictionary.  Could use some error checking.
+
         records = collections.defaultdict(dict)
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         all_rows = wks.get_all_values()
+        import pdb; pdb.set_trace()
+        # Get the header of the sheet.
+        # If different, log message and update header.
+        # This is probably a pretty general function.
         for row in all_rows[1:]:
             if not row[0]:
                 break
             for i, h in enumerate(HEADER):
                 records[row[0]][h] = row[i]
 
-        date = datetime.utcnow().strftime(gsheet_date_only_format)
-        account_id = self.account_info.account_ids[account_key]
-        records[date]['Date'] = date
-        records[date]['Value'] = self.account_info.get_account_balance(account_id)
-        records[date]['Profit'] = self.account_info.get_account_profit(account_id)
-
-        records[date]['BTC'] = self.account_info.get_coin_in_account('BTC', account_id)
-        records[date]['BTC_Available'] = self.account_info.get_coin_available('BTC', account_id)
-        records[date]['BTC_Reserved'] = self.account_info.get_coin_reserved('BTC', account_id)
-
-        records[date]['BNB'] = self.account_info.get_coin_in_account('BNB', account_id)
-        records[date]['BNB_Available'] = self.account_info.get_coin_available('BNB', account_id)
-        records[date]['BNB_Reserved'] = self.account_info.get_coin_reserved('BNB', account_id)
-
-        records[date]['ETH'] = self.account_info.get_coin_in_account('ETH', account_id)
-        records[date]['ETH_Available'] = self.account_info.get_coin_available('ETH', account_id)
-        records[date]['ETH_Reserved'] = self.account_info.get_coin_reserved('ETH', account_id)
-
-        records[date]['USDT'] = self.account_info.get_coin_in_account('USDT', account_id)
-        records[date]['USDT_Available'] = self.account_info.get_coin_available('USDT', account_id)
-        records[date]['USDT_Reserved'] = self.account_info.get_coin_reserved('USDT', account_id)
-
-        # Would be good to use a function to write these values to sheet from dictionary.  Could use some error checking.
         data_matrix = []
         data_matrix.append(HEADER)
         for k, v in records.items():
@@ -104,8 +83,12 @@ class GSheetWriter:
 
     def update_last_write(self, elapsed_time=-1):
         wks = _get_worksheet_by_name(self.sh, GSHEET_UPDATE_LOG)
-        wks.update_row(1, ['Last Update'])
-        wks.insert_rows(1, number=1, values=[datetime.utcnow().strftime(gsheet_date_format), elapsed_time])
+        wks.update_row(1, ["Last Update"])
+        wks.insert_rows(
+            1,
+            number=1,
+            values=[datetime.utcnow().strftime(gsheet_date_format), elapsed_time],
+        )
 
 
 def _get_if_sheet_exists(sh, name):
