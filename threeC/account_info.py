@@ -1,7 +1,8 @@
 import collections
-from datetime import datetime
 import functools
-from typing import Any, Dict, List, Optional, cast, Callable, OrderedDict, Union
+from datetime import datetime
+from typing import (Any, Callable, Dict, List, Optional, OrderedDict, Union,
+                    cast)
 
 from py3cw import request as py3cw_req  # type: ignore
 
