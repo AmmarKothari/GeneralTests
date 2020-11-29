@@ -65,7 +65,9 @@ class GSheetWriter:
         records = collections.defaultdict(dict)
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         all_rows = wks.get_all_values()
-        import pdb; pdb.set_trace()
+        import pdb
+
+        pdb.set_trace()
         # Get the header of the sheet.
         # If different, log message and update header.
         # This is probably a pretty general function.

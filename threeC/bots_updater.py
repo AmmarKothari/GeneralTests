@@ -7,13 +7,13 @@ import yaml
 
 import constants
 
-KEYS_TO_UPDATE = ['strategy_list', 'pairs']
+KEYS_TO_UPDATE = ["strategy_list", "pairs"]
 
 
 def update_config(d):
     for k in KEYS_TO_UPDATE:
         if k in d.keys():
-            d[k] = json.dumps(d[k], separators=(',', ':'))
+            d[k] = json.dumps(d[k], separators=(",", ":"))
     return d
 
 
@@ -37,7 +37,7 @@ class AllBotsDef:
 
     def get_bot(self, bot_name):
         if bot_name not in self.available_bots:
-            raise Exception('Bot does not exist')
+            raise Exception("Bot does not exist")
         return BotDef(self.all_bot_config[bot_name])
 
 
@@ -47,7 +47,6 @@ class BotDef:
 
     def as_payload(self):
         return update_config(self.bot_config)
-
 
 
 config = configparser.ConfigParser()
@@ -64,15 +63,21 @@ with open(f"{constants.CONFIG_ROOT}/bots.yaml") as bots_f:
 # bots_def['base_keiko']['strategy_list'][0] = json.dumps(bots_def['base_keiko']['strategy_list'][0])
 # bots_def['base_keiko']['strategy_list'] = json.dumps(bots_def['base_keiko']['strategy_list'])
 all_bots_def = AllBotsDef(bots_def)
-test_bot_def = BotDef(bots_def['test'])
+test_bot_def = BotDef(bots_def["test"])
 pdb.set_trace()
-success, out = py3cw.request(entity='bots', action='create_bot', payload=test_bot_def.as_payload())
-test_def['bot_id'] = out['id']
-test_def['allowed_deals_on_same_pair'] = 10
+success, out = py3cw.request(
+    entity="bots", action="create_bot", payload=test_bot_def.as_payload()
+)
+test_def["bot_id"] = out["id"]
+test_def["allowed_deals_on_same_pair"] = 10
 pdb.set_trace()
 
-#TODO: Load the settings for the current bots. Set up a script to update all the bots to a slightly different base order size.
-success, out = py3cw.request(entity='bots', action='update', action_id=str(test_def['id']), payload=test_def)
+# TODO: Load the settings for the current bots. Set up a script to update all the bots to a slightly different base order size.
+success, out = py3cw.request(
+    entity="bots", action="update", action_id=str(test_def["id"]), payload=test_def
+)
 
-success, out = py3cw.request(entity='bots', action='create_bot', payload=bots_def['base_keiko'])
+success, out = py3cw.request(
+    entity="bots", action="create_bot", payload=bots_def["base_keiko"]
+)
 pdb.set_trace()

@@ -1,8 +1,7 @@
 import collections
 import functools
 from datetime import datetime
-from typing import (Any, Callable, Dict, List, Optional, OrderedDict, Union,
-                    cast)
+from typing import Any, Callable, Dict, List, Optional, OrderedDict, Union, cast
 
 from py3cw import request as py3cw_req  # type: ignore
 
@@ -116,7 +115,7 @@ class AccountInfo:
 
     def get_account_stats(
         self, account_name: str
-    ) -> Dict[str, OrderedDict[str, Union[str, float]]]:
+    ) -> Dict[str, "OrderedDict[str, Union[str, float]]"]:
         # NOTE: Things will probably break if accounts are added
         date: str = datetime.utcnow().strftime(constants.gsheet_date_only_format)
         account_id = self.account_ids[account_name]

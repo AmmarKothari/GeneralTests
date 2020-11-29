@@ -14,14 +14,17 @@ class APIDealHandler:
 
     def get_all_deals(self):
         """Get all deals from API"""
-        print('Fetching all deals')
+        print("Fetching all deals")
         start = time.time()
         offset = 0
         fetch_counter = 0
         # Keep requesting until return fewer than maximum number of deals
         while True:
-            success, deals = self.cw.request(entity='deals', action='',
-                                             payload={'limit': MAX_DEALS_PER_REQUEST, 'offset': offset})
+            success, deals = self.cw.request(
+                entity="deals",
+                action="",
+                payload={"limit": MAX_DEALS_PER_REQUEST, "offset": offset},
+            )
             fetch_counter += 1
             check_if_request_successful(success)
             self.all_deals.extend(deals)
@@ -29,7 +32,7 @@ class APIDealHandler:
                 break
             offset += MAX_DEALS_PER_REQUEST
         end = time.time()
-        print('Done fetching {} deals in {:.3} s'.format(self.num_deals, end - start))
+        print("Done fetching {} deals in {:.3} s".format(self.num_deals, end - start))
         # TODO: Convert to datetime
         self._update_date_format()
         return self.all_deals
@@ -48,12 +51,14 @@ class APIDealHandler:
                     except ValueError:
                         # if the value has already been converted
                         pass
-                    if 'T' in deal[key]:
-                        raise Exception('Failed to convert to proper date format.')
+                    if "T" in deal[key]:
+                        raise Exception("Failed to convert to proper date format.")
                 else:
                     deal[key] = None
         return self.all_deals
 
 
 def _threec_to_gsheet_time_format(threec_time):
-    return datetime.strptime(threec_time, threeC_date_format).strftime(gsheet_date_format)
+    return datetime.strptime(threec_time, threeC_date_format).strftime(
+        gsheet_date_format
+    )
