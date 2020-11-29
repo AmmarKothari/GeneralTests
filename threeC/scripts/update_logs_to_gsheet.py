@@ -38,9 +38,9 @@ try:
 										 settings['GSHEET_LOG_FILE'])
 
 	account_info = account_info_module.AccountInfo(py3cw, real=True)
-	account_stats = account_info.get_account_stats(config['threeC']['main_account_key'])
+	account_stats = account_info.get_account_stats(settings['MAIN_ACCOUNT_KEY'])
 	import pdb; pdb.set_trace()
-	gwriter.write_account_stats(settings['GSHEET_TAB_NAME_ACCOUNT_VALUE'], constants.MAIN_ACCOUNT_KEY)
+	gwriter.write_account_stats(settings['GSHEET_TAB_NAME_ACCOUNT_VALUE'], account_stats)
 	bot_info = BotInfo(py3cw)
 
 	# TODO: Clear sheet before writing
