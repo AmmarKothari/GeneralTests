@@ -1,3 +1,4 @@
 *config.ini
 *my-project*.json
 *cache_files/*
+.mypy_cache/*
