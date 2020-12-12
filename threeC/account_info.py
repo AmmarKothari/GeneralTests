@@ -71,6 +71,12 @@ class AccountInfo:
                     return account
         raise AccountException(f"No account with id: {account_id}")
 
+    def get_account_from_name(self, account_name: str) -> request_helper.Py3cw_request_info_single_success:
+        for account in self.accounts:
+            if account['exchange_name'] == account_name:
+                return account
+        raise AccountException(f"No account width name: {account_name}")
+
     def get_account_balance(self, account_id: int) -> float:
         account = self.get_account_from_id(account_id)
         return float(account["btc_amount"])
@@ -79,6 +85,7 @@ class AccountInfo:
         account = self.get_account_from_id(account_id)
         return float(account["day_profit_btc"])
 
+    @functools.lru_cache()
     def get_coin_in_account(self, coin: str, account_id: int) -> float:
         request_func: Callable[
             [], request_helper.Py3cw_request_list_response

@@ -44,9 +44,6 @@ try:
 
     account_info = account_info_module.AccountInfo(py3cw, real=True)
     account_stats = account_info.get_account_stats(settings["MAIN_ACCOUNT_KEY"])
-    import pdb
-
-    pdb.set_trace()
     gwriter.write_account_stats(
         settings["GSHEET_TAB_NAME_ACCOUNT_VALUE"], account_stats
     )

@@ -1,5 +1,6 @@
 import functools
 from datetime import datetime
+from typing import List, Dict, Any, Optional
 
 import constants
 import time_converters
@@ -34,19 +35,111 @@ class Deal:
     def __init__(self, deal):
         self.deal = deal
 
-    def get_created_at(self):
-        return time_converters.gsheet_time_to_datetime(
+    def is_valid_trade(self):
+        return self.deal["status"] != "failed"
+
+    def get_id(self):
+        return self.deal["id"]
+
+
+class Trade:
+    def __init__(self, trade):
+        self.trade = trade
+
+    def get_created_at(self) -> datetime:
+        return time_converters.threec_time_to_datetime(
+            self.trade[constants.DEAL_START_KEY]
+        )
+
+    def get_updated_at(self) -> datetime:
+        return time_converters.threec_time_to_datetime(
+            self.trade[constants.DEAL_UPDATED_KEY]
+        )
+
+    def get_closed_at(self) -> datetime:
+        if self.trade[constants.DEAL_END_KEY]:
+            return time_converters.threec_time_to_datetime(
+                self.trade[constants.DEAL_END_KEY]
+            )
+        else:
+            return datetime.utcnow()
+
+
+class SmartDeal(Deal):
+    def get_created_at(self) -> datetime:
+        return time_converters.threec_time_to_datetime(
+            self.deal['data'][constants.DEAL_START_KEY]
+        )
+
+    def get_updated_at(self) -> datetime:
+        return time_converters.threec_time_to_datetime(
+            self.deal['data'][constants.DEAL_UPDATED_KEY]
+        )
+
+    def get_closed_at(self) -> datetime:
+        if self.deal[constants.DEAL_END_KEY]:
+            return time_converters.threec_time_to_datetime(
+                self.deal['data'][constants.DEAL_END_KEY]
+            )
+        else:
+            return datetime.utcnow()
+
+    def get_base_currency(self) -> str:
+        return self.deal["pair"].split("_")[0]
+
+    def get_alt_currency(self) -> str:
+        return self.deal["pair"].split("_")[1]
+
+    def get_pair(self) -> str:
+        return self.deal["pair"]
+
+    def add_safety_order(self, cw, order_type: str, units: float, price: float):
+        payload = {
+            "order_type": order_type,
+            "units": {
+                "value": units,
+            },
+            "price": {
+                "value": price,
+            },
+            "order_id": self.get_id(),
+        }
+        success, response = cw.request(entity="smart_trades_v2", action="add_funds", action_id=str(self.get_id()), payload=payload)
+        if success:
+            raise AddFundsException(f"{self.get_id()}: Could not add funds to smart trade ({success}) (payload: {payload})")
+
+    def get_trades(self, cw) -> List[Trade]:
+        payload = {
+            "smart_trade_id": self.get_id(),
+        }
+        success, response = cw.request(entity="smart_trades_v2", action="get_trades", action_id=str(self.get_id()), payload=payload)
+        if success:
+            raise Exception("Could not find deals associated with smart trade")
+        return [Trade(r) for r in response]
+
+class AddFundsException(Exception):
+    pass
+
+class BotDeal(Deal):
+    def get_bot_id(self) -> int:
+        return self.deal["bot_id"]
+
+    def get_active_safety_orders(self):
+        return int(self.deal["current_active_safety_orders"])
+
+    def get_created_at(self) -> datetime:
+        return time_converters.threec_time_to_datetime(
             self.deal[constants.DEAL_START_KEY]
         )
 
-    def get_updated_at(self):
-        return time_converters.gsheet_time_to_datetime(
+    def get_updated_at(self) -> datetime:
+        return time_converters.threec_time_to_datetime(
             self.deal[constants.DEAL_UPDATED_KEY]
         )
 
-    def get_closed_at(self):
+    def get_closed_at(self) -> datetime:
         if self.deal[constants.DEAL_END_KEY]:
-            return time_converters.gsheet_time_to_datetime(
+            return time_converters.threec_time_to_datetime(
                 self.deal[constants.DEAL_END_KEY]
             )
         else:
@@ -58,17 +151,34 @@ class Deal:
     def get_alt_currency(self):
         return self.deal["to_currency"]
 
-    def is_valid_trade(self):
-        return self.deal["status"] != "failed"
+    def get_pair(self):
+        return f"{self.get_base_currency()}_{self.get_alt_currency()}"
 
-    def get_id(self):
-        return self.deal["id"]
+    def get_data_for_adding_funds(self, cw):
+        payload = {
+            "deal_id": self.get_id(),
+        }
+        success, response = cw.request(entity="deals", action="data_for_adding_funds", action_id=str(self.get_id()), payload=payload)
+        if success:
+            raise Exception("Could not retrieve data for adding funds")
+        return response
 
-    def get_bot_id(self):
-        return self.deal["bot_id"]
+    def add_funds(self, cw, amount, price, is_market=False):
+        payload = {
+            "quantity": amount,
+            "is_market": is_market,
+            # "response_type": "",
+            "rate": price,
+            "deal_id": self.get_id(),
+        }
+        success, response = cw.request(entity="deals", action="add_funds", action_id=str(self.get_id()),payload=payload)
+        if success:
+            raise AddFundsException(f"{self.get_id()}: Could not add funds to deal ({success})")
+        return response
 
     def __repr__(self):
         return f"Base: {self.get_base_currency()} - Alt: {self.get_alt_currency()}"
+
 
 
 class DealHandler:
@@ -144,6 +254,32 @@ class DealHandler:
                 self.all_deals[i] = new_deal
                 return
         self.all_deals.append(new_deal)
+
+    def get_smart_deals(self, status: Optional[str]) -> List[SmartDeal]:
+        # TODO: loop through until all deals are gathered.
+        payload = {
+            "per_page": 100
+        }
+        if status:
+            payload["status"] = status
+        success, response = self.cw.request(entity="smart_trades_v2", action="", payload=payload)
+        if success:
+            raise Exception("No smart deals found")
+        deals = [SmartDeal(r) for r in response]
+        return deals
+
+    def get_bot_deals(self, scope: Optional[str] = None) -> List[BotDeal]:
+        # TODO: loop through until all deals are gathered.
+        payload = {
+            "limit": 1000,
+        }
+        if scope:
+            payload["scope"] = scope
+        success, response = self.cw.request(entity="deals", action="", payload=payload)
+        if success:
+            raise Exception("No smart deals found")
+        deals = [BotDeal(r) for r in response]
+        return deals
 
 
 def sort_deals_by_key(deals, key):
