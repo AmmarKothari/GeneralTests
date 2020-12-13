@@ -34,7 +34,6 @@ class DealCacher:
     @property
     def cached_deals(self):
         try:
-            print("Loading deals from cache")
             return self._get_cached_deals_from_file()
         except FileNotFoundError:
             print("No cache file found.")

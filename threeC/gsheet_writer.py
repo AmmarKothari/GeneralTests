@@ -58,16 +58,18 @@ class GSheetWriter:
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         wks.update_row(1, data_matrix)
 
-    def write_account_stats(self, sheet_name: str, account_key: str) -> None:
+    def write_account_stats(self, sheet_name: str, account_info: Dict[str, Any]) -> None:
         # TODO: Don't read and write the whole thing every time.  Just add a row at the bottom and add values there. Unclear if headers should be updated?
-        # Would be good to use a function to write these values to sheet from dictionary.  Could use some error checking.
-
+        # NOTE: Things will probably break if accounts are added
+        HEADER = ['Date', 'Value', 'Profit',
+                  'BTC', 'BTC_Available', 'BTC_Reserved',
+                  'BNB', 'BNB_Available', 'BNB_Reserved',
+                  'ETH', 'ETH_Available', 'ETH_Reserved',
+                  'USDT', 'USDT_Available', 'USDT_Reserved'
+                  ]
         records = collections.defaultdict(dict)
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         all_rows = wks.get_all_values()
-        import pdb
-
-        pdb.set_trace()
         # Get the header of the sheet.
         # If different, log message and update header.
         # This is probably a pretty general function.
@@ -77,6 +79,8 @@ class GSheetWriter:
             for i, h in enumerate(HEADER):
                 records[row[0]][h] = row[i]
 
+        records.update(account_info)
+        # Would be good to use a function to write these values to sheet from dictionary.  Could use some error checking.
         data_matrix = []
         data_matrix.append(HEADER)
         for k, v in records.items():
