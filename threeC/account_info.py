@@ -127,6 +127,7 @@ class AccountInfo:
         date: str = datetime.utcnow().strftime(constants.gsheet_date_only_format)
         account_id = self.account_ids[account_name]
 
+        # TODO: Remove the date as a key.  WHY?!?!
         records: Dict[
             str, collections.OrderedDict[str, Union[str, float]]
         ] = collections.defaultdict(collections.OrderedDict)
