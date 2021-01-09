@@ -30,18 +30,18 @@ deal_handler = deal_handlers.DealHandler(py3cw, use_cache=True)
 all_smart_deals = deal_handler.get_smart_deals(status="active")
 CURRENCY_SETTINGS = {
     "BTC": {
-        "min": 0.01,
-        "ratio_of_total_order_size": 0.01,
+        "min": 0.05,
+        "base_order_size": 0.0002,
         "ratio_of_order_price": 0.95,
     },
     "ETH": {
         "min": 0.5,
-        "ratio_of_total_order_size": 0.01,
+        "base_order_size": 0.02,
         "ratio_of_order_price": 0.95,
     },
     "BNB": {
         "min": 5.0,
-        "ratio_of_total_order_size": 0.01,
+        "base_order_size": 0.2,
         "ratio_of_order_price": 0.95,
     }
 }
@@ -81,7 +81,7 @@ for base_currency in CURRENCY_SETTINGS:
 
         # Get acceptable order size
         success, response = py3cw.request(entity="accounts", action="currency_rates", payload={"pair": smart_deal.get_pair(), "market_code": "binance"})
-        amount = CURRENCY_SETTINGS[base_currency]["ratio_of_total_order_size"] * coin_in_account / float(response['last'])
+        amount = CURRENCY_SETTINGS[base_currency]["base_order_size"] / float(response['last'])
         units_to_buy = math.floor(
             float(amount) / float(response["lotStep"])
         ) * float(response["lotStep"])

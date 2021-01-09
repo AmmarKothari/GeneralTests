@@ -90,10 +90,10 @@ def get_deals(filtered_deals):
 # ----------------
 
 
-def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals, fast=True):
+def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals, skip_calc=False):
     print("Starting calculation for all max simultaneous deals")
     start_time = time.time()
-    if not fast:
+    if not skip_calc:
         # calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
         calc_pool = multiprocessing.pool.ThreadPool(1)
         all_deals = sorted(
