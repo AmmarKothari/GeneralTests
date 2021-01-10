@@ -54,7 +54,7 @@ try:
         bot_info.bots, settings["GSHEET_TAB_NAME_BOT_IDS"]
     )
     deal_handler = DealHandler(py3cw)
-    data = deal_handlers.get_data(py3cw, use_cache=True)
+    data = deal_handlers.get_data(py3cw, use_cache=False)
 
     filtered_deals = []
     for bot_group_key in settings["bot_groups"]:
