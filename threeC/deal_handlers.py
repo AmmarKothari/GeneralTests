@@ -23,6 +23,7 @@ def get_data(cw, use_cache=False):
         # TODO: Update the duration of all deals.
         need_updating = deal_handler.get_deals_that_need_updating()
         need_updating = _calculate_duration(need_updating)
+        import pdb; pdb.set_trace()
         new_deals = _calculate_all_max_simultaneous_open_deals(
             need_updating, deal_handler.api_deals
         )
@@ -211,7 +212,6 @@ class DealHandler:
     def cache_deals_to_file(self):
         self.deal_cacher.cache_deals_to_file(self.all_deals)
 
-    # @functools.lru_cache()
     def get_deals_that_need_updating(self):
         """Deals that have a changed compared to cache or are new deals."""
         # Add deal indexes to set if deal id is not in keys or update time has changed
