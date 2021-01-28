@@ -1,22 +1,18 @@
 import csv
 import functools
 import hashlib
-import multiprocessing
 import multiprocessing.pool
 import time
 from datetime import datetime
 import tqdm
 
-import pdb
 
 from bot_info import BotInfo
 from constants import (
     gsheet_date_format,
-    threeC_date_format,
     DEAL_START_KEY,
     DEAL_END_KEY,
 )
-from time_converters import gsheet_time_to_datetime
 from helper_classes import MaxValueTracker
 
 LOG_FILENAMES = {"BOTINFO": "bot_info.csv", "DEAL_LOG": "deal_log_{}.csv"}
@@ -51,18 +47,6 @@ def _get_updated_and_new_deals(all_deals, cached_deals):
     return relevant_deals
 
 
-#       for deal, deal_hash in zip(all_deals, all_deals_has_set):
-#           if cached_deal in cached_deals_has_set:
-#               if deal == cached_deal:
-#                   continue
-#               new_deals.append(deal)
-#     return new_deals
-
-# def _get_relevant_deals(all_deals, new_deals):
-"""All deals that need to updated.  (All deals still in bought phase + All new deals).
-All other deals don't need to be updated."""
-
-
 def filter_by_bot_id(deals, bot_id):
     if not deals:
         return []
@@ -95,8 +79,7 @@ def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals, skip_calc=F
     print("Starting calculation for all max simultaneous deals")
     start_time = time.time()
     if not skip_calc:
-        calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        # calc_pool = multiprocessing.pool.ThreadPool(1)
+        calc_pool = multiprocessing.pool.ThreadPool(1)
         all_deals = sorted(
             all_deals,
             key=lambda x: datetime.strptime(x["created_at"], gsheet_date_format),
@@ -132,15 +115,6 @@ def _calculate_max_simultaneous_open_deals(current_deal, all_deals):
     for deal in all_deals:
         if deal["from_currency"] != current_deal["from_currency"]:
             continue
-        now = datetime.utcnow()
-        # # TODO: continue if current_deal start is after end of deal)
-        # deal_end = gsheet_time_to_datetime(deal[DEAL_END_KEY]) if deal[DEAL_END_KEY] else now
-        # if gsheet_time_to_datetime(current_deal[DEAL_START_KEY]) > deal_end:
-        #     continue
-        # # TODO: break if current_deal end is before start of deal
-        # current_end = gsheet_time_to_datetime(current_deal[DEAL_END_KEY]) if current_deal[DEAL_END_KEY] else now
-        # if current_end < gsheet_time_to_datetime(deal[DEAL_START_KEY]):
-        #     break
         is_overlapping = _is_overlapping(
             deal[DEAL_START_KEY],
             deal[DEAL_END_KEY],
@@ -224,36 +198,11 @@ def write_bot_info_to_log(cw):
         dict_writer.writerows(bot_info.bots)
 
 
-def print_bot_id_to_name_mapping(cw):
-    bots = get_bots(cw)
-    for bot in bots:
-        print("{} -> {}".format(bot["id"], bot["name"]))
-
-
-def get_name_from_id(cw, id):
-    bots = get_bots(cw)
-    for bot in bots:
-        if bot["id"] == id:
-            return bot["name"]
-    raise Exception("No bot found with that id")
-
-
 def write_log_with_deals(bot_id, deals):
     # TDOO: Need to deal with deals that were not completed but now are
     # Could rewrite whole file or find a way to replace just that row in file.
     log_filename = LOG_FILENAMES["DEAL_LOG"].format(bot_id)
     header = deals[0].keys()
-
-    # previously_logged_deals = []
-    # write_mode = 'a'
-    # try:
-    # 	with open(log_filename, 'r') as deal_log_f:
-    # 		reader = csv.DictReader(deal_log_f)
-    # 		for deal in reader:
-    # 			previously_logged_deals.append(int(deal['id']))
-    # except FileNotFoundError:
-    # 	write_mode = 'w'
-    # 	print('File not found.  Creating new file.')
 
     # Rewrite the log file everytime
     write_mode = "w"
@@ -265,29 +214,3 @@ def write_log_with_deals(bot_id, deals):
             # if deal['id'] not in previously_logged_deals:
             # print('Logging new deal')
             dict_writer.writerow(deal)
-
-
-# def test_setup_bot(cw, bot_name):
-# 	settings_dict = _load_yaml()
-# 	# settings_dict['base_keiko']['strategy_list'] = [get_strategy(cw, 'keiko')]
-# 	success, response = cw.request(entity='bots', action='create_bot', payload=settings_dict['base_keiko'])
-# 	pdb.set_trace()
-# 	return response
-
-# def test_update_bot(cw, bot_name):
-# 	settings_dict = _load_yaml()[bot_name]
-# 	# if settings_dict['is_update']:
-# 	settings_dict.pop('is_update')
-# 	success, response = cw.request(entity='bots', action='update', action_id=str(settings_dict['id']), payload=settings_dict)
-# 	pdb.set_trace()
-
-
-# bots = get_bots(py3cw)
-# data = get_data(py3cw)
-# filtered_deals = filter_by_bot_id(data, MAIN_BOT_ID)
-# completed_deals, ongoing_deals = get_deals(filtered_deals)
-# max_open_duration = get_longest_open_deal(ongoing_deals)
-# print('Longest open deal {:.3f}'.format(max_open_duration))
-
-# write_bot_info_to_log(py3cw)
-# print_bot_id_to_name_mapping(py3cw)

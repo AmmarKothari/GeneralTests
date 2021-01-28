@@ -68,7 +68,7 @@ try:
     for deal in filtered_deals:
         if deal["id"] not in unique_deal_ids:
             unique_deal_ids.append(deal["id"])
-            unique_deals.append(deal["id"])
+            unique_deals.append(deal)
     unique_deals = sorted(unique_deals, key=lambda x: int(x["id"]), reverse=True)
     gwriter.write_log_to_gsheet(settings["GSHEET_TAB_NAME_LOGS"], unique_deals)
     elapsed_time = time.time() - start_time
