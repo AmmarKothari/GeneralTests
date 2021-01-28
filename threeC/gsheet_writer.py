@@ -30,7 +30,7 @@ class GSheetWriter:
 
     # TODO: Add method that can change from datetime to gsheet time string for an entire column
 
-    def write_log_to_gsheet(self, bot_name: str, deals: List[Dict[str, Any]]) -> None:
+    def write_log_to_gsheet(self, sheet_name: str, deals: List[Dict[str, Any]]) -> None:
         if len(deals) == 0:
             print("No deals to write logs for")
             return
@@ -41,7 +41,7 @@ class GSheetWriter:
             data_matrix.append(list(deal.values()))
 
         # Write to sheet
-        wks = _get_worksheet_by_name(self.sh, bot_name)
+        wks = _get_worksheet_by_name(self.sh, sheet_name)
         wks.clear(end="ZZ10000")
         if len(data_matrix) > wks.rows:
             print("Additional rows added")

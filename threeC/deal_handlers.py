@@ -211,7 +211,6 @@ class DealHandler:
     def cache_deals_to_file(self):
         self.deal_cacher.cache_deals_to_file(self.all_deals)
 
-    # @functools.lru_cache()
     def get_deals_that_need_updating(self):
         """Deals that have a changed compared to cache or are new deals."""
         # Add deal indexes to set if deal id is not in keys or update time has changed

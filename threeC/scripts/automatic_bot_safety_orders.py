@@ -9,6 +9,7 @@ import yaml
 import deal_handlers
 
 import account_info
+import slack_updater
 
 config = configparser.ConfigParser()
 config.read("config_files/config.ini")
@@ -34,18 +35,15 @@ all_bot_deals.sort(key=lambda x: x.get_created_at())
 # Uses safety order size to place orders
 CURRENCY_SETTINGS = {
     "BTC": {
-        "min": 0.01,
-        # "ratio_of_total_order_size": 0.01,
-        "ratio_of_order_price": 0.95,
+        "min": 0.2,
+        "ratio_of_order_price": 0.90,
     },
     "ETH": {
-        "min": 0.5,
-        # "ratio_of_total_order_size": 0.01,
+        "min": 1.0,
         "ratio_of_order_price": 0.95,
     },
     "BNB": {
         "min": 5.0,
-        # "ratio_of_total_order_size": 0.01,
         "ratio_of_order_price": 0.95,
     }
 }
@@ -54,6 +52,7 @@ CURRENCY_SETTINGS = {
 ACTIVE_SAFETY_ORDER_MIN = 0
 MAX_NUMBER_OF_DEALS = 10
 
+new_safety_order_msgs = []
 
 for base_currency in CURRENCY_SETTINGS:
     print(f'Base Currency: {base_currency}')
@@ -106,8 +105,13 @@ for base_currency in CURRENCY_SETTINGS:
         if buy_price >= float(response['limits']['maxPrice']):
             print("Buy price is too high.")
         try:
+            pass
             bot_deal.add_funds(py3cw, units_to_buy, buy_price, False)
         except deal_handlers.AddFundsException as e:
             print(e)
             continue
-        print(f"{bot_deal.get_id()}: Created a new safety order for {bot_deal.get_pair()}")
+        new_safety_order_msgs.append(f"{bot_deal.get_id()}: Created a new safety order for {bot_deal.get_pair()}")
+print("New Safety order summary:")
+print("\n".join(new_safety_order_msgs))
+su = slack_updater.SlackUpdater(config["threeC"]["slack_bot_token"])
+su.send_status_message("\n".join(new_safety_order_msgs))

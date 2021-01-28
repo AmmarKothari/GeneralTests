@@ -1,26 +1,24 @@
 import time
 from typing import Any, Dict
+import copy
 
 import slack
 
-ERROR_UPDATE = {
+
+
+STATUS_UPDATE = {
     "type": "section",
     "text": {
         "type": "mrkdwn",
-        "text": (
-            "There was an issue uploading data to the google sheet! :face_with_symbols_on_mouth:"
-        ),
+        "text": (),
     },
 }
 
-SUCCESS_UPDATE = {
-    "type": "section",
-    "text": {
-        "type": "mrkdwn",
-        "text": ("Succesfully uploaded data after failed attempt! :white_check_mark:"),
-    },
-}
+ERROR_UPDATE = copy.deepcopy(STATUS_UPDATE)
+ERROR_UPDATE["text"]["text"] = ("There was an issue uploading data to the google sheet! :face_with_symbols_on_mouth:")
 
+SUCCESS_UPDATE = copy.deepcopy(STATUS_UPDATE)
+SUCCESS_UPDATE["text"]["text"] = ("Succesfully uploaded data after failed attempt! :white_check_mark:")
 
 class SlackUpdater:
     def __init__(self, token: str):
@@ -43,6 +41,11 @@ class SlackUpdater:
             **self.get_success_message_payload()
         )
 
+    def send_status_message(self, message) -> None:
+        response = self.slack_web_client.chat_postMessage(
+            **self.get_status_message_payload(message)
+        )
+
     def _get_user_id_from_name(self, name: str) -> str:
         response = self.slack_web_client.users_list()
         members = response.data["members"]
@@ -61,12 +64,15 @@ class SlackUpdater:
         }
 
     def get_error_message_payload(self, error_msg: str) -> Dict[str, Any]:
-        message_payload = self._get_message_payload(ERROR_UPDATE)
+        error_payload = copy.deepcopy(ERROR_UPDATE)
         if error_msg:
-            message_payload["blocks"][0]["text"]["text"] = message_payload["blocks"][0][
-                "text"
-            ]["text"] + "\n Error message: {}".format(error_msg)
-        return message_payload
+            error_payload["text"]["text"] = error_payload["text"]["text"] + f"\n Error message: {error_msg}"
+        return self._get_message_payload(error_payload)
 
     def get_success_message_payload(self) -> Dict[str, Any]:
         return self._get_message_payload(SUCCESS_UPDATE)
+
+    def get_status_message_payload(self, msg) -> Dict[str, Any]:
+        status_payload = copy.deepcopy(STATUS_UPDATE)
+        status_payload["text"]["text"] = (msg)
+        return self._get_message_payload(status_payload)

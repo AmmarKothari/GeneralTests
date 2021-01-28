@@ -28,6 +28,7 @@ account = accounts.get_account_from_name(settings["MAIN_ACCOUNT_KEY"])
 # Get all safety orders
 deal_handler = deal_handlers.DealHandler(py3cw, use_cache=True)
 all_smart_deals = deal_handler.get_smart_deals(status="active")
+all_smart_deals.sort(key=lambda x: x.get_created_at())
 CURRENCY_SETTINGS = {
     "BTC": {
         "min": 0.05,
@@ -35,7 +36,7 @@ CURRENCY_SETTINGS = {
         "ratio_of_order_price": 0.95,
     },
     "ETH": {
-        "min": 0.5,
+        "min": 1.0,
         "base_order_size": 0.02,
         "ratio_of_order_price": 0.95,
     },
