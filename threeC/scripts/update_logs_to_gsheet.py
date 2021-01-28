@@ -63,6 +63,7 @@ try:
     #     bot_info.bots, settings["GSHEET_TAB_NAME_BOT_IDS"]
     # )
     deal_handler = DealHandler(py3cw)
+<<<<<<< HEAD
     print("Loading raw deals from cache")
     deal_handler.use_cache_deals()
     print("Fetching deals from 3c")
@@ -73,6 +74,7 @@ try:
     deal_handler.raw_deal_cacher.cache_deals_to_file(deal_handler.all_deals)
     data = deal_handler.all_deals
     # data = deal_handlers.get_data(py3cw, deal_handler, use_cache=True)
+    data = deal_handlers.get_data(py3cw, use_cache=True)
     print("Finished getting data from ThreeC")
 
     filtered_deals = []

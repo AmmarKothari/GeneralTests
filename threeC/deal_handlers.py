@@ -3,6 +3,8 @@ from typing import List, Optional
 
 import tqdm
 
+import tqdm
+
 import constants
 import time_converters
 from api_deal_handler import APIDealHandler
@@ -71,7 +73,6 @@ class Trade:
 
     def base_amount(self):
         return float(self.trade['realised_total'])
-
 
 class SmartDeal(Deal):
     def get_created_at(self) -> datetime:

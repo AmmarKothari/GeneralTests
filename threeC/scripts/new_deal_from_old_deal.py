@@ -12,7 +12,7 @@ import deal_handlers
 import account_info
 import slack_updater
 
-DEAL_OF_INTEREST = 6931213
+DEAL_OF_INTEREST = 1519166
 
 config = configparser.ConfigParser()
 config.read("config_files/config.ini")
@@ -48,7 +48,3 @@ for smart_deal in all_smart_deals:
             if sell.is_completed():
                 base_total -= sell.base_amount()
                 alt_total -= sell.alt_amount()
-
-        import pdb;
-
-        pdb.set_trace()
