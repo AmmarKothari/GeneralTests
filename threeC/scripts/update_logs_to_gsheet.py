@@ -63,8 +63,14 @@ try:
             for deal in bot_deals:
                 deal["bot_group"] = bot_group_key
             filtered_deals.extend(bot_deals)
-    filtered_deals = sorted(filtered_deals, key=lambda x: int(x["id"]), reverse=True)
-    gwriter.write_log_to_gsheet(settings["GSHEET_TAB_NAME_LOGS"], filtered_deals)
+    unique_deals = []
+    unique_deal_ids = []
+    for deal in filtered_deals:
+        if deal["id"] not in unique_deal_ids:
+            unique_deal_ids.append(deal["id"])
+            unique_deals.append(deal["id"])
+    unique_deals = sorted(unique_deals, key=lambda x: int(x["id"]), reverse=True)
+    gwriter.write_log_to_gsheet(settings["GSHEET_TAB_NAME_LOGS"], unique_deals)
     elapsed_time = time.time() - start_time
     gwriter.update_last_write(elapsed_time)
     print("Successfully updated information in {:.3f}.".format(elapsed_time))
