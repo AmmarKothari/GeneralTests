@@ -41,7 +41,7 @@ class GSheetWriter:
             data_matrix.append(list(deal.values()))
 
         # Write to sheet
-        wks = _get_worksheet_by_name(self.sh, bot_name)
+        wks = _get_worksheet_by_name(self.sh, sheet_name)
         wks.clear(end="ZZ10000")
         if len(data_matrix) > wks.rows:
             print("Additional rows added")

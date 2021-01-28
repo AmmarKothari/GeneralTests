@@ -23,7 +23,6 @@ def get_data(cw, use_cache=False):
         # TODO: Update the duration of all deals.
         need_updating = deal_handler.get_deals_that_need_updating()
         need_updating = _calculate_duration(need_updating)
-        import pdb; pdb.set_trace()
         new_deals = _calculate_all_max_simultaneous_open_deals(
             need_updating, deal_handler.api_deals
         )
