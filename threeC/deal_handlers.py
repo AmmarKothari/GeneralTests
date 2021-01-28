@@ -64,6 +64,8 @@ class Trade:
         else:
             return datetime.utcnow()
 
+class GetTradesException(Exception):
+    pass
 
 class SmartDeal(Deal):
     def get_created_at(self) -> datetime:
@@ -114,7 +116,7 @@ class SmartDeal(Deal):
         }
         success, response = cw.request(entity="smart_trades_v2", action="get_trades", action_id=str(self.get_id()), payload=payload)
         if success:
-            raise Exception("Could not find deals associated with smart trade")
+            raise GetTradesException("Could not find deals associated with smart trade")
         return [Trade(r) for r in response]
 
 class AddFundsException(Exception):

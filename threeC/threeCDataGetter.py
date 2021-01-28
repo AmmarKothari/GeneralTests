@@ -5,6 +5,7 @@ import multiprocessing
 import multiprocessing.pool
 import time
 from datetime import datetime
+import tqdm
 
 import pdb
 
@@ -94,8 +95,8 @@ def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals, skip_calc=F
     print("Starting calculation for all max simultaneous deals")
     start_time = time.time()
     if not skip_calc:
-        # calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        calc_pool = multiprocessing.pool.ThreadPool(1)
+        calc_pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        # calc_pool = multiprocessing.pool.ThreadPool(1)
         all_deals = sorted(
             all_deals,
             key=lambda x: datetime.strptime(x["created_at"], gsheet_date_format),
@@ -104,7 +105,7 @@ def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals, skip_calc=F
         pool_func = functools.partial(
             _calculate_max_simultaneous_open_deals, all_deals=all_deals
         )
-        result = calc_pool.map(pool_func, new_deals, chunksize=10)
+        result = list(tqdm.tqdm(calc_pool.imap(pool_func, new_deals, chunksize=10), disable=True))
         calc_pool.close()
         calc_pool.join()
         for deal, (max_simul, max_coin, max_reserved, max_simul_same) in zip(

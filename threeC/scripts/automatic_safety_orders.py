@@ -65,11 +65,16 @@ for base_currency in CURRENCY_SETTINGS:
             print(f"Base currency of deal does not match {smart_deal.get_base_currency()} != {base_currency}")
             continue
 
-        smart_trade_trades = smart_deal.get_trades(py3cw)
+        try:
+            smart_trade_trades = smart_deal.get_trades(py3cw)
+        except deal_handlers.GetTradesException as e:
+            print(f"{smart_deal.get_pair()} Exception when getting trade info {e}")
+            continue
+
         most_recent_update = max([t.get_updated_at() for t in smart_trade_trades])
         time_delta = datetime.datetime.utcnow() - most_recent_update
         if time_delta.total_seconds() < UPDATE_TIME_THRESHOLD:
-            print(f'{smart_deal.get_pair()} deal has been updated recently. ({time_delta.seconds}s < {UPDATE_TIME_THRESHOLD}s) Not adding safety order.')
+            print(f'{smart_deal.get_pair():<10} deal has been updated recently. ({time_delta.seconds}s < {UPDATE_TIME_THRESHOLD}s) Not adding safety order.')
             continue
 
         # When is the right time to count a deal?
@@ -81,6 +86,9 @@ for base_currency in CURRENCY_SETTINGS:
 
         # Get acceptable order size
         success, response = py3cw.request(entity="accounts", action="currency_rates", payload={"pair": smart_deal.get_pair(), "market_code": "binance"})
+        if success:
+            print(f'Failed to get order data')
+            continue
         amount = CURRENCY_SETTINGS[base_currency]["base_order_size"] / float(response['last'])
         units_to_buy = math.floor(
             float(amount) / float(response["lotStep"])
