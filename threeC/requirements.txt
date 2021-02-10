@@ -13,7 +13,7 @@ click==7.1.2
 conda==4.3.16
 conda-workon==0.4.0
 constantly==15.1.0
-cryptography==3.2.1
+cryptography==3.3.2
 dateparser==1.0.0
 distlib==0.3.1
 fancycompleter==0.9.1
