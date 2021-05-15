@@ -18,13 +18,11 @@ with open("config_files/settings.yaml") as settings_f:
 
 py3cw = cw_req.Py3CW(key=config["threeC"]["key"], secret=config["threeC"]["secret"])
 
-MIN_IN_ACCOUNT = 0.01  # MINIMUM AMOUNT OF COIN IN ACCOUNT TO DO THIS
 UPDATE_TIME_THRESHOLD = 60 * 60 * 24  # 1 Day
 
 # Get total coin
 accounts = account_info.AccountInfo(py3cw)
 account = accounts.get_account_from_name(settings["MAIN_ACCOUNT_KEY"])
-
 # Get all safety orders
 deal_handler = deal_handlers.DealHandler(py3cw, use_cache=True)
 all_smart_deals = deal_handler.get_smart_deals(status="active")
@@ -32,11 +30,11 @@ all_smart_deals.sort(key=lambda x: x.get_created_at())
 CURRENCY_SETTINGS = {
     "BTC": {
         "min": 0.05,
-        "base_order_size": 0.0002,
+        "base_order_size": 0.002,
         "ratio_of_order_price": 0.95,
     },
     "ETH": {
-        "min": 1.0,
+        "min": 0.5,
         "base_order_size": 0.02,
         "ratio_of_order_price": 0.95,
     },
@@ -44,11 +42,16 @@ CURRENCY_SETTINGS = {
         "min": 5.0,
         "base_order_size": 0.2,
         "ratio_of_order_price": 0.95,
+    },
+    "USDT": {
+        "min": 200.0,
+        "base_order_size": 20,
+        "ratio_of_order_price": 0.95,
     }
 }
 
 # Don't open more than this number of deals to help limit total spend.
-MAX_NUMBER_OF_DEALS = 10
+MAX_NUMBER_OF_DEALS = 20
 
 
 for base_currency in CURRENCY_SETTINGS:

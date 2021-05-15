@@ -64,6 +64,16 @@ class Trade:
         else:
             return datetime.utcnow()
 
+    def is_initial_deal(self):
+        """Start of deal with own funds."""
+        return self.trade['status'] == 'smart_sell'
+
+    def is_buy(self):
+        return self.trade['order_side'] == 'buy'
+
+    def is_completed(self):
+        return self.trade['status'] == 'finished'
+
 class GetTradesException(Exception):
     pass
 
@@ -162,7 +172,7 @@ class BotDeal(Deal):
         }
         success, response = cw.request(entity="deals", action="data_for_adding_funds", action_id=str(self.get_id()), payload=payload)
         if success:
-            raise Exception("Could not retrieve data for adding funds")
+            raise Exception(f"Could not retrieve data for adding funds: {success} - {response}")
         return response
 
     def add_funds(self, cw, amount, price, is_market=False):
