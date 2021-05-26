@@ -2,6 +2,8 @@ import functools
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 
+import tqdm
+
 import constants
 import time_converters
 from api_deal_handler import APIDealHandler
@@ -21,13 +23,19 @@ def get_data(cw, use_cache=False):
     if not (use_cache and deal_handler.deal_cacher.cache_valid()):
         deal_handler.fetch_deals()
         # TODO: Update the duration of all deals.
+        print("Finished fetching deals")
         need_updating = deal_handler.get_deals_that_need_updating()
+        print("Finished getting deals that need update")
         need_updating = _calculate_duration(need_updating)
+        print("Finished calculating durations")
         new_deals = _calculate_all_max_simultaneous_open_deals(
             need_updating, deal_handler.api_deals, skip_calc=True
         )
+        print("Finished calculating max simultaneous deals")
         deal_handler.update_deals(new_deals)
+        print("Finished updating deals")
         deal_handler.cache_deals_to_file()
+        print("Finished caching deals")
     return deal_handler.all_deals
 
 
@@ -226,7 +234,7 @@ class DealHandler:
         # Add deal indexes to set if deal id is not in keys or update time has changed
         updated_and_new_deals_idx = set()
         updated_and_new_deals = []
-        for idx, deal in enumerate(self.api_deals):
+        for idx, deal in enumerate(tqdm.tqdm(self.api_deals)):
             if deal["id"] in self.deal_cacher.cached_deal_ids:
                 if (
                     self.deal_cacher.cached_deals_info[deal["id"]]
@@ -243,7 +251,7 @@ class DealHandler:
             earliest_deal = sort_deals_by_key(updated_and_new_deals, DEAL_START_KEY)[-1]
             sorted_all_deals = sort_deals_by_key(self.api_deals, DEAL_END_KEY)
             overlapping_deals = 0
-            for idx, d in enumerate(sorted_all_deals):
+            for idx, d in enumerate(tqdm.tqdm(sorted_all_deals)):
                 if not d[DEAL_END_KEY] or gsheet_time_to_datetime(
                     d[DEAL_END_KEY]
                 ) >= gsheet_time_to_datetime(earliest_deal[DEAL_START_KEY]):
@@ -255,7 +263,7 @@ class DealHandler:
         return need_updating
 
     def update_deals(self, new_deals):
-        for new_deal in new_deals:
+        for new_deal in tqdm.tqdm(new_deals):
             self._update_deal(new_deal)
         self.all_deals = sort_deals_by_key(self.all_deals, DEAL_START_KEY)
 

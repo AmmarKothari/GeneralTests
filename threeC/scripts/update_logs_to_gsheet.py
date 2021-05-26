@@ -42,11 +42,14 @@ try:
         os.path.expanduser(settings["GSHEET_SERVICE_FILE"]), settings["GSHEET_LOG_FILE"]
     )
 
+
+    print("Starting writing account stats")
     account_info = account_info_module.AccountInfo(py3cw, real=True)
     account_stats = account_info.get_account_stats(settings["MAIN_ACCOUNT_KEY"])
     gwriter.write_account_stats(
         settings["GSHEET_TAB_NAME_ACCOUNT_VALUE"], account_stats
     )
+    print("Finished writing account stats")
     bot_info = BotInfo(py3cw)
 
     # TODO: Clear sheet before writing
@@ -54,7 +57,8 @@ try:
         bot_info.bots, settings["GSHEET_TAB_NAME_BOT_IDS"]
     )
     deal_handler = DealHandler(py3cw)
-    data = deal_handlers.get_data(py3cw, use_cache=False)
+    data = deal_handlers.get_data(py3cw, use_cache=True)
+    print("Finished getting data from ThreeC")
 
     filtered_deals = []
     for bot_group_key in settings["bot_groups"]:
@@ -63,6 +67,7 @@ try:
             for deal in bot_deals:
                 deal["bot_group"] = bot_group_key
             filtered_deals.extend(bot_deals)
+    print("Finished filtering deals based on bot groups")
     unique_deals = []
     unique_deal_ids = []
     for deal in filtered_deals:

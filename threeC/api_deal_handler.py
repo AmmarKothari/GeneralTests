@@ -31,6 +31,7 @@ class APIDealHandler:
             if len(deals) < MAX_DEALS_PER_REQUEST:
                 break
             offset += MAX_DEALS_PER_REQUEST
+            print("Finished fetching one page of deals {:.3} s".format(time.time() - start))
         end = time.time()
         print("Done fetching {} deals in {:.3} s".format(self.num_deals, end - start))
         # TODO: Convert to datetime
