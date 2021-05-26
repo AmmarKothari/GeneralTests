@@ -3,7 +3,7 @@
 GSHEET_SERVICE_FILE: "config_files/my-project-1472545352517-b199b7c6ff37.json"
 
 # Name of the document where you want the logs written to
-GSHEET_LOG_FILE: "Crypto Heist (3Commas.io)"
+GSHEET_LOG_FILE: "Crypto Heist (Raw Data A)"
 
 # Name of the sheet to put all the logs
 GSHEET_TAB_NAME_LOGS: "Raw_BotLogs"
@@ -20,7 +20,9 @@ MAIN_ACCOUNT_KEY: "Binance"
 # Grouping of bots by ids to give them an easier to remember name and group similar bots.
 bot_groups:
   Berlin: [1076302, 1054875, 1054872, 1054867, 1054863, 1054858, 1054856, 1054855, 1035623, 1606912]
-  Nairobi: [1857805, 1857800, 1857797, 1857792, 1857774, 1857765, 1857753, 1857743, 1857448, 1857448]
-  Oslo: [1042508, 1857831]
-  Rio: [1422849, 1857837]
+  Nairobi: [1857805, 1857800, 1857797, 1857792, 1857774, 1857765, 1857753, 1857743, 1857448, 2760917]
+  Oslo: [1042508, 1857837, 3119389, 3119403]
+  Rio: [1422849, 1857831, 3119277]
   Helsinki: [2725309]
+  Arturo: [3153122, 3152720]
+  Raquel: [3145968]
