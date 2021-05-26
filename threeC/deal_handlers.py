@@ -24,7 +24,7 @@ def get_data(cw, use_cache=False):
         need_updating = deal_handler.get_deals_that_need_updating()
         need_updating = _calculate_duration(need_updating)
         new_deals = _calculate_all_max_simultaneous_open_deals(
-            need_updating, deal_handler.api_deals
+            need_updating, deal_handler.api_deals, skip_calc=True
         )
         deal_handler.update_deals(new_deals)
         deal_handler.cache_deals_to_file()
