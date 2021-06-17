@@ -43,22 +43,32 @@ try:
     )
 
 
-    print("Starting writing account stats")
-    account_info = account_info_module.AccountInfo(py3cw, real=True)
-    account_stats = account_info.get_account_stats(settings["MAIN_ACCOUNT_KEY"])
-    gwriter.write_account_stats(
-        settings["GSHEET_TAB_NAME_ACCOUNT_VALUE"], account_stats
-    )
-    print("Finished writing account stats")
+    # print("Starting writing account stats")
+    # account_info = account_info_module.AccountInfo(py3cw, real=True)
+    # account_stats = account_info.get_account_stats(settings["MAIN_ACCOUNT_KEY"])
+    # gwriter.write_account_stats(
+    #     settings["GSHEET_TAB_NAME_ACCOUNT_VALUE"], account_stats
+    # )
+    # print("Finished writing account stats")
     bot_info = BotInfo(py3cw)
 
     # TODO: Clear sheet before writing
-    gwriter.write_bot_id_to_names_map_to_gsheet(
-        bot_info.bots, settings["GSHEET_TAB_NAME_BOT_IDS"]
-    )
+    # gwriter.write_bot_id_to_names_map_to_gsheet(
+    #     bot_info.bots, settings["GSHEET_TAB_NAME_BOT_IDS"]
+    # )
     deal_handler = DealHandler(py3cw)
-    data = deal_handlers.get_data(py3cw, use_cache=True)
+    print("Loading raw deals from cache")
+    deal_handler.use_cache_deals()
+    print("Fetching deals from 3c")
+    all_new_deals = deal_handler.api_deal_handler.get_deals(deal_handler.raw_deal_cacher.most_recent_update_time())
+    print("Updating files")
+    deal_handler.update_deals(all_new_deals)
+    print("Updating raw deals cache file")
+    deal_handler.raw_deal_cacher.cache_deals_to_file(deal_handler.all_deals)
+    data = deal_handler.all_deals
+    # data = deal_handlers.get_data(py3cw, deal_handler, use_cache=True)
     print("Finished getting data from ThreeC")
+    import pdb; pdb.set_trace()
 
     filtered_deals = []
     for bot_group_key in settings["bot_groups"]:

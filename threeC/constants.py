@@ -2,6 +2,7 @@
 CSV_ACCOUNT_VALUE_LOG = "Raw_AccountValue.csv"
 
 threeC_date_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+threeC_date_format_no_T = "%m-%d-%Y %H:%M:%S.%f"
 gsheet_date_format = "%m-%d-%Y %H:%M:%S.%f"
 gsheet_date_only_format = "%m-%d-%Y"
 

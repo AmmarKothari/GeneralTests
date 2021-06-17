@@ -11,7 +11,7 @@ import numpy as np
 from threeC.threeCDataGetter import _calculate_all_max_simultaneous_open_deals
 from threeC.constants import gsheet_date_format
 
-RAW_BOT_LOGS_FN = "raw_bot_logs.p"
+RAW_BOT_LOGS_FN = "modified_bot_logs.p"
 
 
 example_deal = OrderedDict(
