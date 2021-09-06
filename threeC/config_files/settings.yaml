@@ -3,7 +3,8 @@
 GSHEET_SERVICE_FILE: "config_files/my-project-1472545352517-b199b7c6ff37.json"
 
 # Name of the document where you want the logs written to
-GSHEET_LOG_FILE: "Crypto Heist (Raw Data A)"
+GSHEET_LOG_FILE: "Crypto Heist (Raw Data V2)"
+GSHEET_LOG_FILE_START_ROW: 12825
 
 # Name of the sheet to put all the logs
 GSHEET_TAB_NAME_LOGS: "Raw_BotLogs"
@@ -15,7 +16,7 @@ GSHEET_TAB_NAME_BOT_IDS: "Raw_BotIDs"
 GSHEET_TAB_NAME_ACCOUNT_VALUE: "Raw_AccountValue"
 
 # Name of the main exchange that trades are made with
-MAIN_ACCOUNT_KEY: "Binance"
+EXCHANGE_ACCOUNT_NAMES: ["Ali Gateio V4", "BinanceUSAli"]
 
 # Grouping of bots by ids to give them an easier to remember name and group similar bots.
 bot_groups:

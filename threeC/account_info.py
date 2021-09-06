@@ -59,7 +59,7 @@ class AccountInfo:
         account_ids: Dict[str, int] = {}
         for account in self.accounts:
             if account:
-                account_ids[account["exchange_name"]] = cast(int, account["id"])
+                account_ids[account["name"]] = cast(int, account["id"])
         return account_ids
 
     def get_account_from_id(
@@ -73,7 +73,7 @@ class AccountInfo:
 
     def get_account_from_name(self, account_name: str) -> request_helper.Py3cw_request_info_single_success:
         for account in self.accounts:
-            if account['exchange_name'] == account_name:
+            if account['name'] == account_name:
                 return account
         raise AccountException(f"No account width name: {account_name}")
 

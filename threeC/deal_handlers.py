@@ -66,6 +66,12 @@ class Trade:
     def is_completed(self):
         return self.trade['status'] == 'finished'
 
+    def alt_amount(self):
+        return float(self.trade['realised_amount'])
+
+    def base_amount(self):
+        return float(self.trade['realised_total'])
+
 
 class SmartDeal(Deal):
     def get_created_at(self) -> datetime:
@@ -249,6 +255,7 @@ class DealHandler:
         return need_updating
 
     def update_deals(self, new_deals):
+        # TODO:  This can be done by finding the ids of new deals with sets and then iterating over those only once.
         for new_deal in tqdm.tqdm(new_deals):
             self._update_deal(new_deal)
         self.all_deals = sort_deals_by_key(self.all_deals, DEAL_START_KEY)

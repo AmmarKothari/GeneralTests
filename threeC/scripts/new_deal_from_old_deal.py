@@ -12,7 +12,7 @@ import deal_handlers
 import account_info
 import slack_updater
 
-DEAL_OF_INTEREST = 1519166
+DEAL_OF_INTEREST = 6931213
 
 config = configparser.ConfigParser()
 config.read("config_files/config.ini")
@@ -30,6 +30,25 @@ all_smart_deals.sort(key=lambda x: x.get_created_at())
 
 for smart_deal in all_smart_deals:
     if smart_deal.get_id() == DEAL_OF_INTEREST:
+        trades = smart_deal.get_trades(py3cw)
+        buys = []
+        sells = []
+        for trade in trades:
+            if trade.is_buy():
+                buys.append(trade)
+            else:
+                sells.append(trade)
+        base_total = 0
+        alt_total = 0
+        for buy in buys:
+            if buy.is_completed():
+                base_total += buy.base_amount()
+                alt_total += buy.alt_amount()
+        for sell in sells:
+            if sell.is_completed():
+                base_total -= sell.base_amount()
+                alt_total -= sell.alt_amount()
+
         import pdb;
 
         pdb.set_trace()
