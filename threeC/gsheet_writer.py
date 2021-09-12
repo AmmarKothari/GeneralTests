@@ -11,6 +11,12 @@ from constants import gsheet_date_only_format, GSHEET_UPDATE_LOG, gsheet_date_fo
 
 MAX_RETRIES = 5
 
+HEADER = ['Date', 'Value', 'Profit',
+          'BTC', 'BTC_Available', 'BTC_Reserved',
+          'BNB', 'BNB_Available', 'BNB_Reserved',
+          'ETH', 'ETH_Available', 'ETH_Reserved',
+          'USDT', 'USDT_Available', 'USDT_Reserved'
+          ]
 
 class GSheetWriter:
     def __init__(self, service_file: str, output_gsheet: str):
@@ -30,24 +36,26 @@ class GSheetWriter:
 
     # TODO: Add method that can change from datetime to gsheet time string for an entire column
 
-    def write_log_to_gsheet(self, sheet_name: str, deals: List[Dict[str, Any]]) -> None:
+    def write_log_to_gsheet(self, sheet_name: str, deals: List[Dict[str, Any]], start_row: int = 0, include_header: bool = False) -> None:
         if len(deals) == 0:
             print("No deals to write logs for")
             return
 
         # Gets all data into a list of lists
-        data_matrix = [list(deals[0].keys())]
+        data_matrix = []
+        if include_header:
+            data_matrix.append(list(deals[0].keys()))
         for deal in deals:
             data_matrix.append(list(deal.values()))
 
         # Write to sheet
         wks = _get_worksheet_by_name(self.sh, sheet_name)
-        wks.clear(end="ZZ10000")
-        if len(data_matrix) > wks.rows:
+        wks.clear(start=f"A{start_row}", end=f"ZZ{start_row+10000}")
+        if len(data_matrix) > (wks.rows - start_row):
             print("Additional rows added")
-            additional_rows = len(data_matrix) - wks.rows + 1
+            additional_rows = len(data_matrix) - (wks.rows - start_row) + 1
             wks.add_rows(additional_rows)
-        wks.update_row(1, data_matrix)
+        wks.update_row(start_row, data_matrix)
 
     def write_bot_id_to_names_map_to_gsheet(
         self, bots: List[Dict[str, Any]], sheet_name: str
@@ -58,15 +66,29 @@ class GSheetWriter:
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         wks.update_row(1, data_matrix)
 
+    def combine_account_stats(self, account_infos: List[Dict[str, Any]]) -> Dict[str, Any]:
+        accumulated_stats = collections.defaultdict(float)
+        for account_info_with_date_key in account_infos:
+            # Should only be one item in list.  Pop it and get the values.
+            account_info = account_info_with_date_key.popitem()[1]
+            for h in HEADER:
+                if h == "Date":
+                    accumulated_stats[h] = account_info[h]
+                else:
+                    # Everything else is a float that can be summed
+                    if h in account_info.keys():
+                        accumulated_stats[h] += account_info[h]
+                    else:
+                        accumulated_stats[h] += 0.0
+        # Because of a poor formatting choice for account stats, add the date key in. FIX!
+        formatted_accumualted_stats = {}
+        formatted_accumualted_stats[accumulated_stats["Date"]] = accumulated_stats
+        return formatted_accumualted_stats
+
+
     def write_account_stats(self, sheet_name: str, account_info: Dict[str, Any]) -> None:
         # TODO: Don't read and write the whole thing every time.  Just add a row at the bottom and add values there. Unclear if headers should be updated?
         # NOTE: Things will probably break if accounts are added
-        HEADER = ['Date', 'Value', 'Profit',
-                  'BTC', 'BTC_Available', 'BTC_Reserved',
-                  'BNB', 'BNB_Available', 'BNB_Reserved',
-                  'ETH', 'ETH_Available', 'ETH_Reserved',
-                  'USDT', 'USDT_Available', 'USDT_Reserved'
-                  ]
         records = collections.defaultdict(dict)
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         all_rows = wks.get_all_values()

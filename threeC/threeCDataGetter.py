@@ -91,13 +91,15 @@ def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals, skip_calc=F
         result = list(tqdm.tqdm(calc_pool.imap(pool_func, new_deals, chunksize=10), disable=True))
         calc_pool.close()
         calc_pool.join()
-        for deal, (max_simul, max_coin, max_reserved, max_simul_same) in zip(
-            new_deals, result
-        ):
-            deal[MAX_SIMULTANEOUS_DEALS_KEY] = max_simul
-            deal[MAX_COIN_IN_DEALS_KEY] = max_coin
-            deal[MAX_COIN_RESERVED_IN_DEALS_KEY] = max_reserved
-            deal[MAX_SIMULTANEOUS_DEALS_SAME_BOT_KEY] = max_simul_same
+    else:
+        result = [(0.0, 0.0, 0.0, 0.0) for _ in new_deals]
+    for deal, (max_simul, max_coin, max_reserved, max_simul_same) in zip(
+        new_deals, result
+    ):
+        deal[MAX_SIMULTANEOUS_DEALS_KEY] = max_simul
+        deal[MAX_COIN_IN_DEALS_KEY] = max_coin
+        deal[MAX_COIN_RESERVED_IN_DEALS_KEY] = max_reserved
+        deal[MAX_SIMULTANEOUS_DEALS_SAME_BOT_KEY] = max_simul_same
     print("Total Elapsed Time: {:.3f}".format(time.time() - start_time))
     return new_deals
 

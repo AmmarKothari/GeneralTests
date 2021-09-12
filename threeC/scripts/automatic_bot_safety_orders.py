@@ -36,7 +36,7 @@ all_bot_deals.sort(key=lambda x: x.get_created_at())
 CURRENCY_SETTINGS = {
     "BTC": {
         "min": 0.2,
-        "ratio_of_order_price": 0.90,
+        "ratio_of_order_price": 0.95,
     },
     "ETH": {
         "min": 1.0,
@@ -45,12 +45,16 @@ CURRENCY_SETTINGS = {
     "BNB": {
         "min": 5.0,
         "ratio_of_order_price": 0.95,
+    },
+    "USDT": {
+        "min": 200.0,
+        "ratio_of_order_price": 0.95,
     }
 }
 
 # Don't open more than this number of deals to help limit total spend.
 ACTIVE_SAFETY_ORDER_MIN = 0
-MAX_NUMBER_OF_DEALS = 10
+MAX_NUMBER_OF_DEALS = 20
 
 new_safety_order_msgs = []
 
@@ -86,7 +90,11 @@ for base_currency in CURRENCY_SETTINGS:
             break
 
         # Get acceptable order size
-        response = bot_deal.get_data_for_adding_funds(py3cw)
+        try:
+            response = bot_deal.get_data_for_adding_funds(py3cw)
+        except:
+            print('Unexplained Exception')
+            continue
         amount = float(bot_deal.deal['base_order_volume']) / float(response['orderbook_price'])
         units_to_buy = math.floor(
             float(amount) / float(response["limits"]["lotStep"])
@@ -109,6 +117,7 @@ for base_currency in CURRENCY_SETTINGS:
             bot_deal.add_funds(py3cw, units_to_buy, buy_price, False)
         except deal_handlers.AddFundsException as e:
             print(e)
+            deal_count -= 1
             continue
         new_safety_order_msgs.append(f"{bot_deal.get_id()}: Created a new safety order for {bot_deal.get_pair()}")
 print("New Safety order summary:")

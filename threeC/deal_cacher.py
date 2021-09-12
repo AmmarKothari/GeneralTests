@@ -4,6 +4,7 @@ import pickle
 import time
 
 from constants import DEAL_UPDATED_KEY
+import time_converters
 
 
 CACHE_LIFETIME_S = 6000
@@ -20,7 +21,10 @@ class DealCacher:
         pickle.dump(all_deals, open(self.cache_fn, "wb"))
 
     def _get_cached_deals_from_file(self):
-        return pickle.load(open(self.cache_fn, "rb"))
+        all_deals = pickle.load(open(self.cache_fn, "rb"))
+        sorted_all_deals = sorted(all_deals, key=lambda x: time_converters.threec_time_to_datetime(x['updated_at']),
+                                  reverse=True)
+        return sorted_all_deals
 
     def cache_valid(self):
         is_valid = False
@@ -58,3 +62,6 @@ class DealCacher:
             if deal["status"] == "bought":
                 open_deals.append(deal)
         return open_deals
+
+    def most_recent_update_time(self):
+        return time_converters.threec_time_to_datetime(self.cached_deals[0]["updated_at"])

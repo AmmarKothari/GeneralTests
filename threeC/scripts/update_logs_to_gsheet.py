@@ -19,6 +19,9 @@ from constants import LAST_RUN_SUCCESS_CACHE
 from deal_handlers import DealHandler
 import slack_updater
 
+# TODO: "max_simultaneous_deals",
+FIELDS_OF_INTEREST = ["id", "bot_id", "created_at", "finished?", "current_active_safety_orders", "completed_safety_orders_count", "completed_manual_safety_orders_count", "pair", "status", "take_profit", "base_order_volume", "bought_volume", "sold_volume", "error_message", "from_currency", "to_currency", "final_profit_percentage", "actual_profit_percentage", "bot_name", "actual_profit", "bot_group"]
+
 lock = singleton.SingleInstance()
 
 config = configparser.ConfigParser()
@@ -42,19 +45,35 @@ try:
         os.path.expanduser(settings["GSHEET_SERVICE_FILE"]), settings["GSHEET_LOG_FILE"]
     )
 
+
+    print("Starting writing account stats")
     account_info = account_info_module.AccountInfo(py3cw, real=True)
-    account_stats = account_info.get_account_stats(settings["MAIN_ACCOUNT_KEY"])
+    account_stats = []
+    for account_name in settings["EXCHANGE_ACCOUNT_NAMES"]:
+        account_stats.append(account_info.get_account_stats(account_name))
+    accumulated_account_stats = gwriter.combine_account_stats(account_stats)
     gwriter.write_account_stats(
-        settings["GSHEET_TAB_NAME_ACCOUNT_VALUE"], account_stats
+        settings["GSHEET_TAB_NAME_ACCOUNT_VALUE"], accumulated_account_stats
     )
+    print("Finished writing account stats")
     bot_info = BotInfo(py3cw)
 
     # TODO: Clear sheet before writing
-    gwriter.write_bot_id_to_names_map_to_gsheet(
-        bot_info.bots, settings["GSHEET_TAB_NAME_BOT_IDS"]
-    )
+    # gwriter.write_bot_id_to_names_map_to_gsheet(
+    #     bot_info.bots, settings["GSHEET_TAB_NAME_BOT_IDS"]
+    # )
     deal_handler = DealHandler(py3cw)
-    data = deal_handlers.get_data(py3cw, use_cache=False)
+    print("Loading raw deals from cache")
+    deal_handler.use_cache_deals()
+    print("Fetching deals from 3c")
+    all_new_deals = deal_handler.api_deal_handler.get_deals(deal_handler.raw_deal_cacher.most_recent_update_time())
+    print("Updating files")
+    deal_handler.update_deals(all_new_deals)
+    print("Updating raw deals cache file")
+    deal_handler.raw_deal_cacher.cache_deals_to_file(deal_handler.all_deals)
+    data = deal_handler.all_deals
+    # data = deal_handlers.get_data(py3cw, deal_handler, use_cache=True)
+    print("Finished getting data from ThreeC")
 
     filtered_deals = []
     for bot_group_key in settings["bot_groups"]:
@@ -63,6 +82,7 @@ try:
             for deal in bot_deals:
                 deal["bot_group"] = bot_group_key
             filtered_deals.extend(bot_deals)
+    print("Finished filtering deals based on bot groups")
     unique_deals = []
     unique_deal_ids = []
     for deal in filtered_deals:
@@ -70,7 +90,10 @@ try:
             unique_deal_ids.append(deal["id"])
             unique_deals.append(deal)
     unique_deals = sorted(unique_deals, key=lambda x: int(x["id"]), reverse=True)
-    gwriter.write_log_to_gsheet(settings["GSHEET_TAB_NAME_LOGS"], unique_deals)
+    unique_deals_with_relevant_fields = []
+    for deal in unique_deals:
+        unique_deals_with_relevant_fields.append({k: deal[k] for k in FIELDS_OF_INTEREST})
+    gwriter.write_log_to_gsheet(settings["GSHEET_TAB_NAME_LOGS"], unique_deals_with_relevant_fields, start_row = settings["GSHEET_LOG_FILE_START_ROW"])
     elapsed_time = time.time() - start_time
     gwriter.update_last_write(elapsed_time)
     print("Successfully updated information in {:.3f}.".format(elapsed_time))
