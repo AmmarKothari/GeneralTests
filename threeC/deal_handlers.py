@@ -3,8 +3,6 @@ from typing import List, Optional
 
 import tqdm
 
-import tqdm
-
 import constants
 import time_converters
 from api_deal_handler import APIDealHandler
@@ -29,8 +27,11 @@ class Deal:
     def __init__(self, deal):
         self.deal = deal
 
-    def is_valid_trade(self):
-        return self.deal["status"] != "failed"
+    # def is_valid_trade(self):
+    #     return self.deal["status"] != "failed"
+
+    def is_open(self):
+        return self.deal['status']['type'] != 'waiting_position'
 
     def get_id(self):
         return self.deal["id"]
@@ -111,7 +112,7 @@ class SmartDeal(Deal):
             "price": {
                 "value": price,
             },
-            "order_id": self.get_id(),
+            "id": self.get_id(),
         }
         success, response = cw.request(entity="smart_trades_v2", action="add_funds", action_id=str(self.get_id()),
                                        payload=payload)
@@ -298,7 +299,7 @@ class DealHandler:
 def get_data(cw, deal_handler: DealHandler, use_cache: bool =False):
 
     # If the cached deals is valid, return those so computation takes less time.  Mostly for debugging.
-    if not (use_cache and deal_handler.deal_cacher.cache_valid()):
+    if not (use_cache and deal_handler.raw_deal_cacher.cache_valid()):
         deal_handler.fetch_deals()
         # TODO: Update the duration of all deals.
         print("Finished fetching deals")
