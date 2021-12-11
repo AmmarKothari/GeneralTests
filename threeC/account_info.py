@@ -25,6 +25,17 @@ class AccountInfo:
         )
         request_helper.check_if_request_successful(success)
         self._accounts: Optional[request_helper.Py3cw_request_info_list] = None
+        self._account_index: int = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._account_index < len(self.accounts):
+            self._account_index += 1
+            return self._accounts[self._account_index - 1]
+
+        raise StopIteration
 
     @functools.lru_cache()
     def account_table_data(
