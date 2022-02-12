@@ -54,7 +54,7 @@ CURRENCY_SETTINGS = {
 # Don't open more than this number of deals to help limit total spend.
 MAX_NUMBER_OF_DEALS = 20
 
-
+new_safety_order_msgs = []
 for account in [accounts.get_account_from_name(account_name) for account_name in settings["EXCHANGE_ACCOUNT_NAMES"]]:
     print(f"****Analyzing account {account['name']}****")
     for base_currency in CURRENCY_SETTINGS:
@@ -115,13 +115,15 @@ for account in [accounts.get_account_from_name(account_name) for account_name in
                 deal_count -= 1
                 continue
             print(f"{smart_deal.get_id()}: Created a new safety order for {smart_deal.get_pair()}")
+            new_safety_order_msgs.append(f"{smart_deal.get_id()}: Created a new safety order for {smart_deal.get_pair()}")
 
-
-# print("New Safety order summary:")
-# print("\n".join(new_safety_order_msgs))
-# if new_safety_order_msgs:
-#     su = slack_updater.SlackUpdater(config["threeC"]["slack_bot_token"])
-#     su.send_status_message("\n".join(new_safety_order_msgs))
+print("New Safety order summary:")
+print("\n".join(new_safety_order_msgs))
+if not new_safety_order_msgs:
+    new_safety_order_msgs = ["No update today"]
+if new_safety_order_msgs:
+    su = slack_updater.SlackUpdater(config["threeC"]["slack_bot_token"])
+    su.send_status_message("\n".join(new_safety_order_msgs))
 
 
 
