@@ -48,7 +48,11 @@ CURRENCY_SETTINGS = {
     "USDT": {
         "min": 200.0,
         "ratio_of_order_price": 0.95,
-    }
+    },
+    "USD": {
+        "min": 200.0,
+        "ratio_of_order_price": 0.95,
+    },
 }
 
 # Don't open more than this number of deals to help limit total spend.
@@ -126,6 +130,8 @@ for account in [accounts.get_account_from_name(account_name) for account_name in
             new_safety_order_msgs.append(f"{bot_deal.get_id()}: Created a new safety order for {bot_deal.get_pair()}")
 print("New Safety order summary:")
 print("\n".join(new_safety_order_msgs))
-if new_safety_order_msgs:
-    su = slack_updater.SlackUpdater(config["threeC"]["slack_bot_token"])
-    su.send_status_message("\n".join(new_safety_order_msgs))
+if not new_safety_order_msgs:
+    new_safety_order_msgs = ["No update today"]
+
+su = slack_updater.SlackUpdater(config["threeC"]["slack_bot_token"])
+su.send_status_message("\n".join(new_safety_order_msgs))
