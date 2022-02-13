@@ -51,7 +51,6 @@ try:
     account_stats = []
     for account_name in settings["EXCHANGE_ACCOUNT_NAMES"]:
         account_stats.append(account_info.get_account_stats(account_name))
-    import pdb; pdb.set_trace()
     accumulated_account_stats = gwriter.combine_account_stats(account_stats)
     gwriter.write_account_stats(
         settings["GSHEET_TAB_NAME_ACCOUNT_VALUE"], accumulated_account_stats
