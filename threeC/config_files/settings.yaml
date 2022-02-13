@@ -27,3 +27,6 @@ bot_groups:
   Helsinki: [2725309]
   Arturo: [3153122, 3152720]
   Raquel: [3145968]
+
+# After this time, convert to smart trade (seconds)
+CONVERT_SMART_TRADE_DURATION: 2592000 # 30 days

@@ -146,7 +146,7 @@ class AccountInfo:
         records[date]["Value"] = self.get_account_balance(account_id)
         records[date]["Profit"] = self.get_account_profit(account_id)
 
-        coins_of_interest = ["BTC", "BNB", "ETH", "USDT"]
+        coins_of_interest = ["BTC", "BNB", "ETH", "USDT", "USD"]
         for coin in coins_of_interest:
             try:
                 records[date][coin] = self.get_coin_in_account(coin, account_id)

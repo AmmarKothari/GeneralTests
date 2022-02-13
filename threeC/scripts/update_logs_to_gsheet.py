@@ -51,6 +51,7 @@ try:
     account_stats = []
     for account_name in settings["EXCHANGE_ACCOUNT_NAMES"]:
         account_stats.append(account_info.get_account_stats(account_name))
+    import pdb; pdb.set_trace()
     accumulated_account_stats = gwriter.combine_account_stats(account_stats)
     gwriter.write_account_stats(
         settings["GSHEET_TAB_NAME_ACCOUNT_VALUE"], accumulated_account_stats
@@ -75,17 +76,19 @@ try:
     data = deal_handlers.get_data(py3cw, deal_handler, use_cache=True)
     print("Finished getting data from ThreeC")
 
-    filtered_deals = []
+    bot_info_lookup = {}
     for bot_group_key in settings["bot_groups"]:
         for bot_id in settings["bot_groups"][bot_group_key]:
-            bot_deals = tcdg.filter_by_bot_id(data, bot_id)
-            for deal in bot_deals:
-                deal["bot_group"] = bot_group_key
-            filtered_deals.extend(bot_deals)
+             bot_info_lookup[bot_id] = bot_group_key
+    for deal in data:
+        if deal["bot_id"] in bot_info_lookup:
+            deal["bot_group"] = bot_info_lookup[deal["bot_id"]]
+        else:
+            deal["bot_group"] = "other"
     print("Finished filtering deals based on bot groups")
     unique_deals = []
     unique_deal_ids = []
-    for deal in filtered_deals:
+    for deal in data:
         if deal["id"] not in unique_deal_ids:
             unique_deal_ids.append(deal["id"])
             unique_deals.append(deal)

@@ -48,6 +48,11 @@ CURRENCY_SETTINGS = {
         "min": 200.0,
         "base_order_size": 20,
         "ratio_of_order_price": 0.95,
+    },
+    "USD": {
+        "min": 200.0,
+        "base_order_size": 20,
+        "ratio_of_order_price": 0.95,
     }
 }
 
@@ -99,9 +104,11 @@ for account in [accounts.get_account_from_name(account_name) for account_name in
                 break
 
             # Get acceptable order size
-            success, response = py3cw.request(entity="accounts", action="currency_rates", payload={"pair": smart_deal.get_pair(), "market_code": "binance"})
+            # This is not going to work for the other account unfortuantely.
+            success, response = py3cw.request(entity="accounts", action="currency_rates", payload={"pair": smart_deal.get_pair(), "market_code": account["market_code"]})
             if success:
-                print(f'Failed to get order data')
+                # import pdb; pdb.set_trace()
+                print(f'Error getting trade info: {success}')
                 continue
             amount = CURRENCY_SETTINGS[base_currency]["base_order_size"] / float(response['last'])
             units_to_buy = math.floor(

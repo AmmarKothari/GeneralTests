@@ -15,7 +15,8 @@ HEADER = ['Date', 'Value', 'Profit',
           'BTC', 'BTC_Available', 'BTC_Reserved',
           'BNB', 'BNB_Available', 'BNB_Reserved',
           'ETH', 'ETH_Available', 'ETH_Reserved',
-          'USDT', 'USDT_Available', 'USDT_Reserved'
+          'USDT', 'USDT_Available', 'USDT_Reserved',
+          'USD', 'USD_Available', 'USD_Reserved'
           ]
 
 class GSheetWriter:
@@ -99,7 +100,11 @@ class GSheetWriter:
             if not row[0]:
                 break
             for i, h in enumerate(HEADER):
-                records[row[0]][h] = row[i]
+                try:
+                    records[row[0]][h] = row[i]
+                except IndexError:
+                    # The value didn't exist for that row so just fill in with 0.0 for now?
+                    records[row[0]][h] = 0.0
 
         records.update(account_info)
         # Would be good to use a function to write these values to sheet from dictionary.  Could use some error checking.
