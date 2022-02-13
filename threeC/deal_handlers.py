@@ -1,9 +1,11 @@
 from datetime import datetime
+from datetime import timedelta
 from typing import List, Optional
 
 import tqdm
 
 import constants
+import request_helper
 import time_converters
 from api_deal_handler import APIDealHandler
 from constants import DEAL_UPDATED_KEY, DEAL_START_KEY, DEAL_END_KEY
@@ -143,6 +145,9 @@ class BotDeal(Deal):
             self.deal[constants.DEAL_START_KEY]
         )
 
+    def open_duration(self) -> timedelta:
+        return datetime.now() - self.get_created_at()
+
     def get_updated_at(self) -> datetime:
         return time_converters.threec_time_to_datetime(
             self.deal[constants.DEAL_UPDATED_KEY]
@@ -188,6 +193,32 @@ class BotDeal(Deal):
         if success:
             raise AddFundsException(f"{self.get_id()}: Could not add funds to deal ({success})")
         return response
+
+    def convert_to_smart_deal(self, cw):
+        success, response = cw.request(entity="deals", action="convert_to_smart_trade", action_id=str(self.get_id()))
+        request_helper.check_if_request_successful(success)
+
+    def get_alt_bought_volume(self):
+        return float(self.deal['bought_amount'])
+
+    def get_bought_volume(self):
+        return float(self.deal['bought_volume'])
+
+    def get_average_price(self):
+        return float(self.deal['bought_average_price'])
+
+    def get_current_price(self):
+        return float(self.deal['current_price'])
+
+    def get_current_profit(self):
+        return float(self.deal['actual_usd_profit'])
+
+    def close(self, cw):
+        success, response = cw.request(entity="deals", action="cancel", action_id=str(self.get_id()))
+        if success:
+            raise AddFundsException(f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})")
+        return response
+
 
     def __repr__(self):
         return f"Base: {self.get_base_currency()} - Alt: {self.get_alt_currency()}"

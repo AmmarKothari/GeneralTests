@@ -44,3 +44,42 @@ def _load_yaml():
     with open(BOTS_FILENAME) as bot_yaml:
         settings_dict = yaml.load(bot_yaml)
     return settings_dict
+
+
+class GridBots:
+    def __init__(self, cw: py3cw.request.Py3CW):
+        self.cw = cw
+
+    @property
+    @functools.lru_cache()
+    def bots(self):
+        success, bots = self.cw.request(entity="grid_bots", action="")
+        request_helper.check_if_request_successful(success)
+        return bots
+
+    @property
+    def ids(self):
+        ids = []
+        for bot in self.bots:
+            ids.append(bot['id'])
+        return ids
+
+    def get_pair(self, bot_id: int):
+        for bot in self.bots:
+            if bot['id'] == bot_id:
+                return bot['pair']
+
+    def get_profits(self, bot_id: int = 0):
+        profits = []
+        for bot in self.bots:
+            if bot_id:
+                if bot['id'] != bot_id:
+                    continue
+            id = bot['id']
+            success, one_bot_profits = self.cw.request(entity="grid_bots", action="profits", action_id=str(id))
+            request_helper.check_if_request_successful(success)
+            profits.extend(one_bot_profits)
+        return profits
+
+
+
