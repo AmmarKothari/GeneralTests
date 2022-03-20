@@ -56,7 +56,7 @@ CURRENCY_SETTINGS = {
 }
 
 # Don't open more than this number of deals to help limit total spend.
-ACTIVE_SAFETY_ORDER_MIN = 0
+ACTIVE_SAFETY_ORDER_MIN = 100
 MAX_NUMBER_OF_DEALS = 20
 
 new_safety_order_msgs = []
