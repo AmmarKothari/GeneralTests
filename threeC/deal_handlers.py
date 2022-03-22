@@ -152,6 +152,12 @@ class SmartDeal(Deal):
             raise GetTradesException("Could not find deals associated with smart trade")
         return [Trade(r) for r in response]
 
+    def close(self, cw):
+        success, response = cw.request(entity="smart_trades_v2", action="cancel", action_id=str(self.get_id()))
+        if success:
+            raise AddFundsException(f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})")
+        return response
+
 
 class BotDeal(Deal):
     def get_bot_id(self) -> int:
