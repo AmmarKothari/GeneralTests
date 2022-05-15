@@ -1,6 +1,4 @@
-import csv
 import math
-import sys
 import datetime
 
 from py3cw import request as cw_req

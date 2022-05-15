@@ -28,5 +28,8 @@ bot_groups:
   Arturo: [3153122, 3152720]
   Raquel: [3145968]
 
-# After this time, convert to smart trade (seconds)
-CONVERT_SMART_TRADE_DURATION: 2592000 # 30 days
+CONVERT_SMART_TRADE:
+  # After this time, convert to smart trade (seconds)
+  THRESHOLD: 2592000 # 30 days
+  # Convert at most this many trades at the same time.
+  MAX_CONVERT: 5
