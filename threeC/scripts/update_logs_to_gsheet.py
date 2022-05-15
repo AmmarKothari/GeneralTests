@@ -20,7 +20,7 @@ from deal_handlers import DealHandler
 import slack_updater
 
 # TODO: "max_simultaneous_deals",
-FIELDS_OF_INTEREST = ["id", "bot_id", "created_at", "finished?", "current_active_safety_orders", "completed_safety_orders_count", "completed_manual_safety_orders_count", "pair", "status", "take_profit", "base_order_volume", "bought_volume", "sold_volume", "error_message", "from_currency", "to_currency", "final_profit_percentage", "actual_profit_percentage", "bot_name", "actual_profit", "bot_group"]
+FIELDS_OF_INTEREST = ["id", "bot_id", "created_at", "updated_at", "closed_at", "finished?", "current_active_safety_orders", "completed_safety_orders_count", "completed_manual_safety_orders_count", "pair", "status", "take_profit", "base_order_volume", "bought_volume", "sold_volume", "error_message", "from_currency", "to_currency", "final_profit_percentage", "actual_profit_percentage", "bot_name", "actual_profit", "bot_group"]
 
 lock = singleton.SingleInstance()
 

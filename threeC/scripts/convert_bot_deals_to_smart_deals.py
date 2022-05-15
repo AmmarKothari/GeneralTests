@@ -16,13 +16,23 @@ py3cw = cw_req.Py3CW(key=config["threeC"]["key"], secret=config["threeC"]["secre
 # Get all safety orders
 deal_handler = deal_handlers.DealHandler(py3cw, use_cache=True)
 all_bot_deals = deal_handler.get_bot_deals(scope="active")
+all_bot_deals.sort(key=lambda x: x.get_created_at())
 
 new_convert_trades_message = []
+converted_deals_counter = 0
 for deal in all_bot_deals:
+    if converted_deals_counter >= settings['CONVERT_SMART_TRADE']['MAX_CONVERT']:
+        break
     print(f'Active safety orders: {deal.get_active_safety_orders()}')
-    if deal.open_duration().total_seconds() > settings["CONVERT_SMART_TRADE_DURATION"]:
-        deal.convert_to_smart_deal(py3cw)
-        new_convert_trades_message.append(f"Converted order {deal.get_id()} to smart trade.")
+    if deal.open_duration().total_seconds() > settings['CONVERT_SMART_TRADE']['THRESHOLD']:
+        try:
+            deal.convert_to_smart_deal(py3cw)
+        except Exception as e:
+            print(e)
+            continue
+        new_convert_trades_message.append(f"Converted order {deal.get_id()} to smart trade. "
+                                          f"Open for {deal.open_duration().total_seconds()/60/60/24:.2f} days.")
+        converted_deals_counter += 1
         print(f'Converting deal {deal}')
     else:
         print(f'Not converting deal {deal}')

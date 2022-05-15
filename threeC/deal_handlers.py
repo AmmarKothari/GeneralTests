@@ -105,6 +105,26 @@ class SmartDeal(Deal):
     def get_pair(self) -> str:
         return self.deal["pair"]
 
+    def get_alt_bought_volume(self) -> float:
+        return float(self.deal['position']['units']['value'])
+
+    def get_average_price(self) -> float:
+        return float(self.deal['position']['price']['value'])
+
+    def get_bought_volume(self) -> float:
+        return self.get_alt_bought_volume() * self.get_average_price()
+
+    def get_current_profit(self) -> float:
+        try:
+            return float(self.deal['profit']['volume'])
+        except TypeError:
+            return -1
+
+    def get_current_price(self) -> float:
+        return float( self.deal['data']['current_price']['last'])
+
+
+
     def add_safety_order(self, cw, order_type: str, units: float, price: float):
         payload = {
             "order_type": order_type,
@@ -131,6 +151,12 @@ class SmartDeal(Deal):
         if success:
             raise GetTradesException("Could not find deals associated with smart trade")
         return [Trade(r) for r in response]
+
+    def close(self, cw):
+        success, response = cw.request(entity="smart_trades_v2", action="cancel", action_id=str(self.get_id()))
+        if success:
+            raise AddFundsException(f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})")
+        return response
 
 
 class BotDeal(Deal):
