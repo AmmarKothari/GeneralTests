@@ -2,6 +2,7 @@ from py3cw import request as cw_req
 import configparser
 import yaml
 import deal_handlers
+import traceback
 
 import slack_updater
 
@@ -28,7 +29,7 @@ for deal in all_bot_deals:
         try:
             deal.convert_to_smart_deal(py3cw)
         except Exception as e:
-            print(e)
+            print(f'Exception: {traceback.format_exc()}')
             continue
         new_convert_trades_message.append(f"Converted order {deal.get_id()} to smart trade. "
                                           f"Open for {deal.open_duration().total_seconds()/60/60/24:.2f} days.")
