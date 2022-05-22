@@ -52,6 +52,8 @@ for deal in all_deals:
             total_alt += deal.get_alt_bought_volume()
             total_profit += deal.get_current_profit()
             current_price = deal.get_current_price()
+        else:
+            print(f'Not closing deal {deal.get_id()}')
 print(f'Total     {total_base:.2f} {total_alt:.2f} {total_profit:.2f}')
 break_even = current_price + (total_base + total_profit) / total_alt
 print(f'New Deal  amount: {total_alt:.2f}  break-even: {break_even:.2f}')

@@ -158,6 +158,58 @@ class SmartDeal(Deal):
             raise AddFundsException(f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})")
         return response
 
+def create_new_smart_sell(
+        cw,
+        account_id: str,
+        pair: str,
+        alt_amount: float,
+        alt_buy_price: float,
+        alt_sell_price: float,
+        note: str
+) -> SmartDeal:
+    """Use this to create a new deal from coin purchased during a separate deal."""
+    payload = {
+        "account_id": account_id,
+        "pair": pair,
+        "skip_enter_step": True,
+        "note": note,
+        "position": {
+            "type": "buy",
+            "order_type": "market",
+            "units": {
+                "value": alt_amount,
+            },
+            "price": {
+                "value": alt_buy_price,
+            },
+        },
+        "take_profit": {
+            "enabled": True,
+            "steps": [
+                {
+                    "order_type": "limit",
+                    "price": {
+                        # TODO: Add check for this and reject if needed.
+                        # BEWARE: This is actually the min between this and max order book price.
+                        "value": alt_sell_price,
+                        "type": "bid",
+                    },
+                    "volume": 100,
+                }
+            ]
+        },
+        "stop_loss": {
+            "enabled": False,
+        },
+    }
+    success, response = cw.request(entity="smart_trades_v2", action="new",
+                                   payload=payload)
+    if success:
+        print('Successfully placed trade')
+    print('HERE')
+    import pdb; pdb.set_trace()
+
+
 
 class BotDeal(Deal):
     def get_bot_id(self) -> int:
