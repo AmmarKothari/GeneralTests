@@ -21,4 +21,13 @@ deal_handler = deal_handlers.DealHandler(py3cw, use_cache=True)
 all_bot_deals = deal_handler.get_bot_deals(scope="active")
 all_smart_deals = deal_handler.get_smart_deals(status="active")
 for deal in all_bot_deals + all_smart_deals:
-    print(f'{deal.get_id()}  {deal.get_pair():<8} {deal.get_bought_volume():.6f} {deal.get_alt_bought_volume():.2f} {deal.get_average_price():.2f} {deal.get_current_profit():.2f}')
+    print(
+        f'{deal.type:<5} '
+        f'{deal.get_account_id():<8} '
+        f'{deal.get_id()}  '
+        f'{deal.get_pair():<8} '
+        f'{deal.get_bought_volume():.6f} '
+        f' {deal.get_alt_bought_volume():.2f} '
+        f'{deal.get_average_price():.6f} '
+        f' {deal.get_current_profit():.6f} '
+    )

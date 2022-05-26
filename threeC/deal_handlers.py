@@ -78,6 +78,8 @@ class Trade:
         return float(self.trade['realised_total'])
 
 class SmartDeal(Deal):
+    type = 'smart'
+
     def get_created_at(self) -> datetime:
         return time_converters.threec_time_to_datetime(
             self.deal['data'][constants.DEAL_START_KEY]
@@ -123,8 +125,6 @@ class SmartDeal(Deal):
     def get_current_price(self) -> float:
         return float( self.deal['data']['current_price']['last'])
 
-
-
     def add_safety_order(self, cw, order_type: str, units: float, price: float):
         payload = {
             "order_type": order_type,
@@ -157,6 +157,9 @@ class SmartDeal(Deal):
         if success:
             raise AddFundsException(f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})")
         return response
+
+    def get_account_id(self):
+        return self.deal['account']['id']
 
 def create_new_smart_sell(
         cw,
@@ -206,12 +209,11 @@ def create_new_smart_sell(
                                    payload=payload)
     if success:
         print('Successfully placed trade')
-    print('HERE')
-    import pdb; pdb.set_trace()
 
 
 
 class BotDeal(Deal):
+    type = 'bot'
     def get_bot_id(self) -> int:
         return self.deal["bot_id"]
 
@@ -291,12 +293,14 @@ class BotDeal(Deal):
     def get_current_profit(self):
         return float(self.deal['actual_usd_profit'])
 
+    def get_account_id(self):
+        return self.deal.get('account_id', '')
+
     def close(self, cw):
         success, response = cw.request(entity="deals", action="cancel", action_id=str(self.get_id()))
         if success:
             raise AddFundsException(f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})")
         return response
-
 
     def __repr__(self):
         return f"Base: {self.get_base_currency()} - Alt: {self.get_alt_currency()}"

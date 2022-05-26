@@ -31,19 +31,28 @@ total_profit = 0
 current_price = 0
 for deal in all_deals:
     if deal.get_id() in args.deals:
-        print(f'{deal.get_id()}  {deal.get_bought_volume():.2f}  {deal.get_alt_bought_volume():.2f}  {deal.get_average_price():.2f} {deal.get_current_profit():.2f}')
+        print(f'{deal.get_id()}  {deal.get_bought_volume():.6f}  {deal.get_alt_bought_volume():.6f}  {deal.get_average_price():.6f} {deal.get_current_profit():.6f}')
         total_base += deal.get_bought_volume()
         total_alt += deal.get_alt_bought_volume()
         total_profit += deal.get_current_profit()
         current_price = deal.get_current_price()
-print(f'Total     {total_base:.2f} {total_alt:.2f} {total_profit:.2f}')
-break_even = current_price + (total_base + total_profit) / total_alt
-print(f'New Deal  buy: {total_base / total_alt:.2f}  break-even: {break_even:.2f}')
+print(f'Total: {total_base:.6f} {total_alt:.6f} {total_profit:.6f}')
+base_price = total_base / total_alt
+print(f'New Deal  break even (base): {base_price:.6f}')
+
+account = None
+for deal in all_deals:
+    if deal.get_id() in args.deals:
+        if account is not None:
+            assert deal.get_account_id() == account
+        else:
+            account = deal.get_account_id()
 
 total_base = 0
 total_alt = 0
 total_profit = 0
 current_price = 0
+note = ','.join([str(d) for d in args.deals])
 for deal in all_deals:
     if deal.get_id() in args.deals:
         if input(f'Close deal {deal.get_id()}: ').lower() == 'y':
@@ -54,9 +63,19 @@ for deal in all_deals:
             current_price = deal.get_current_price()
         else:
             print(f'Not closing deal {deal.get_id()}')
-print(f'Total     {total_base:.2f} {total_alt:.2f} {total_profit:.2f}')
-break_even = current_price + (total_base + total_profit) / total_alt
-print(f'New Deal  amount: {total_alt:.2f}  break-even: {break_even:.2f}')
+print(f'Total: {total_base:.6f} {total_alt:.6f} {total_profit:.6f}')
+base_price = total_base / total_alt
+sale_price = base_price * 1.1
+print(f'New Deal: {total_base:.6f} {total_alt:.6f} {sale_price:.6f}')
+deal_handlers.create_new_smart_sell(
+    py3cw,
+    account,
+    deal.get_pair(),
+    total_alt,
+    base_price,
+    sale_price,
+    note = 'combined from: ' + note
+)
 
 
 
