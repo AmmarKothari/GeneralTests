@@ -16,7 +16,8 @@ GSHEET_TAB_NAME_BOT_IDS: "Raw_BotIDs"
 GSHEET_TAB_NAME_ACCOUNT_VALUE: "Raw_AccountValue"
 
 # Name of the main exchange that trades are made with
-EXCHANGE_ACCOUNT_NAMES: ["Ali Gateio V4", "BinanceUSAli"]
+# EXCHANGE_ACCOUNT_NAMES: ["Ali Gateio V4", "BinanceUSAli"]
+EXCHANGE_ACCOUNT_NAMES: ["My Coinbase Advanced"]
 
 # Grouping of bots by ids to give them an easier to remember name and group similar bots.
 bot_groups:

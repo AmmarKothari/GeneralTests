@@ -4,13 +4,9 @@ import yaml
 import csv
 
 import account_info
+from utils import config
 
-config = configparser.ConfigParser()
-config.read("config_files/config.ini")
-
-with open("config_files/settings.yaml") as settings_f:
-    settings = yaml.load(settings_f, Loader=yaml.Loader)
-py3cw = cw_req.Py3CW(key=config["threeC"]["key"], secret=config["threeC"]["secret"])
+py3cw = config.get_3c_interface()
 
 account = account_info.AccountInfo(py3cw)
 exchange_account_id = account.accounts[1]["id"]
