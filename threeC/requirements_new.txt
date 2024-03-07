@@ -2,3 +2,6 @@ PyYAML
 py3cw==0.1.1
 tqdm
 slackclient
+tendo
+google-api-python-client
+pygsheets

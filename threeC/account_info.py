@@ -77,8 +77,7 @@ class AccountInfo:
         self, account_id: int
     ) -> request_helper.Py3cw_request_info_single_success:
         for account in self.accounts:
-            if account:
-                if account["id"] == account_id:
+            if account and account["id"] == account_id:
                     return account
         raise AccountException(f"No account with id: {account_id}")
 
@@ -86,7 +85,7 @@ class AccountInfo:
         for account in self.accounts:
             if account['name'] == account_name:
                 return account
-        raise AccountException(f"No account width name: {account_name}")
+        raise AccountException(f"No account with name: {account_name}")
 
     def get_account_balance(self, account_id: int) -> float:
         account = self.get_account_from_id(account_id)
