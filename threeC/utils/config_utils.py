@@ -6,6 +6,8 @@ import yaml
 
 from py3cw import request as cw_req
 
+import slack_updater
+
 CODEHOME = os.environ.get("CODEHOME")
 
 
@@ -23,7 +25,12 @@ def get_settings() -> dict:
     return settings
 
 
-def get_3c_interface():
+def get_3c_interface() -> cw_req.Py3CW:
     config = get_config()
     py3cw = cw_req.Py3CW(key=config["threeC"]["key"], secret=config["threeC"]["secret"])
     return py3cw
+
+def get_slack_updater():
+    config = get_config()
+    su = slack_updater.SlackUpdater(config["threeC"]["slack_bot_token"])
+    return su

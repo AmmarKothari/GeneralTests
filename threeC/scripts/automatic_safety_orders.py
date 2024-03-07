@@ -1,23 +1,15 @@
-import csv
 import math
-import sys
 import datetime
 
-from py3cw import request as cw_req
-import configparser
 import yaml
 import deal_handlers
 
 import account_info
-import slack_updater
+from utils import config_utils
 
-config = configparser.ConfigParser()
-config.read("config_files/config.ini")
 
-with open("config_files/settings.yaml") as settings_f:
-    settings = yaml.load(settings_f, Loader=yaml.Loader)
-
-py3cw = cw_req.Py3CW(key=config["threeC"]["key"], secret=config["threeC"]["secret"])
+settings = config_utils.get_settings()
+py3cw = config_utils.get_3c_interface()
 
 UPDATE_TIME_THRESHOLD = 60 * 60 * 24  # 1 Day
 
@@ -107,7 +99,6 @@ for account in [accounts.get_account_from_name(account_name) for account_name in
             # This is not going to work for the other account unfortuantely.
             success, response = py3cw.request(entity="accounts", action="currency_rates", payload={"pair": smart_deal.get_pair(), "market_code": account["market_code"]})
             if success:
-                # import pdb; pdb.set_trace()
                 print(f'Error getting trade info: {success}')
                 continue
             amount = CURRENCY_SETTINGS[base_currency]["base_order_size"] / float(response['last'])
@@ -129,7 +120,7 @@ print("\n".join(new_safety_order_msgs))
 if not new_safety_order_msgs:
     new_safety_order_msgs = ["No update today"]
 if new_safety_order_msgs:
-    su = slack_updater.SlackUpdater(config["threeC"]["slack_bot_token"])
+    su = config_utils.get_slack_updater()
     su.send_status_message("\n".join(new_safety_order_msgs))
 
 

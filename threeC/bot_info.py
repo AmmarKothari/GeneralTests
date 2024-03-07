@@ -3,6 +3,7 @@ from typing import Optional, List, Any, Dict
 import yaml
 
 import py3cw  # type: ignore
+import py3cw.request  # type: ignore
 
 import request_helper
 

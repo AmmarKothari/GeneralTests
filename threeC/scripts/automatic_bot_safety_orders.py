@@ -1,21 +1,14 @@
 import math
 import datetime
 
-from py3cw import request as cw_req
 import configparser
-import yaml
 import deal_handlers
 
 import account_info
-import slack_updater
+from utils import config_utils
 
-config = configparser.ConfigParser()
-config.read("config_files/config.ini")
-
-with open("config_files/settings.yaml") as settings_f:
-    settings = yaml.load(settings_f, Loader=yaml.Loader)
-
-py3cw = cw_req.Py3CW(key=config["threeC"]["key"], secret=config["threeC"]["secret"])
+settings = config_utils.get_settings()
+py3cw = config_utils.get_3c_interface()
 
 MIN_IN_ACCOUNT = 0.01  # MINIMUM AMOUNT OF COIN IN ACCOUNT TO DO THIS
 UPDATE_TIME_THRESHOLD = 60 * 60 * 24  # 1 Day
@@ -131,5 +124,5 @@ print("\n".join(new_safety_order_msgs))
 if not new_safety_order_msgs:
     new_safety_order_msgs = ["No update today"]
 
-su = slack_updater.SlackUpdater(config["threeC"]["slack_bot_token"])
+su = config_utils.get_slack_updater()
 su.send_status_message("\n".join(new_safety_order_msgs))
