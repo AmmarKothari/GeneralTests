@@ -1,34 +1,16 @@
-import datetime
-import time
-import sys
-import configparser
-import os
-import yaml
 from tendo import singleton
 import collections
-
 
 from py3cw import request as py3cw_req
 
 import account_info as account_info_module
-import constants
-import deal_handlers
-import gsheet_writer
-import threeCDataGetter as tcdg
-from bot_info import BotInfo
-from constants import LAST_RUN_SUCCESS_CACHE
-from deal_handlers import DealHandler
-import slack_updater
+from utils import config_utils
 
 lock = singleton.SingleInstance()
 
-config = configparser.ConfigParser()
-config.read("config_files/config.ini")
+settings = config_utils.get_settings()
 
-with open("config_files/settings.yaml") as settings_f:
-    settings = yaml.load(settings_f, Loader=yaml.Loader)
-
-py3cw = py3cw_req.Py3CW(key=config["threeC"]["key"], secret=config["threeC"]["secret"])
+py3cw = config_utils.get_3c_interface()
 
 account_info = account_info_module.AccountInfo(py3cw, real=True)
 
