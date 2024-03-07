@@ -5,7 +5,6 @@ import copy
 import slack
 
 
-
 STATUS_UPDATE = {
     "type": "section",
     "text": {
@@ -15,10 +14,15 @@ STATUS_UPDATE = {
 }
 
 ERROR_UPDATE = copy.deepcopy(STATUS_UPDATE)
-ERROR_UPDATE["text"]["text"] = ("There was an issue uploading data to the google sheet! :face_with_symbols_on_mouth:")
+ERROR_UPDATE["text"][
+    "text"
+] = "There was an issue uploading data to the google sheet! :face_with_symbols_on_mouth:"
 
 SUCCESS_UPDATE = copy.deepcopy(STATUS_UPDATE)
-SUCCESS_UPDATE["text"]["text"] = ("Succesfully uploaded data after failed attempt! :white_check_mark:")
+SUCCESS_UPDATE["text"][
+    "text"
+] = "Succesfully uploaded data after failed attempt! :white_check_mark:"
+
 
 class SlackUpdater:
     def __init__(self, token: str):
@@ -66,7 +70,9 @@ class SlackUpdater:
     def get_error_message_payload(self, error_msg: str) -> Dict[str, Any]:
         error_payload = copy.deepcopy(ERROR_UPDATE)
         if error_msg:
-            error_payload["text"]["text"] = error_payload["text"]["text"] + f"\n Error message: {error_msg}"
+            error_payload["text"]["text"] = (
+                error_payload["text"]["text"] + f"\n Error message: {error_msg}"
+            )
         return self._get_message_payload(error_payload)
 
     def get_success_message_payload(self) -> Dict[str, Any]:
@@ -74,5 +80,5 @@ class SlackUpdater:
 
     def get_status_message_payload(self, msg) -> Dict[str, Any]:
         status_payload = copy.deepcopy(STATUS_UPDATE)
-        status_payload["text"]["text"] = (msg)
+        status_payload["text"]["text"] = msg
         return self._get_message_payload(status_payload)

@@ -11,13 +11,27 @@ from constants import gsheet_date_only_format, GSHEET_UPDATE_LOG, gsheet_date_fo
 
 MAX_RETRIES = 5
 
-HEADER = ['Date', 'Value', 'Profit',
-          'BTC', 'BTC_Available', 'BTC_Reserved',
-          'BNB', 'BNB_Available', 'BNB_Reserved',
-          'ETH', 'ETH_Available', 'ETH_Reserved',
-          'USDT', 'USDT_Available', 'USDT_Reserved',
-          'USD', 'USD_Available', 'USD_Reserved'
-          ]
+HEADER = [
+    "Date",
+    "Value",
+    "Profit",
+    "BTC",
+    "BTC_Available",
+    "BTC_Reserved",
+    "BNB",
+    "BNB_Available",
+    "BNB_Reserved",
+    "ETH",
+    "ETH_Available",
+    "ETH_Reserved",
+    "USDT",
+    "USDT_Available",
+    "USDT_Reserved",
+    "USD",
+    "USD_Available",
+    "USD_Reserved",
+]
+
 
 class GSheetWriter:
     def __init__(self, service_file: str, output_gsheet: str):
@@ -37,7 +51,13 @@ class GSheetWriter:
 
     # TODO: Add method that can change from datetime to gsheet time string for an entire column
 
-    def write_log_to_gsheet(self, sheet_name: str, deals: List[Dict[str, Any]], start_row: int = 0, include_header: bool = False) -> None:
+    def write_log_to_gsheet(
+        self,
+        sheet_name: str,
+        deals: List[Dict[str, Any]],
+        start_row: int = 0,
+        include_header: bool = False,
+    ) -> None:
         if len(deals) == 0:
             print("No deals to write logs for")
             return
@@ -67,7 +87,9 @@ class GSheetWriter:
         wks = _get_worksheet_by_name(self.sh, sheet_name)
         wks.update_row(1, data_matrix)
 
-    def combine_account_stats(self, account_infos: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def combine_account_stats(
+        self, account_infos: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
         accumulated_stats = collections.defaultdict(float)
         for account_info_with_date_key in account_infos:
             # Should only be one item in list.  Pop it and get the values.
@@ -86,8 +108,9 @@ class GSheetWriter:
         formatted_accumualted_stats[accumulated_stats["Date"]] = accumulated_stats
         return formatted_accumualted_stats
 
-
-    def write_account_stats(self, sheet_name: str, account_info: Dict[str, Any]) -> None:
+    def write_account_stats(
+        self, sheet_name: str, account_info: Dict[str, Any]
+    ) -> None:
         # TODO: Don't read and write the whole thing every time.  Just add a row at the bottom and add values there. Unclear if headers should be updated?
         # NOTE: Things will probably break if accounts are added
         records = collections.defaultdict(dict)

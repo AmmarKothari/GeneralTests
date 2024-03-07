@@ -30,6 +30,7 @@ def get_3c_interface() -> cw_req.Py3CW:
     py3cw = cw_req.Py3CW(key=config["threeC"]["key"], secret=config["threeC"]["secret"])
     return py3cw
 
+
 def get_slack_updater():
     config = get_config()
     su = slack_updater.SlackUpdater(config["threeC"]["slack_bot_token"])

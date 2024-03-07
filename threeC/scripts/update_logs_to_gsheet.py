@@ -20,7 +20,31 @@ from deal_handlers import DealHandler
 import slack_updater
 
 # TODO: "max_simultaneous_deals",
-FIELDS_OF_INTEREST = ["id", "bot_id", "created_at", "updated_at", "closed_at", "finished?", "current_active_safety_orders", "completed_safety_orders_count", "completed_manual_safety_orders_count", "pair", "status", "take_profit", "base_order_volume", "bought_volume", "sold_volume", "error_message", "from_currency", "to_currency", "final_profit_percentage", "actual_profit_percentage", "bot_name", "actual_profit", "bot_group"]
+FIELDS_OF_INTEREST = [
+    "id",
+    "bot_id",
+    "created_at",
+    "updated_at",
+    "closed_at",
+    "finished?",
+    "current_active_safety_orders",
+    "completed_safety_orders_count",
+    "completed_manual_safety_orders_count",
+    "pair",
+    "status",
+    "take_profit",
+    "base_order_volume",
+    "bought_volume",
+    "sold_volume",
+    "error_message",
+    "from_currency",
+    "to_currency",
+    "final_profit_percentage",
+    "actual_profit_percentage",
+    "bot_name",
+    "actual_profit",
+    "bot_group",
+]
 
 lock = singleton.SingleInstance()
 
@@ -45,7 +69,6 @@ try:
         os.path.expanduser(settings["GSHEET_SERVICE_FILE"]), settings["GSHEET_LOG_FILE"]
     )
 
-
     print("Starting writing account stats")
     account_info = account_info_module.AccountInfo(py3cw, real=True)
     account_stats = []
@@ -66,7 +89,9 @@ try:
     print("Loading raw deals from cache")
     deal_handler.use_cache_deals()
     print("Fetching deals from 3c")
-    all_new_deals = deal_handler.api_deal_handler.get_deals(deal_handler.raw_deal_cacher.most_recent_update_time())
+    all_new_deals = deal_handler.api_deal_handler.get_deals(
+        deal_handler.raw_deal_cacher.most_recent_update_time()
+    )
     print("Updating files")
     deal_handler.update_deals(all_new_deals)
     print("Updating raw deals cache file")
@@ -78,7 +103,7 @@ try:
     bot_info_lookup = {}
     for bot_group_key in settings["bot_groups"]:
         for bot_id in settings["bot_groups"][bot_group_key]:
-             bot_info_lookup[bot_id] = bot_group_key
+            bot_info_lookup[bot_id] = bot_group_key
     for deal in data:
         if deal["bot_id"] in bot_info_lookup:
             deal["bot_group"] = bot_info_lookup[deal["bot_id"]]
@@ -94,8 +119,14 @@ try:
     unique_deals = sorted(unique_deals, key=lambda x: int(x["id"]), reverse=True)
     unique_deals_with_relevant_fields = []
     for deal in unique_deals:
-        unique_deals_with_relevant_fields.append({k: deal[k] for k in FIELDS_OF_INTEREST})
-    gwriter.write_log_to_gsheet(settings["GSHEET_TAB_NAME_LOGS"], unique_deals_with_relevant_fields, start_row = settings["GSHEET_LOG_FILE_START_ROW"])
+        unique_deals_with_relevant_fields.append(
+            {k: deal[k] for k in FIELDS_OF_INTEREST}
+        )
+    gwriter.write_log_to_gsheet(
+        settings["GSHEET_TAB_NAME_LOGS"],
+        unique_deals_with_relevant_fields,
+        start_row=settings["GSHEET_LOG_FILE_START_ROW"],
+    )
     elapsed_time = time.time() - start_time
     gwriter.update_last_write(elapsed_time)
     print("Successfully updated information in {:.3f}.".format(elapsed_time))

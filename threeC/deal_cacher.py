@@ -22,8 +22,11 @@ class DealCacher:
 
     def _get_cached_deals_from_file(self):
         all_deals = pickle.load(open(self.cache_fn, "rb"))
-        sorted_all_deals = sorted(all_deals, key=lambda x: time_converters.threec_time_to_datetime(x['updated_at']),
-                                  reverse=True)
+        sorted_all_deals = sorted(
+            all_deals,
+            key=lambda x: time_converters.threec_time_to_datetime(x["updated_at"]),
+            reverse=True,
+        )
         return sorted_all_deals
 
     def cache_valid(self):
@@ -64,4 +67,6 @@ class DealCacher:
         return open_deals
 
     def most_recent_update_time(self):
-        return time_converters.threec_time_to_datetime(self.cached_deals[0]["updated_at"])
+        return time_converters.threec_time_to_datetime(
+            self.cached_deals[0]["updated_at"]
+        )

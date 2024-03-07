@@ -12,7 +12,7 @@ settings = config_utils.get_settings()
 account = account_info.AccountInfo(py3cw)
 primary_account = settings["EXCHANGE_ACCOUNT_NAMES"][0]
 exchange_account = account.get_account_from_name(primary_account)
-coin_data = account.account_table_data(exchange_account['id'])
+coin_data = account.account_table_data(exchange_account["id"])
 
 with open("current_coin_amounts.csv", "w", newline="") as csvfile:
     fieldnames = coin_data[0].keys()

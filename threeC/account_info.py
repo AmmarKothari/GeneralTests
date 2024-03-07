@@ -41,13 +41,13 @@ class AccountInfo:
     def account_table_data(
         self, account_id: int
     ) -> request_helper.Py3cw_request_info_list:
-        request_func: Callable[
-            [], request_helper.Py3cw_request_list_response
-        ] = functools.partial(
-            self.cw.request,
-            entity="accounts",
-            action="account_table_data",
-            action_id=str(account_id),
+        request_func: Callable[[], request_helper.Py3cw_request_list_response] = (
+            functools.partial(
+                self.cw.request,
+                entity="accounts",
+                action="account_table_data",
+                action_id=str(account_id),
+            )
         )
         table_data = request_helper.check_with_retry(request_func)
         table_data = cast(request_helper.Py3cw_request_info_list, table_data)
@@ -57,9 +57,9 @@ class AccountInfo:
     def accounts(self) -> request_helper.Py3cw_request_info_list:
         if self._accounts:
             return self._accounts
-        request_func: Callable[
-            [], request_helper.Py3cw_request_list_response
-        ] = functools.partial(self.cw.request, entity="accounts", action="")
+        request_func: Callable[[], request_helper.Py3cw_request_list_response] = (
+            functools.partial(self.cw.request, entity="accounts", action="")
+        )
         accounts = request_helper.check_with_retry(request_func)
         accounts = cast(request_helper.Py3cw_request_info_list, accounts)
         self._accounts = accounts
@@ -78,12 +78,14 @@ class AccountInfo:
     ) -> request_helper.Py3cw_request_info_single_success:
         for account in self.accounts:
             if account and account["id"] == account_id:
-                    return account
+                return account
         raise AccountException(f"No account with id: {account_id}")
 
-    def get_account_from_name(self, account_name: str) -> request_helper.Py3cw_request_info_single_success:
+    def get_account_from_name(
+        self, account_name: str
+    ) -> request_helper.Py3cw_request_info_single_success:
         for account in self.accounts:
-            if account['name'] == account_name:
+            if account["name"] == account_name:
                 return account
         raise AccountException(f"No account with name: {account_name}")
 
@@ -97,13 +99,13 @@ class AccountInfo:
 
     @functools.lru_cache()
     def get_coin_in_account(self, coin: str, account_id: int) -> float:
-        request_func: Callable[
-            [], request_helper.Py3cw_request_list_response
-        ] = functools.partial(
-            self.cw.request,
-            entity="accounts",
-            action="pie_chart_data",
-            action_id=str(account_id),
+        request_func: Callable[[], request_helper.Py3cw_request_list_response] = (
+            functools.partial(
+                self.cw.request,
+                entity="accounts",
+                action="pie_chart_data",
+                action_id=str(account_id),
+            )
         )
         pairs_info = request_helper.check_with_retry(request_func)
         pairs_info = cast(List[Dict[str, Any]], pairs_info)
@@ -138,9 +140,9 @@ class AccountInfo:
         account_id = self.account_ids[account_name]
 
         # TODO: Remove the date as a key.  WHY?!?!
-        records: Dict[
-            str, collections.OrderedDict[str, Union[str, float]]
-        ] = collections.defaultdict(collections.OrderedDict)
+        records: Dict[str, collections.OrderedDict[str, Union[str, float]]] = (
+            collections.defaultdict(collections.OrderedDict)
+        )
         records[date]["Date"] = date
         records[date]["Value"] = self.get_account_balance(account_id)
         records[date]["Profit"] = self.get_account_profit(account_id)

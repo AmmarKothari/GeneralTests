@@ -33,7 +33,7 @@ class Deal:
     #     return self.deal["status"] != "failed"
 
     def is_open(self):
-        return self.deal['status']['type'] != 'waiting_position'
+        return self.deal["status"]["type"] != "waiting_position"
 
     def get_id(self):
         return self.deal["id"]
@@ -63,35 +63,36 @@ class Trade:
 
     def is_initial_deal(self):
         """Start of deal with own funds."""
-        return self.trade['status'] == 'smart_sell'
+        return self.trade["status"] == "smart_sell"
 
     def is_buy(self):
-        return self.trade['order_side'] == 'buy'
+        return self.trade["order_side"] == "buy"
 
     def is_completed(self):
-        return self.trade['status'] == 'finished'
+        return self.trade["status"] == "finished"
 
     def alt_amount(self):
-        return float(self.trade['realised_amount'])
+        return float(self.trade["realised_amount"])
 
     def base_amount(self):
-        return float(self.trade['realised_total'])
+        return float(self.trade["realised_total"])
+
 
 class SmartDeal(Deal):
     def get_created_at(self) -> datetime:
         return time_converters.threec_time_to_datetime(
-            self.deal['data'][constants.DEAL_START_KEY]
+            self.deal["data"][constants.DEAL_START_KEY]
         )
 
     def get_updated_at(self) -> datetime:
         return time_converters.threec_time_to_datetime(
-            self.deal['data'][constants.DEAL_UPDATED_KEY]
+            self.deal["data"][constants.DEAL_UPDATED_KEY]
         )
 
     def get_closed_at(self) -> datetime:
         if self.deal[constants.DEAL_END_KEY]:
             return time_converters.threec_time_to_datetime(
-                self.deal['data'][constants.DEAL_END_KEY]
+                self.deal["data"][constants.DEAL_END_KEY]
             )
         else:
             return datetime.utcnow()
@@ -106,24 +107,22 @@ class SmartDeal(Deal):
         return self.deal["pair"]
 
     def get_alt_bought_volume(self) -> float:
-        return float(self.deal['position']['units']['value'])
+        return float(self.deal["position"]["units"]["value"])
 
     def get_average_price(self) -> float:
-        return float(self.deal['position']['price']['value'])
+        return float(self.deal["position"]["price"]["value"])
 
     def get_bought_volume(self) -> float:
         return self.get_alt_bought_volume() * self.get_average_price()
 
     def get_current_profit(self) -> float:
         try:
-            return float(self.deal['profit']['volume'])
+            return float(self.deal["profit"]["volume"])
         except TypeError:
             return -1
 
     def get_current_price(self) -> float:
-        return float( self.deal['data']['current_price']['last'])
-
-
+        return float(self.deal["data"]["current_price"]["last"])
 
     def add_safety_order(self, cw, order_type: str, units: float, price: float):
         payload = {
@@ -136,26 +135,39 @@ class SmartDeal(Deal):
             },
             "id": self.get_id(),
         }
-        success, response = cw.request(entity="smart_trades_v2", action="add_funds", action_id=str(self.get_id()),
-                                       payload=payload)
+        success, response = cw.request(
+            entity="smart_trades_v2",
+            action="add_funds",
+            action_id=str(self.get_id()),
+            payload=payload,
+        )
         if success:
             raise AddFundsException(
-                f"{self.get_id()}: Could not add funds to smart trade ({success}) (payload: {payload})")
+                f"{self.get_id()}: Could not add funds to smart trade ({success}) (payload: {payload})"
+            )
 
     def get_trades(self, cw) -> List[Trade]:
         payload = {
             "smart_trade_id": self.get_id(),
         }
-        success, response = cw.request(entity="smart_trades_v2", action="get_trades", action_id=str(self.get_id()),
-                                       payload=payload)
+        success, response = cw.request(
+            entity="smart_trades_v2",
+            action="get_trades",
+            action_id=str(self.get_id()),
+            payload=payload,
+        )
         if success:
             raise GetTradesException("Could not find deals associated with smart trade")
         return [Trade(r) for r in response]
 
     def close(self, cw):
-        success, response = cw.request(entity="smart_trades_v2", action="cancel", action_id=str(self.get_id()))
+        success, response = cw.request(
+            entity="smart_trades_v2", action="cancel", action_id=str(self.get_id())
+        )
         if success:
-            raise AddFundsException(f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})")
+            raise AddFundsException(
+                f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})"
+            )
         return response
 
 
@@ -200,10 +212,16 @@ class BotDeal(Deal):
         payload = {
             "deal_id": self.get_id(),
         }
-        success, response = cw.request(entity="deals", action="data_for_adding_funds", action_id=str(self.get_id()),
-                                       payload=payload)
+        success, response = cw.request(
+            entity="deals",
+            action="data_for_adding_funds",
+            action_id=str(self.get_id()),
+            payload=payload,
+        )
         if success:
-            raise Exception(f"Could not retrieve data for adding funds: {success} - {response}")
+            raise Exception(
+                f"Could not retrieve data for adding funds: {success} - {response}"
+            )
         return response
 
     def add_funds(self, cw, amount, price, is_market=False):
@@ -214,37 +232,50 @@ class BotDeal(Deal):
             "rate": price,
             "deal_id": self.get_id(),
         }
-        success, response = cw.request(entity="deals", action="add_funds", action_id=str(self.get_id()),
-                                       payload=payload)
+        success, response = cw.request(
+            entity="deals",
+            action="add_funds",
+            action_id=str(self.get_id()),
+            payload=payload,
+        )
         if success:
-            raise AddFundsException(f"{self.get_id()}: Could not add funds to deal ({success})")
+            raise AddFundsException(
+                f"{self.get_id()}: Could not add funds to deal ({success})"
+            )
         return response
 
     def convert_to_smart_deal(self, cw):
-        success, response = cw.request(entity="deals", action="convert_to_smart_trade", action_id=str(self.get_id()))
+        success, response = cw.request(
+            entity="deals",
+            action="convert_to_smart_trade",
+            action_id=str(self.get_id()),
+        )
         request_helper.check_if_request_successful(success)
 
     def get_alt_bought_volume(self):
-        return float(self.deal['bought_amount'])
+        return float(self.deal["bought_amount"])
 
     def get_bought_volume(self):
-        return float(self.deal['bought_volume'])
+        return float(self.deal["bought_volume"])
 
     def get_average_price(self):
-        return float(self.deal['bought_average_price'])
+        return float(self.deal["bought_average_price"])
 
     def get_current_price(self):
-        return float(self.deal['current_price'])
+        return float(self.deal["current_price"])
 
     def get_current_profit(self):
-        return float(self.deal['actual_usd_profit'])
+        return float(self.deal["actual_usd_profit"])
 
     def close(self, cw):
-        success, response = cw.request(entity="deals", action="cancel", action_id=str(self.get_id()))
+        success, response = cw.request(
+            entity="deals", action="cancel", action_id=str(self.get_id())
+        )
         if success:
-            raise AddFundsException(f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})")
+            raise AddFundsException(
+                f"{self.get_id()}: Could not sell deal {self.get_id()} ({success})"
+            )
         return response
-
 
     def __repr__(self):
         return f"Base: {self.get_base_currency()} - Alt: {self.get_alt_currency()}"
@@ -288,8 +319,8 @@ class DealHandler:
         for idx, deal in enumerate(tqdm.tqdm(self.api_deals)):
             if deal["id"] in self.raw_deal_cacher.cached_deal_ids:
                 if (
-                        self.raw_deal_cacher.cached_deals_info[deal["id"]]
-                        == deal[DEAL_UPDATED_KEY]
+                    self.raw_deal_cacher.cached_deals_info[deal["id"]]
+                    == deal[DEAL_UPDATED_KEY]
                 ):
                     continue
             updated_and_new_deals.append(deal)
@@ -304,7 +335,7 @@ class DealHandler:
             overlapping_deals = 0
             for idx, d in enumerate(tqdm.tqdm(sorted_all_deals)):
                 if not d[DEAL_END_KEY] or gsheet_time_to_datetime(
-                        d[DEAL_END_KEY]
+                    d[DEAL_END_KEY]
                 ) >= gsheet_time_to_datetime(earliest_deal[DEAL_START_KEY]):
                     overlapping_deals += 1
                     updated_and_new_deals_idx.add(idx)
@@ -328,12 +359,12 @@ class DealHandler:
 
     def get_smart_deals(self, status: Optional[str]) -> List[SmartDeal]:
         # TODO: loop through until all deals are gathered.
-        payload = {
-            "per_page": 100
-        }
+        payload = {"per_page": 100}
         if status:
             payload["status"] = status
-        success, response = self.cw.request(entity="smart_trades_v2", action="", payload=payload)
+        success, response = self.cw.request(
+            entity="smart_trades_v2", action="", payload=payload
+        )
         if success:
             raise Exception("No smart deals found")
         deals = [SmartDeal(r) for r in response]
@@ -353,7 +384,7 @@ class DealHandler:
         return deals
 
 
-def get_data(cw, deal_handler: DealHandler, use_cache: bool =False):
+def get_data(cw, deal_handler: DealHandler, use_cache: bool = False):
 
     # If the cached deals is valid, return those so computation takes less time.  Mostly for debugging.
     if not (use_cache and deal_handler.raw_deal_cacher.cache_valid()):

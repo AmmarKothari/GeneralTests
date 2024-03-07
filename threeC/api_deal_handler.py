@@ -13,7 +13,7 @@ class APIDealHandler:
         self.cw = cw
         self.all_deals = []
 
-    def get_deals(self, updates_after = datetime(1990, 1, 1)):
+    def get_deals(self, updates_after=datetime(1990, 1, 1)):
         # TODO: Add an arg to only load deals changed after a certain time. If none, then load all deals.
         """Get all deals from API"""
         print("Fetching all deals")
@@ -26,12 +26,20 @@ class APIDealHandler:
             success, deals = self.cw.request(
                 entity="deals",
                 action="",
-                payload={"limit": MAX_DEALS_PER_REQUEST, "offset": offset, "order": "updated_at", "order_direction": "desc"},
+                payload={
+                    "limit": MAX_DEALS_PER_REQUEST,
+                    "offset": offset,
+                    "order": "updated_at",
+                    "order_direction": "desc",
+                },
             )
             fetch_counter += 1
             check_if_request_successful(success)
             for deal in deals:
-                if time_converters.threec_time_to_datetime(deal["updated_at"]) >= updates_after:
+                if (
+                    time_converters.threec_time_to_datetime(deal["updated_at"])
+                    >= updates_after
+                ):
                     self.all_deals.append(deal)
                 else:
                     run_loop = False
@@ -39,7 +47,11 @@ class APIDealHandler:
             if len(deals) < MAX_DEALS_PER_REQUEST:
                 run_loop = False
             offset += MAX_DEALS_PER_REQUEST
-            print("Finished fetching one page of deals {:.3} s. Current Total: {}".format(time.time() - start, len(self.all_deals)))
+            print(
+                "Finished fetching one page of deals {:.3} s. Current Total: {}".format(
+                    time.time() - start, len(self.all_deals)
+                )
+            )
         end = time.time()
         print("Done fetching {} deals in {:.3} s".format(self.num_deals, end - start))
         # TODO: Convert to datetime

@@ -88,7 +88,9 @@ def _calculate_all_max_simultaneous_open_deals(new_deals, all_deals, skip_calc=F
         pool_func = functools.partial(
             _calculate_max_simultaneous_open_deals, all_deals=all_deals
         )
-        result = list(tqdm.tqdm(calc_pool.imap(pool_func, new_deals, chunksize=10), disable=True))
+        result = list(
+            tqdm.tqdm(calc_pool.imap(pool_func, new_deals, chunksize=10), disable=True)
+        )
         calc_pool.close()
         calc_pool.join()
     else:

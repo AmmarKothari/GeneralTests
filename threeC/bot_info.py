@@ -62,25 +62,24 @@ class GridBots:
     def ids(self):
         ids = []
         for bot in self.bots:
-            ids.append(bot['id'])
+            ids.append(bot["id"])
         return ids
 
     def get_pair(self, bot_id: int):
         for bot in self.bots:
-            if bot['id'] == bot_id:
-                return bot['pair']
+            if bot["id"] == bot_id:
+                return bot["pair"]
 
     def get_profits(self, bot_id: int = 0):
         profits = []
         for bot in self.bots:
             if bot_id:
-                if bot['id'] != bot_id:
+                if bot["id"] != bot_id:
                     continue
-            id = bot['id']
-            success, one_bot_profits = self.cw.request(entity="grid_bots", action="profits", action_id=str(id))
+            id = bot["id"]
+            success, one_bot_profits = self.cw.request(
+                entity="grid_bots", action="profits", action_id=str(id)
+            )
             request_helper.check_if_request_successful(success)
             profits.extend(one_bot_profits)
         return profits
-
-
-
