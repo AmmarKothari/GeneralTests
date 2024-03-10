@@ -4,7 +4,7 @@ GSHEET_SERVICE_FILE: "config_files/my-project-1472545352517-b199b7c6ff37.json"
 
 # Name of the document where you want the logs written to
 GSHEET_LOG_FILE: "Crypto Heist (Raw Data V2)"
-GSHEET_LOG_FILE_START_ROW: 12825
+GSHEET_LOG_FILE_START_ROW: 53776
 
 # Name of the sheet to put all the logs
 GSHEET_TAB_NAME_LOGS: "Raw_BotLogs"
